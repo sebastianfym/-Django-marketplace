@@ -3,8 +3,8 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 
 
-class Customer(AbstractBaseUser, PermissionsMixin):
-    pass
+#class Customer(AbstractBaseUser, PermissionsMixin):
+#    pass
 
 
 class ViewsHistory(models.Model):

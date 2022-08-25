@@ -43,6 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'customers.apps.CustomersConfig',
+    'app_shop.apps.AppShopConfig',
+    'cart.apps.CartConfig',
+    'banners.apps.BannersConfig',
+    'discounts.apps.DiscountsConfig',
+    'goods.apps.GoodsConfig',
+    'orders.apps.OrdersConfig',
 ]
 
 MIDDLEWARE = [

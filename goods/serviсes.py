@@ -1,15 +1,11 @@
-from  models import Goods
+from models import Goods
 
 
 def final_price(price_discount):
     pass
 
 
-class Catalog:
-
-    def __init__(self, goods: Goods):
-        self.goods = goods
-
+class CatalogMixin:
 
     def final_price_calculation(self):
         pass
@@ -23,3 +19,26 @@ class Catalog:
     def list_sorting(self, query_param):
         pass
 
+
+class GoodsMixin:
+    """Класс-миксин для модели goods"""
+
+    def add_review(self, user_id: int, goods_id: int, review: str):
+        """
+        Добавляет отзыв на товар от определённого пользователя в модель review
+        :param user_id:
+        :param goods_id:
+        :param review
+        :return: None
+        Метод добавляет отзыв
+        """
+        pass
+
+    def price_calculation(self) -> int:
+        """
+        Метод расчитывает значение поля price как среднее значение полей price всех записей модели goods_in_market
+        имеющих отношение к текущей записи модели goods и с учётом скидки из модели Promotion, если она есть.
+        :param:
+        :return: int
+        """
+        pass
