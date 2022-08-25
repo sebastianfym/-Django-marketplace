@@ -5,4 +5,3 @@ from discounts.models import Promotion
 
 class CarouselModel(models.Model):
     goods_for_banner = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='goods_fk')
-    discounts_for_banner = models.ForeignKey(Promotion, on_delete=models.CASCADE, related_name='discounts_fk')
