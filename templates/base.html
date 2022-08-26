@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+  {% block header %}{% header %}
+
+  {% block content %}{% endblock %}
+
+
+  {% block footer %}{% footer %}
+</body>
+</html>
