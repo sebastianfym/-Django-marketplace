@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from discounts.models import Promotion
 from orders.models import Order
-from app_shop.models import Salesman
+from app_shop.models import Saler
 
 
 class Category(models.Model):
@@ -76,7 +76,7 @@ class GoodsInMarket(models.Model):
                                  on_delete=models.DO_NOTHING,
                                  related_name='goods_in_market'
                                  )
-    salesman = models.ForeignKey(Salesman,
+    saler = models.ForeignKey(Saler,
                                  verbose_name=_('goods'),
                                  on_delete=models.DO_NOTHING,
                                  related_name='goods_in_market'
