@@ -1,0 +1,24 @@
+<div class="Section">
+  <div class="wrap">
+    <div class="BannersHome">
+      {{ for item in banner_items }}
+      <a class="BannersHomeBlock" href="{{ url }}">
+        <div class="BannersHomeBlock-row">
+          <div class="BannersHomeBlock-block">
+            <strong class="BannersHomeBlock-title">{{ item.category.name }}</strong> <!-- Video Cards -->
+            <div class="BannersHomeBlock-content">
+              <p>from <span class="BannersHomeBlock-price">{{ item.price }}</span></p> <!--$199.00-->
+            </div>
+          </div>
+          <div class="BannersHomeBlock-block">
+            <div class="BannersHomeBlock-img">
+              <!-- TODO how do we store file  -->
+              <img src="{{ url item.image.path }}" alt="{{ item.image.path.split('/')[-1] }}"/>
+            </div>
+          </div>
+        </div>
+      </a>
+      {{ endfor }}
+    </div>
+  </div>
+</div>

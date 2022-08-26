@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>Main Page</title>
+</head>
+<body>
+{% extends "header.html" %}
+<div class="Middle">
+  {% include "section_1.html" %}
+  {% include "section_2.html" %}
+  {% include "section_3.html" %}
+  {% include "section_4.html" %}
+</div>
+{% include "footer.html" %}
+</body>
+</html>
