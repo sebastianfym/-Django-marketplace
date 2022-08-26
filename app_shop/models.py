@@ -1,5 +1,5 @@
 from django.db import models
 
 
-class Salesman(models.Model):
+class Seller(models.Model):
     pass

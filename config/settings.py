@@ -49,7 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    'goods',
+    'app_shop.apps.AppShopConfig',
+    'cart.apps.CartConfig',
+    'banners.apps.BannersConfig',
+    'discounts.apps.DiscountsConfig',
+    'goods.apps.GoodsConfig',
+    'orders.apps.OrdersConfig',
 ]
 
 MIDDLEWARE = [
