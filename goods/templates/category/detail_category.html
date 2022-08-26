@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail category view</title>
+</head>
+<body>
+<h2>{{ category.title }}</h2>
+{% for product in goods %}
+    {{ product.title }}
+{% endfor %}
+</body>
+</html>

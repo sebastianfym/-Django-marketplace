@@ -14,9 +14,16 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import goods
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+CACHES_TIME = 24
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -42,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    'customers.apps.CustomersConfig',
+    'goods',
 ]
 
 MIDDLEWARE = [
