@@ -5,12 +5,12 @@ from discounts.models import Promotion
 from orders.models import Order
 from app_shop.models import Seller
 
+
 class Feature(models.Model):
     pass
 
     def __str__(self):
         pass
-
 
 
 class Category(models.Model):
@@ -90,11 +90,11 @@ class GoodsInMarket(models.Model):
                                  on_delete=models.DO_NOTHING,
                                  related_name='goods_in_market'
                                  )
-    saler = models.ForeignKey(Saler,
-                                 verbose_name=_('goods'),
-                                 on_delete=models.DO_NOTHING,
-                                 related_name='goods_in_market'
-                                 )
+    seller = models.ForeignKey(Seller,
+                               verbose_name=_('goods'),
+                               on_delete=models.DO_NOTHING,
+                               related_name='goods_in_market'
+                               )
 
     def __str__(self):
         return self.goods.name

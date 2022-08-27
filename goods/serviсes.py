@@ -1,6 +1,5 @@
 from models import Goods
 
-
 def final_price(price_discount):
     pass
 
@@ -40,5 +39,25 @@ class GoodsMixin:
         имеющих отношение к текущей записи модели goods и с учётом скидки из модели Promotion, если она есть.
         :param:
         :return: int
+        """
+        pass
+
+    def add_to_view_history(self):
+        """
+        Добавляет товар, который был открыт в detail_view в список просмотренных товаров пользователя
+        :return: None
+        """
+        pass
+
+
+class GoodsInMarketMixin:
+    """
+    Класс-миксин для модели GoodsInMarket
+    """
+
+    def add_to_cart(self):
+        """
+        Добавляет товар от определённого продавца в корзину
+        :return:
         """
         pass
