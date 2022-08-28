@@ -140,3 +140,6 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
     }
 }
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
+MEDIA_URL = '/media/'

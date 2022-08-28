@@ -1,7 +1,9 @@
 from django.db import models
-from goods.models import Goods
 from discounts.models import Promotion
 
 
-class CarouselModel(models.Model):
-    goods_for_banner = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='goods_fk')
+class BannerModel(models.Model):
+    title = models.CharField(max_length=150)
+    description = models.CharField(max_length=500)
+    image = models.ImageField(blank=True, null=True)
+    promotion_for_banner = models.ForeignKey(Promotion, on_delete=models.CASCADE, related_name='promotion_fk')
