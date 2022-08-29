@@ -5,12 +5,12 @@ from discounts.models import Promotion
 from orders.models import Order
 from app_shop.models import Seller
 
+
 class Feature(models.Model):
     pass
 
     def __str__(self):
         pass
-
 
 
 class Category(models.Model):
