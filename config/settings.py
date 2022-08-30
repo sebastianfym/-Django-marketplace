@@ -128,4 +128,6 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 AUTH_USER_MODEL = 'customers.CustomerUser'
 
+LOGIN_REDIRECT_URL = '/profile'
+
 # ACCOUNT_USER_MODEL_USERNAME_FIELD = 'email'
