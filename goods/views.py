@@ -16,16 +16,3 @@ class CategoryView(View):
         if categories.update():
             cache.delete(cache_this)
         return render(request, 'category/category.html', context={'categories': categories})
-
-
-class DetailCategoryView(View):
-    """
-    Детальное представление определенной категории.
-    """
-    def get(self, request, pk):
-        cache_this = cache_page(3600 * CACHES_TIME)
-        category = Category.objects.get(id=pk)
-        goods = Goods.objects.filter(activity=True, category__id=pk)
-        return render(request, 'category/detail_category.html', context={'category': category,
-                                                                         'goods': goods,
-                                                                         })
