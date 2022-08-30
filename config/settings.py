@@ -142,3 +142,13 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+CACHES_TIME = 60
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+    }
+}
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
+MEDIA_URL = '/media/'
