@@ -2,19 +2,23 @@ from django.shortcuts import render
 from django.views import View
 from django.views.decorators.cache import cache_page
 from config.settings import CACHES_TIME
-
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from banners.forms import ClearCacheForm
 from banners.utils import clear_cache
+from banners.models import BannerModel
 
 
 class BannerView(View):
 
     def get(self, request):
-        return render(request, 'base.html')
+        list_banners = []
+        banner_obj = BannerModel.objects.all()
+        for banner in banner_obj:
+            list_banners.append(banner)
+        return render(request, 'base.html', context={'banner': list_banners})
 
     def cache_this(self, request):
         self.get(request)
