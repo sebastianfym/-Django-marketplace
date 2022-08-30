@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import CustomerUser
+
+
+class CustomerUserAdmin(admin.ModelAdmin):
+    exclude = ('password',)
+
+
+admin.site.register(CustomerUser, CustomerUserAdmin)
