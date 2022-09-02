@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import View
 from .models import Category, Goods
 from django.views.decorators.cache import cache_page
@@ -16,3 +16,20 @@ class CategoryView(View):
         if categories.update():
             cache.delete(cache_this)
         return render(request, 'category/category.html', context={'categories': categories})
+
+
+def detail_goods_page(request, slug):
+    """
+    Данная функция служит для детального представления определённого товара.
+    :param request:
+    :param slug:
+    :return:
+    """
+    cache_this = cache_page(3600 * CACHES_TIME)
+    post = get_object_or_404(Goods, slug=slug)
+
+    context = {
+        'post': post,
+    }
+
+    return render(request, 'goods/detail_goods_page.html', context=context)
