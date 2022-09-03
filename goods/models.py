@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator
 from discounts.models import Promotion
 from orders.models import Order
 from app_shop.models import Seller
+from customers.models import CustomerUser
 
 
 class Feature(models.Model):
@@ -11,6 +12,44 @@ class Feature(models.Model):
 
     def __str__(self):
         pass
+
+
+class Review(models.Model):
+    """
+    Review class consist of:
+    score: 0-5 graduated point of good
+    author: FK to Custom_user model (Unauthorized user can't create any review)
+    text: user text
+    image: user images
+    date_created: date_created
+    date_edited: date_edited
+    """
+    SCORES = (
+        (0, 'disgusting'),
+        (1, 'bad'),
+        (2, 'not good'),
+        (3, "it's ok"),
+        (4, 'good'),
+        (5, 'perfect'),
+    )
+    score = models.IntegerField(default=0, choices=SCORES)
+    author = models.ForeignKey(CustomerUser,
+                               on_delete=models.DO_NOTHING,
+                               related_name='author')
+    text = models.CharField(verbose_name='review text', max_length=1500)
+    image = models.ImageField(upload_to='images/review/', blank=True, null=True, width_field=1000, heigh_field=800)
+    date_created = models.DateTimeField(auto_now=True)
+    date_edited = models.DateTimeField(auto_now_add=True)
+
+
+class Comment(models.Model):
+    """Comment class for add any comments to any review """
+    parent_review = models.ForeignKey(Review, on_delete=models.CASCADE, blank=False)
+    author = models.ForeignKey(CustomerUser,
+                               on_delete=models.DO_NOTHING,
+                               related_name='author')
+    text = models.CharField(verbose_name='review text', max_length=1500)
+    date_created = models.DateTimeField(auto_now=True)
 
 
 class Category(models.Model):
@@ -63,6 +102,11 @@ class Goods(models.Model):
     feature = models.ManyToManyField(Feature,
                                      verbose_name=_('feature'),
                                      related_name='goods')
+    review = models.ForeignKey(Review,
+                               verbose_name='review',
+                               verbose_name_plural='reviews',
+                               on_delete=models.CASCADE,
+                               related_name='goods')
 
     def __str__(self):
         return f'{self.name}'
@@ -98,3 +142,4 @@ class GoodsInMarket(models.Model):
 
     def __str__(self):
         return self.goods.name
+
