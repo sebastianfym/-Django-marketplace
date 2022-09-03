@@ -32,6 +32,7 @@ class Review(models.Model):
         (4, 'good'),
         (5, 'perfect'),
     )
+    good = models.ForeignKey("Goods", on_delete=models.CASCADE)
     score = models.IntegerField(default=0, choices=SCORES)
     author = models.ForeignKey(CustomerUser,
                                on_delete=models.DO_NOTHING,
