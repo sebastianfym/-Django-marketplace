@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import View
+from django.views.generic import DetailView
+
 from .models import Category, Goods
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
@@ -28,3 +30,8 @@ def detail_goods_page(request, slug):
     cache_this = cache_page(3600 * CACHES_TIME)
     product = get_object_or_404(Goods, slug=slug)
     return render(request, 'goods/product.html', context={'product': product})
+
+
+class ShowDetailProduct(DetailView):
+    model = Goods
+    template_name = 'goods/product.html'
