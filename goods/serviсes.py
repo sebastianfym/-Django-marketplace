@@ -1,10 +1,31 @@
-from models import Goods
+from goods.models import Goods
+from django.http import HttpRequest
+from urllib.parse import parse_qs, urlparse
+
 
 def final_price(price_discount):
     pass
 
 
 class CatalogMixin:
+
+    def get_sort_param(self) -> dict:
+        """
+        Получает из get-параметров значения по ключам 'sort' и 'trend'
+        :return tuple
+        """
+        query_param = {'sort': 'price', 'trend': ''}
+        print('Словарь ГЕТ', self.request.GET.dict())
+        previous_param = {}
+        current_param = self.request.GET.dict()
+        referer_url = self.request.headers.get('Referer')
+        if referer_url:
+            previous_param = parse_qs(urlparse(referer_url).query)
+            for param in previous_param:
+                previous_param[param] = previous_param[param][0]
+        query_param.update(previous_param)
+        query_param.update(current_param)
+        return query_param
 
     def final_price_calculation(self):
         pass
