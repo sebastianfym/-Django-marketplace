@@ -1,6 +1,7 @@
 from goods.models import Goods
 from django.http import HttpRequest
 from urllib.parse import parse_qs, urlparse
+from django.db.models import Sum, Count, Q
 
 
 def final_price(price_discount):
@@ -14,17 +15,29 @@ class CatalogMixin:
         Получает из get-параметров значения по ключам 'sort' и 'trend'
         :return tuple
         """
+        ## sort_on_ = {'': self.object.get(all).order_by}
+        ## self.object.get(all).order_by()
         query_param = {'sort': 'price', 'trend': ''}
-        print('Словарь ГЕТ', self.request.GET.dict())
-        previous_param = {}
-        current_param = self.request.GET.dict()
-        referer_url = self.request.headers.get('Referer')
-        if referer_url:
-            previous_param = parse_qs(urlparse(referer_url).query)
-            for param in previous_param:
-                previous_param[param] = previous_param[param][0]
-        query_param.update(previous_param)
-        query_param.update(current_param)
+        #print('Словарь ГЕТ', self.request.GET.dict())
+        #previous_param = {}
+        #current_param = self.request.GET.dict()
+        #referer_url = self.request.headers.get('Referer')
+        #if referer_url:
+        #    previous_param = parse_qs(urlparse(referer_url).query)
+        #    for param in previous_param:
+        #        previous_param[param] = previous_param[param][0]
+        #query_param.update(previous_param)
+        #query_param.update(current_param)
+        #summ = Sum('goods_id')
+        #post_params = {'name': 'a', 'seller': 'b', 'price_min': 10, 'price_max': 1000}
+        #queryset = Goods.objects.annotate(in_stock=Sum('goods_in_market__quantity')).filter(
+        #    in_stock__gte=1,
+        #    price__gte=post_params['price_min'],
+        #    price__lte=post_params['price_max'],
+        #    name__icontains=post_params['name'],
+        #    goods_in_market__free_delivery=True,
+        #    goods_in_market__seller__title=post_params['seller']
+        #)
         return query_param
 
     def final_price_calculation(self):

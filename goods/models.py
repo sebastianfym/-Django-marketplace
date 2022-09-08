@@ -63,6 +63,7 @@ class Goods(models.Model):
     feature = models.ManyToManyField(Feature,
                                      verbose_name=_('feature'),
                                      related_name='goods')
+    rating = models.PositiveIntegerField(verbose_name='rating', default=0)
 
     def __str__(self):
         return f'{self.name}'
@@ -80,6 +81,7 @@ class GoodsInMarket(models.Model):
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))]
                                 )
     quantity = models.PositiveIntegerField(verbose_name=_('quantity'))
+    free_delivery = models.BooleanField(verbose_name=_('free_delivery'), default=False)
     goods = models.ForeignKey(Goods,
                               verbose_name=_('goods'),
                               on_delete=models.DO_NOTHING,
