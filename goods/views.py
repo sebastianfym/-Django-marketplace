@@ -16,3 +16,12 @@ class CategoryView(View):
         if categories.update():
             cache.delete(cache_this)
         return render(request, 'category/category.html', context={'categories': categories})
+
+
+class TopGoodsCatalogView(View):
+    """
+    Представление для топ-товаров на главное странице
+    """
+    def get(self, request):
+        top_goods = Goods.objects.filter(limit_edition=True)[:10]
+        return render(request, 'goods/top_product_catalog.html', context={'goods': top_goods})
