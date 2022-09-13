@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from discounts.models import Promotion
@@ -45,6 +46,7 @@ class Goods(models.Model):
     Модель является первичной с FK отношением к моделями goods_in_market и review
     """
     name = models.CharField(verbose_name='name', max_length=50)
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
     brand = models.CharField(verbose_name=_('brand'), max_length=50)
     price = models.DecimalField(verbose_name='price',
                                 max_digits=10,
@@ -66,6 +68,9 @@ class Goods(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+    def get_absolute_url(self):
+        return reverse('post', kwargs={'post_slug': self.slug})
 
 
 class GoodsInMarket(models.Model):
