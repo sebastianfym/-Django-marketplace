@@ -54,6 +54,8 @@
         {% endblock %}
     </header>
 
+
+
     {% block content %}
         {% include 'goods/test_catalog.html' %}
     {% endblock %}
@@ -71,5 +73,7 @@
         <script src="{% static 'assets/js/scripts.js' %}"></script>
     {% endblock %}
 
+    {% block top_goods_catalog %}
+    {% endblock %}
 </body>
 </html>

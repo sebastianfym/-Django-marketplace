@@ -1,9 +1,11 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from discounts.models import Promotion
 from orders.models import Order
 from app_shop.models import Seller
+from customers.models import CustomerUser
 
 
 class Feature(models.Model):
@@ -11,6 +13,45 @@ class Feature(models.Model):
 
     def __str__(self):
         pass
+
+
+class Review(models.Model):
+    """
+    Review class consist of:
+    score: 0-5 graduated point of good
+    author: FK to Custom_user model (Unauthorized user can't create any review)
+    text: user text
+    image: user images
+    date_created: date_created
+    date_edited: date_edited
+    """
+    SCORES = (
+        (0, 'disgusting'),
+        (1, 'bad'),
+        (2, 'not good'),
+        (3, "it's ok"),
+        (4, 'good'),
+        (5, 'perfect'),
+    )
+    good = models.ForeignKey("Goods", on_delete=models.CASCADE)
+    score = models.IntegerField(default=0, choices=SCORES)
+    author = models.ForeignKey(CustomerUser,
+                               on_delete=models.DO_NOTHING,
+                               related_name='author')
+    text = models.CharField(verbose_name='review text', max_length=1500)
+    image = models.ImageField(upload_to='images/review/', blank=True, null=True, width_field=1000, heigh_field=800)
+    date_created = models.DateTimeField(auto_now=True)
+    date_edited = models.DateTimeField(auto_now_add=True)
+
+
+class Comment(models.Model):
+    """Comment class for add any comments to any review """
+    parent_review = models.ForeignKey(Review, on_delete=models.CASCADE, blank=False)
+    author = models.ForeignKey(CustomerUser,
+                               on_delete=models.DO_NOTHING,
+                               related_name='author')
+    text = models.CharField(verbose_name='review text', max_length=1500)
+    date_created = models.DateTimeField(auto_now=True)
 
 
 class Category(models.Model):
@@ -45,6 +86,7 @@ class Goods(models.Model):
     Модель является первичной с FK отношением к моделями goods_in_market и review
     """
     name = models.CharField(verbose_name='name', max_length=50)
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
     brand = models.CharField(verbose_name=_('brand'), max_length=50)
     price = models.DecimalField(verbose_name='price',
                                 max_digits=10,
@@ -64,10 +106,18 @@ class Goods(models.Model):
     feature = models.ManyToManyField(Feature,
                                      verbose_name=_('feature'),
                                      related_name='goods')
+    review = models.ForeignKey(Review,
+                               verbose_name='review',
+                               verbose_name_plural='reviews',
+                               on_delete=models.CASCADE,
+                               related_name='goods')
     rating = models.PositiveIntegerField(verbose_name='rating', default=0)
 
     def __str__(self):
         return f'{self.name}'
+
+    def get_absolute_url(self):
+        return reverse('post', kwargs={'post_slug': self.slug})
 
 
 class GoodsInMarket(models.Model):
@@ -102,3 +152,4 @@ class GoodsInMarket(models.Model):
 
     def __str__(self):
         return self.goods.name
+
