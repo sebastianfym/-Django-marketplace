@@ -23,12 +23,17 @@ class CategoryView(View):
 
 class Catalog(CatalogMixin, ListView):
     model = Goods
-    template_name = 'goods/catalog.html'
+    template_name = 'goods/test_catalog.html'
+    paginate_by = 8
     
     def get_queryset(self):
-        sort_param = self.get_sort_param()
-        queryset = self.model.objects.order_by(f"{sort_param['trend']}{sort_param['sort']}")
+        queryset = self.get_parameters()
         return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context.update(self.normalises_values_parameters())
+        return context
         
         
     

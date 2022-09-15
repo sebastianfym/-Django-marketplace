@@ -1,7 +1,9 @@
 from goods.models import Goods
-from django.http import HttpRequest
 from urllib.parse import parse_qs, urlparse
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum
+from django.core.cache import cache
+from typing import Dict
+
 
 
 def final_price(price_discount):
@@ -10,35 +12,104 @@ def final_price(price_discount):
 
 class CatalogMixin:
 
-    def get_sort_param(self) -> dict:
+    def get_params_from_request(self, list_params: list, query_params: dict):
         """
-        Получает из get-параметров значения по ключам 'sort' и 'trend'
-        :return tuple
+        Извлекает параметры из гет-запроса согласно заданному списку
+        :param query_params:
+        :param list_params:
+        :return: params
         """
-        ## sort_on_ = {'': self.object.get(all).order_by}
-        ## self.object.get(all).order_by()
-        query_param = {'sort': 'price', 'trend': ''}
-        #print('Словарь ГЕТ', self.request.GET.dict())
-        #previous_param = {}
-        #current_param = self.request.GET.dict()
-        #referer_url = self.request.headers.get('Referer')
-        #if referer_url:
-        #    previous_param = parse_qs(urlparse(referer_url).query)
-        #    for param in previous_param:
-        #        previous_param[param] = previous_param[param][0]
-        #query_param.update(previous_param)
-        #query_param.update(current_param)
-        #summ = Sum('goods_id')
-        #post_params = {'name': 'a', 'seller': 'b', 'price_min': 10, 'price_max': 1000}
-        #queryset = Goods.objects.annotate(in_stock=Sum('goods_in_market__quantity')).filter(
-        #    in_stock__gte=1,
-        #    price__gte=post_params['price_min'],
-        #    price__lte=post_params['price_max'],
-        #    name__icontains=post_params['name'],
-        #    goods_in_market__free_delivery=True,
-        #    goods_in_market__seller__title=post_params['seller']
-        #)
-        return query_param
+        params = {}
+        for param in list_params:
+            value_param = query_params.get(param)
+            if value_param:
+                if isinstance(value_param, list):
+                    value_param = value_param[0]
+                if value_param == '+':
+                    value_param = ''
+                if param != 'trend' or value_param != '':  # если параметр не "тренд" или его значение не пустое
+                    params[param] = value_param            # заносим значение в словарь
+
+        return params
+
+    def get_parameters(self) -> dict:
+        """
+        Возвращает словерь с ключами 'filter' и 'sort'. Значениями являются словари с параметрами
+        фильтрации и параметрами сортировки соответственно.
+        :return
+        """
+        self.request.session.setdefault('filter_params', {})
+        filter_params = self.request.session.get('filter_params')
+        list_filter_params = ['name__icontains',
+                              'delivery__gte',
+                              'in_stock__gte',
+                              'goods_in_market__seller__title',
+                              'delivery__gte',
+                              'price__gte',
+                              'price__lte'
+                              ]
+
+        # Проверяем была ли нажата кнопка filter
+        if self.request.GET.get('filter') is not None:
+            filter_params.clear()
+            filter_params.update(self.get_params_from_request(list_filter_params, self.request.GET))
+
+        sort_params = {'sort': 'price', 'trend': ''}        # Параметры сортировки по умолчанию
+        previous_params = {}
+        list_sort_params = list(sort_params.keys())
+        current_param = self.get_params_from_request(list_sort_params, self.request.GET)
+
+        # Получение словаря из предыдущего гет-запроса с параметрами
+        referer_url = self.request.headers.get('Referer')
+        if referer_url:
+            previous_query_params = parse_qs(urlparse(referer_url).query)
+            previous_params.update(self.get_params_from_request(list_sort_params, previous_query_params))
+
+        # Обновляем словарь с параметрами сортировки сначала словарём с предыдущими параметрами, потом с текущими
+        # параметрами
+        sort_params.update(previous_params)
+        sort_params.update(current_param)
+        result_params = {'filter': filter_params, 'sort': sort_params}
+        return result_params
+
+        # Выбираем ОРМ-запрос. Если есть параметры, которые требую использование метода annotate то:
+    def select_orm_statement(self):
+        """
+        Возвращает кверисет с использованием метода annotate или без него в зависимости от значений
+        словаря, возвращаемого методом get_parameters()
+        :return: queryset
+        """
+        params = self.get_parameters()
+        filter_params = params.get('filter')
+        sort_params = params.get('sort')
+        if filter_params.get('delivery__gte') or filter_params.get('in_stock__gte'):
+            queryset = Goods.objects.annotate(
+                delivery=Sum('goods_in_market__free_delivery'),
+                in_stock=Sum('goods_in_market__quantity')
+            ).filter(**filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}")
+            return queryset
+
+        # Если фильтрация не требует метода annotate, то выражение ОРМ-запроса будет таким:
+        queryset = Goods.objects.filter(**filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}")
+        return queryset
+
+    def normalises_values_parameters(self) -> dict:
+        """
+        Преобразует значения в словаре с параметрами фильтрации для подстановки их в качестве
+        атрибутов в html тегах. Если чекбокс нажат, то значение '1' заменяется на 'checked'
+        :return: dict
+        """
+        filter_params = self.get_parameters().get('filter').copy()
+        list_checked_params = ['delivery__gte', 'in_stock__gte']
+        for param in list_checked_params:
+            if filter_params.get(param) == '1':
+                filter_params[param] = 'checked'
+        return filter_params
+
+
+
+### написать функцию для извлечения нормальных гетпараметров.
+
 
     def final_price_calculation(self):
         pass

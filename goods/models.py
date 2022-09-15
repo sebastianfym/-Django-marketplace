@@ -51,7 +51,8 @@ class Goods(models.Model):
                                 null=True,
                                 decimal_places=2,
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))])
-    describe = models.TextField(verbose_name='describe')
+    describe = models.TextField(verbose_name='describe',)
+    release_date = models.DateField(verbose_name=_('release_date'), null=True, blank=True)
     limit_edition = models.BooleanField(verbose_name=_('limit_edition'), default=False)
     category = models.ForeignKey(Category, verbose_name=_('category'), on_delete=models.CASCADE, related_name='goods')
     promotion = models.ForeignKey(Promotion,
@@ -81,6 +82,7 @@ class GoodsInMarket(models.Model):
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))]
                                 )
     quantity = models.PositiveIntegerField(verbose_name=_('quantity'))
+
     free_delivery = models.BooleanField(verbose_name=_('free_delivery'), default=False)
     goods = models.ForeignKey(Goods,
                               verbose_name=_('goods'),
