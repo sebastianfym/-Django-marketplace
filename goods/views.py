@@ -23,7 +23,7 @@ class CategoryView(View):
 
 class Catalog(CatalogMixin, ListView):
     model = Goods
-    template_name = 'goods/test_catalog.html'
+    template_name = 'goods/catalog.html'
     paginate_by = 8
     
     def get_queryset(self):
