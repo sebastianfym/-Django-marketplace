@@ -8,11 +8,30 @@ from app_shop.models import Seller
 from customers.models import CustomerUser
 
 
-class Feature(models.Model):
-    pass
+class FeatureName(models.Model):
+    """
+    Модель наименований характеристик, отдельная модель, для того, чтобы избежать дублирования наименований
+    Содержит в себе:
+    name: наименование характеристики
+    """
+    name = models.CharField(max_length=100, verbose_name='наименование')
 
-    def __str__(self):
-        pass
+    def str(self):
+        return f'{self.name}'
+
+
+class Feature(models.Model):
+    """
+    Класс моделей характеристик
+    Содержит в себе:
+    name: наименование характеристики
+    value: значение характеристики
+    """
+    name = models.ForeignKey(FeatureName, on_delete=models.CASCADE, verbose_name='наименование')
+    value = models.CharField(max_length=100, verbose_name='значение характеристики')
+
+    def str(self):
+        return f'{self.name}, {self.value}'
 
 
 class Review(models.Model):
@@ -33,13 +52,13 @@ class Review(models.Model):
         (4, 'good'),
         (5, 'perfect'),
     )
-    good = models.ForeignKey("Goods", on_delete=models.CASCADE)
+    good = models.ForeignKey("Goods", on_delete=models.CASCADE, related_name='good_in_review')
     score = models.IntegerField(default=0, choices=SCORES)
     author = models.ForeignKey(CustomerUser,
                                on_delete=models.DO_NOTHING,
-                               related_name='author')
+                               related_name='author_for_review')
     text = models.CharField(verbose_name='review text', max_length=1500)
-    image = models.ImageField(upload_to='images/review/', blank=True, null=True, width_field=1000, heigh_field=800)
+    image = models.ImageField(upload_to='images/review/', blank=True, null=True, width_field=1000, height_field=800)
     date_created = models.DateTimeField(auto_now=True)
     date_edited = models.DateTimeField(auto_now_add=True)
 
@@ -49,7 +68,7 @@ class Comment(models.Model):
     parent_review = models.ForeignKey(Review, on_delete=models.CASCADE, blank=False)
     author = models.ForeignKey(CustomerUser,
                                on_delete=models.DO_NOTHING,
-                               related_name='author')
+                               related_name='author_for_comment')
     text = models.CharField(verbose_name='review text', max_length=1500)
     date_created = models.DateTimeField(auto_now=True)
 
@@ -96,20 +115,23 @@ class Goods(models.Model):
     describe = models.TextField(verbose_name='describe')
     limit_edition = models.BooleanField(verbose_name=_('limit_edition'), default=False)
     category = models.ForeignKey(Category, verbose_name=_('category'), on_delete=models.CASCADE, related_name='goods')
+    image = models.ImageField(upload_to='uploads/', blank=True, null=True)
     promotion = models.ForeignKey(Promotion,
                                   blank=True,
                                   verbose_name=_('promotion'),
                                   on_delete=models.DO_NOTHING,
-                                  related_name='goods'
+                                  related_name='goods',
+                                  null=True
                                   )
     feature = models.ManyToManyField(Feature,
                                      verbose_name=_('feature'),
                                      related_name='goods')
     review = models.ForeignKey(Review,
                                verbose_name='review',
-                               verbose_name_plural='reviews',
                                on_delete=models.CASCADE,
-                               related_name='goods')
+                               related_name='goods',
+                               blank=True,
+                               null=True)
 
     def __str__(self):
         return f'{self.name}'
