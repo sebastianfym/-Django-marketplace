@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from discounts.models import Promotion
-from orders.models import Order
+#from orders.models import Order
 from app_shop.models import Seller
 from customers.models import CustomerUser
 
@@ -33,20 +33,20 @@ class Review(models.Model):
         (4, 'good'),
         (5, 'perfect'),
     )
-    good = models.ForeignKey("Goods", on_delete=models.CASCADE)
+    good = models.ForeignKey("Goods", on_delete=models.CASCADE, related_name='review')
     score = models.IntegerField(default=0, choices=SCORES)
     author = models.ForeignKey(CustomerUser,
                                on_delete=models.DO_NOTHING,
-                               related_name='author')
+                               related_name='review')    #-------------
     text = models.CharField(verbose_name='review text', max_length=1500)
-    image = models.ImageField(upload_to='images/review/', blank=True, null=True, width_field=1000, heigh_field=800)
+    image = models.ImageField(upload_to='images/review/', blank=True, null=True, width_field=1000, height_field=800)
     date_created = models.DateTimeField(auto_now=True)
     date_edited = models.DateTimeField(auto_now_add=True)
 
 
 class Comment(models.Model):
     """Comment class for add any comments to any review """
-    parent_review = models.ForeignKey(Review, on_delete=models.CASCADE, blank=False)
+    parent_review = models.ForeignKey(Review, on_delete=models.CASCADE, blank=False, related_name='comment') #-------
     author = models.ForeignKey(CustomerUser,
                                on_delete=models.DO_NOTHING,
                                related_name='author')
@@ -106,11 +106,10 @@ class Goods(models.Model):
     feature = models.ManyToManyField(Feature,
                                      verbose_name=_('feature'),
                                      related_name='goods')
-    review = models.ForeignKey(Review,
-                               verbose_name='review',
-                               verbose_name_plural='reviews',
-                               on_delete=models.CASCADE,
-                               related_name='goods')
+    #review = models.ForeignKey(Review,
+    #                           verbose_name='review',
+    #                           on_delete=models.CASCADE,
+    #                           related_name='goods')
     rating = models.PositiveIntegerField(verbose_name='rating', default=0)
 
     def __str__(self):
@@ -139,11 +138,11 @@ class GoodsInMarket(models.Model):
                               on_delete=models.DO_NOTHING,
                               related_name='goods_in_market'
                               )
-    order = models.OneToOneField(Order,
-                                 verbose_name=_('order'),
-                                 on_delete=models.DO_NOTHING,
-                                 related_name='goods_in_market'
-                                 )
+    #order = models.OneToOneField(Order,
+    #                             verbose_name=_('order'),
+    #                             on_delete=models.DO_NOTHING,
+    #                             related_name='goods_in_market'
+    #                             )
     seller = models.ForeignKey(Seller,
                                verbose_name=_('goods'),
                                on_delete=models.DO_NOTHING,

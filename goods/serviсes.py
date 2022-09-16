@@ -23,13 +23,12 @@ class CatalogMixin:
         for param in list_params:
             value_param = query_params.get(param)
             if value_param:
-                if isinstance(value_param, list):
-                    value_param = value_param[0]
-                if value_param == '+':
-                    value_param = ''
-                if param != 'trend' or value_param != '':  # если параметр не "тренд" или его значение не пустое
-                    params[param] = value_param            # заносим значение в словарь
-
+                if isinstance(value_param, list):  # Значения параметров приходят ввиде списка с одним элементом
+                    value_param = value_param[0]   # при исользовании urlparse значения необходимо извлекать вручную
+                if value_param:
+                    params[param] = value_param
+                if params.get('trend') == '+':
+                    params['trend'] = ''
         return params
 
     def get_parameters(self) -> dict:
@@ -82,10 +81,11 @@ class CatalogMixin:
         params = self.get_parameters()
         filter_params = params.get('filter')
         sort_params = params.get('sort')
-        if filter_params.get('delivery__gte') or filter_params.get('in_stock__gte'):
+        if filter_params.get('delivery__gte') or filter_params.get('in_stock__gte') or sort_params.get('quantity'):
             queryset = Goods.objects.annotate(
                 delivery=Sum('goods_in_market__free_delivery'),
-                in_stock=Sum('goods_in_market__quantity')
+                in_stock=Sum('goods_in_market__quantity'),
+                quantity=Sum('goods_in_market__order__quantity')
             ).filter(**filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}")
             return queryset
 
