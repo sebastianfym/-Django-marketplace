@@ -94,14 +94,14 @@
 
           <div class="Cards">
           {% for goods in object_list %}
-            <div class="Card"><a class="Card-picture" href="{% url '' %}"><img src="assets/img/content/home/card.jpg" alt="card.jpg"/></a>
+            <div class="Card"><a class="Card-picture" href="{{ goods.get_absolute_url }}"><img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/></a>
               <div class="Card-content">
-                <strong class="Card-title"><a href="product.html">Corsair Carbide Series Arctic White Steel</a>
+                <strong class="Card-title"><a href="{{ goods.get_absolute_url }}">Corsair Carbide Series Arctic White Steel</a>
                 </strong>
                 <div class="Card-description">
-                  <div class="Card-cost"><span class="Card-priceOld">$115.00</span><span class="Card-price">$85.00</span>
+                  <div class="Card-cost"><span class="Card-priceOld">${{ goods.price }}</span><span class="Card-price">${{ goods.price }}</span>
                   </div>
-                  <div class="Card-category">Games / xbox
+                  <div class="Card-category">{{ goods.category.title }}
                   </div>
                   <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/bookmark.svg" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/change.svg" alt="change.svg"/></a>
                   </div>

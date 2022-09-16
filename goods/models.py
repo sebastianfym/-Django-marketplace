@@ -152,4 +152,3 @@ class GoodsInMarket(models.Model):
 
     def __str__(self):
         return self.goods.name
-
