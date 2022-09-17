@@ -103,13 +103,16 @@
               </div>
         </div>
     <script>
-        const differentCheckBox = document.querySelector(name='differentFeature')
-
+        const differentCheckBox = document.querySelector('[name="differentFeature"]')
         differentCheckBox.addEventListener('change', function () {
-            if (this.checked) {
-                document.getElementById('Compare-row Compare-row_hide').style += "display: none"
+            if (differentCheckBox.checked) {
+                Array.prototype.forEach.call(document.getElementsByClassName('Compare-row_hide'), function(el) {
+                    el.style.display = 'none'
+                                    });
             } else {
-                document.getElementById('Compare-row Compare-row_hide').style += "display: flex"
+                Array.prototype.forEach.call(document.getElementsByClassName('Compare-row_hide'), function(el) {
+                    el.style.display = 'flex'
+                                    });
             }
         });
     </script>
