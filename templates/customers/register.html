@@ -3,6 +3,7 @@
     {% include 'elements/header.html' %}
 {% endblock %}
 {% block content %}
+    <form method="post">
     {% csrf_token %}
     <div class="wrap" style="margin-top: 15px">
         {% for field in form %}
@@ -22,6 +23,7 @@
         <button class="btn btn_success" type="submit">Sign up</button>
     </div>
     </div>
+    </form>
 {% endblock %}
 {% block footer %}
      {% include 'elements/footer.html' %}
