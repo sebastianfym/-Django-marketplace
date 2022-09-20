@@ -62,8 +62,3 @@ def detail_goods_page(request, slug):
 class ShowDetailProduct(DetailView):
     model = Goods
     template_name = 'goods/product.html'
-
-
-def fixtures(request):
-    get_entrys()
-    return render(request, 'goods/get_entrys.html')
