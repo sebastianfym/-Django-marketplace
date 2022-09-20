@@ -86,14 +86,15 @@ class Goods(models.Model):
     Модель является первичной с FK отношением к моделями goods_in_market и review
     """
     name = models.CharField(verbose_name='name', max_length=50)
-    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
-    brand = models.CharField(verbose_name=_('brand'), max_length=50)
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL", blank=True, null=True)
+    brand = models.CharField(verbose_name=_('brand'), max_length=50, blank=True, null=True)
     price = models.DecimalField(verbose_name='price',
                                 max_digits=10,
                                 null=True,
                                 decimal_places=2,
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))])
     describe = models.TextField(verbose_name='describe',)
+    image = models.ImageField(upload_to=None, height_field=None, width_field=None, blank=True, null=True)
     release_date = models.DateField(verbose_name=_('release_date'), null=True, blank=True)
     limit_edition = models.BooleanField(verbose_name=_('limit_edition'), default=False)
     category = models.ForeignKey(Category, verbose_name=_('category'), on_delete=models.CASCADE, related_name='goods')
@@ -101,22 +102,21 @@ class Goods(models.Model):
                                   blank=True,
                                   verbose_name=_('promotion'),
                                   on_delete=models.DO_NOTHING,
-                                  related_name='goods'
+                                  related_name='goods',
+                                  null=True
                                   )
     feature = models.ManyToManyField(Feature,
                                      verbose_name=_('feature'),
-                                     related_name='goods')
-    #review = models.ForeignKey(Review,
-    #                           verbose_name='review',
-    #                           on_delete=models.CASCADE,
-    #                           related_name='goods')
+                                     related_name='goods',
+                                     null=True, blank=True)
+
     rating = models.PositiveIntegerField(verbose_name='rating', default=0)
 
     def __str__(self):
         return f'{self.name}'
 
     def get_absolute_url(self):
-        return reverse('post', kwargs={'post_slug': self.slug})
+        return reverse('post', kwargs={'pk': self.pk})
 
 
 class GoodsInMarket(models.Model):

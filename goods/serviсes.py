@@ -1,4 +1,8 @@
-from goods.models import Goods
+import datetime
+import json
+from decimal import Decimal
+
+from goods.models import *
 from urllib.parse import parse_qs, urlparse
 from django.db.models import Sum
 from django.core.cache import cache
@@ -12,7 +16,7 @@ def final_price(price_discount):
 
 class CatalogMixin:
 
-    def get_params_from_request(self, list_params: list, query_params: dict):
+    def get_params_from_request(self, list_params: list, query_params: dict) -> dict:
         """
         Извлекает параметры из гет-запроса согласно заданному списку
         :param query_params:
@@ -20,6 +24,7 @@ class CatalogMixin:
         :return: params
         """
         params = {}
+        print(list_params)
         for param in list_params:
             value_param = query_params.get(param)
             if value_param:
@@ -29,6 +34,7 @@ class CatalogMixin:
                     params[param] = value_param
                 if params.get('trend') == '+':
                     params['trend'] = ''
+        print('this params', params)
         return params
 
     def get_parameters(self) -> dict:
@@ -43,15 +49,17 @@ class CatalogMixin:
                               'delivery__gte',
                               'in_stock__gte',
                               'goods_in_market__seller__title',
-                              'delivery__gte',
-                              'price__gte',
-                              'price__lte'
+                              'price'
                               ]
 
-        # Проверяем была ли нажата кнопка filter
+        # Проверяем была ли нажата кнопка filter. Если нажата, то заполняем filter_params новыми значениями.
         if self.request.GET.get('filter') is not None:
             filter_params.clear()
             filter_params.update(self.get_params_from_request(list_filter_params, self.request.GET))
+            range_price = filter_params.pop('price').split(';')
+            min_price = Decimal(range_price[0])
+            max_price = Decimal(range_price[1])
+            filter_params.update({'price__gte': min_price, 'price__lte': max_price})
 
         sort_params = {'sort': 'price', 'trend': ''}        # Параметры сортировки по умолчанию
         previous_params = {}
@@ -81,7 +89,7 @@ class CatalogMixin:
         params = self.get_parameters()
         filter_params = params.get('filter')
         sort_params = params.get('sort')
-        if filter_params.get('delivery__gte') or filter_params.get('in_stock__gte') or sort_params.get('quantity'):
+        if filter_params.get('delivery__gte') or filter_params.get('in_stock__gte') or sort_params['sort'] == 'quantity':
             queryset = Goods.objects.annotate(
                 delivery=Sum('goods_in_market__free_delivery'),
                 in_stock=Sum('goods_in_market__quantity'),
@@ -166,3 +174,30 @@ class GoodsInMarketMixin:
         :return:
         """
         pass
+
+import random
+def get_entrys():
+    #Category.objects.create(title='Видеокарты')
+    #with open('jsons/videocards.json', 'r') as file:
+    #    products = json.load(file)
+#
+    #for product in products:
+    #    name = products[product]['name']
+    #    price = products[product]['price'][:6]
+    #    price = price if price[-1].isdigit() else price[:-1]
+    #    price = Decimal(price)
+    #    describe = products[product]['describe']
+    #    release = datetime.date(random.randint(2020, 2021), random.randint(1, 12), random.randint(1, 28))
+    #    category = Category.objects.get(title='Видеокарты')
+    #    limit_edition = random.choice([False, False, False, True])
+#
+    #    Goods.objects.create(name=name,
+    #                         price=price,
+    #                         describe=describe,
+    #                         release_date=release,
+    #                         category=category,
+    #                         limit_edition=limit_edition)
+    videocards = Goods.objects.filter(category__title='Видеокарты').order_by('id')
+    for num, item in enumerate(videocards):
+        item.image = f'videocards/{num}.png'
+        item.save()

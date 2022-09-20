@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView
 from django.views.generic import DetailView
+from app_shop.models import Seller
 
 from .models import Category, Goods
 from django.views.decorators.cache import cache_page
@@ -9,6 +10,7 @@ from django.core.cache import cache
 from config.settings import CACHES_TIME
 from goods.serviсes import *
 from urllib.parse import urlparse, parse_qs
+from django.core.paginator import Paginator
 
 
 class CategoryView(View):
@@ -25,16 +27,20 @@ class CategoryView(View):
 
 class Catalog(CatalogMixin, ListView):
     model = Goods
-    template_name = 'goods/test_catalog.html'
+    template_name = 'goods/catalog.html'
     paginate_by = 8
+    context_object_name = 'catalog'
 
     def get_queryset(self):
-        queryset = self.get_parameters()
+        queryset = self.select_orm_statement()
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
-        context.update(self.normalises_values_parameters())
+        parameters = self.normalises_values_parameters()
+        print(parameters)
+        context.update(parameters)
+        context.update({'sellers': Seller.objects.all()})
         return context
 
 
@@ -56,3 +62,8 @@ def detail_goods_page(request, slug):
 class ShowDetailProduct(DetailView):
     model = Goods
     template_name = 'goods/product.html'
+
+
+def fixtures(request):
+    get_entrys()
+    return render(request, 'goods/get_entrys.html')

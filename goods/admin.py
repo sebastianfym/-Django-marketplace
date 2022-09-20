@@ -7,7 +7,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class GoodsAdmin(admin.ModelAdmin):
-    list_display = ["name"]
+    list_display = ['id', "name"]
     prepopulated_fields = {"slug": ("name",)}
 
 
