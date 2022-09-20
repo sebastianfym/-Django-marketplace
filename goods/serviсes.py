@@ -91,7 +91,7 @@ class CatalogMixin:
         sort_params = params.get('sort')
         if filter_params.get('delivery__gte') or filter_params.get('in_stock__gte') or sort_params[
             'sort'] == 'quantity':
-            queryset = Goods.objects.annotate(
+            queryset = Goods.objects.select_related('category').annotate(
                 delivery=Sum('goods_in_market__free_delivery'),
                 in_stock=Sum('goods_in_market__quantity'),
                 quantity=Sum('goods_in_market__order__quantity')
@@ -99,7 +99,7 @@ class CatalogMixin:
             return queryset
 
         # Если фильтрация не требует метода annotate, то выражение ОРМ-запроса будет таким:
-        queryset = Goods.objects.filter(**filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}")
+        queryset = Goods.objects.select_related('category').filter(**filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}")
         return queryset
 
     def normalises_values_parameters(self) -> dict:

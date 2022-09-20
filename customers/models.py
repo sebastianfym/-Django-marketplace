@@ -39,7 +39,3 @@ class CustomerUser(AbstractBaseUser, PermissionsMixin):
 
 class ViewsHistory(models.Model):
     pass
-
-
-class OrderHistory(models.Model):
-    pass

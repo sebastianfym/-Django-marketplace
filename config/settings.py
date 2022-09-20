@@ -151,3 +151,5 @@ CACHES = {
 AUTH_USER_MODEL = 'customers.CustomerUser'
 
 LOGIN_REDIRECT_URL = '/profile'
+
+FIXTURE_DIRS = os.path.join(BASE_DIR, 'fixtures')
