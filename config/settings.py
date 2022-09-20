@@ -141,7 +141,6 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
 CACHES_TIME = 60
 CACHES = {
     'default': {
