@@ -1,11 +1,10 @@
 from django.urls import path
-from .views import *
-# from .views import CategoryView, DetailCategoryView
-
+from .views import CategoryView, detail_goods_page, ShowDetailProduct, CompareView, AddProductToCompareView
 
 urlpatterns = [
     path('catalog/', Catalog.as_view(), name='catalog'),
+    path('compare/', CompareView.as_view(), name='compare'),
+    path("<int:id>/compare_add/", AddProductToCompareView.as_view(), name="compare_add"),
     path("<slug:slug>/", detail_goods_page, name='post'),
-    path('detail/<int:pk>/', ShowDetailProduct.as_view(), name='post'),
-    path('endrys', fixtures, name='fixtures'),
+    path('detail/<slug:slug>/', ShowDetailProduct.as_view(), name='post'),
 ]

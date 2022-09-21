@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView
 from django.views.generic import DetailView
@@ -8,10 +8,7 @@ from .models import Category, Goods
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from config.settings import CACHES_TIME
-from goods.serviсes import *
-from urllib.parse import urlparse, parse_qs
-from django.core.paginator import Paginator
-
+from goods.serviсes import CatalogMixin
 
 class CategoryView(View):
     """
@@ -62,6 +59,109 @@ def detail_goods_page(request, slug):
 class ShowDetailProduct(DetailView):
     model = Goods
     template_name = 'goods/product.html'
+
+
+class AddProductToCompareView(View):
+    """
+    Добавление товара в сравнение
+    """
+    def post(self, request, id, *args, **kwargs):
+        if not request.session.get("compare"):
+            request.session["compare"] = list()
+        if id not in request.session['compare']:
+            request.session['compare'].append(id)
+            request.session.modified = True
+        else:
+            request.session['compare'].remove(id)
+            request.session.modified = True
+        return redirect(request.POST.get("url_from"))
+
+
+class DeleteProductFromCompareView(View):
+    """
+    Удаление товара из списка сравнений
+    """
+    def post(self, request, *args, **kwargs):
+        id_product = int(request.POST.get("id"))
+        if id_product in request.session["compare"]:
+            request.session["compare"].remove(id_product)
+            request.session.modified = True
+        return redirect(request.POST.get("url_from"))
+
+
+class DeleteAllProductsFromCompareView(View):
+    """
+    Удаление всех товаров из сравнения
+    """
+    def post(self, request, *args, **kwargs):
+        if request.session.get("compare"):
+            del request.session["compare"]
+            request.session.modified = True
+        return redirect(request.POST.get("url_from"))
+
+
+class CompareView(View):
+
+    def get(self, request, *args, **kwargs):
+        compare_list = request.session.get("compare")
+        compare_list_products = list()
+        categories_list = list()
+        if compare_list is not None:
+            for element in compare_list:
+                product = Goods.objects.filter(
+                    id=element
+                ).select_related('category').prefetch_related('feature').first()
+                compare_list_products.append(product)
+                categories_list.append(product.category.title)
+            product_features = {
+                product.id: product.feature.all() for product in compare_list_products
+            }
+            if len(set(categories_list)) > 1:
+                context = {
+                    'compare_list_products': compare_list_products,
+                    'message': 'Невозможно сравнивать товары из разных категорий'
+                }
+                return render(request, 'goods/mycompare.html', context=context)
+            all_features = dict()
+            for product, features in product_features.items():
+                for feature in features:
+                    if all_features.get(feature.name, 0):
+                        all_features.get(feature.name).update(
+                            {product: feature.value}
+                        )
+                    else:
+                        all_features[feature.name] = {
+                            product: feature.value
+                        }
+
+            different_features = dict()
+            # for key, values in all_features.items():
+            #     if len(values.values()) != len(compare_list):
+            #         different_features.update({key: values})
+            #     else:
+            #         value_list = list()
+            #         for value in values.values():
+            #             value_list.append(value)
+            #         if len(set(value_list)) > 1:
+            #             different_features.update({key: values})
+            for key, values in all_features.items():
+                if len(values.values()) != len(compare_list):
+                    different_features.update({key: {'diff': values}})
+                    print(different_features[key])
+                else:
+                    value_list = list()
+                    for value in values.values():
+                        value_list.append(value)
+                    if len(set(value_list)) > 1:
+                        different_features.update({key: {'diff ': values}})
+                    else:
+                        different_features.update({key: {'same': values}})
+            print(different_features)
+            return render(request, 'goods/mycompare.html', {'compare_list': compare_list_products,
+                                                            'different_features': different_features})
+        else:
+            return render(request, 'goods/mycompare.html')
+
 
 
 def fixtures(request):

@@ -23,7 +23,7 @@
             <div class="ProductCard-look">
               <div class="ProductCard-photo">
                 <div class="ProductCard-sale">-15%
-                </div><img src="../static/assets/img/content/home/bigGoods.png" alt="bigGoods.png"/>
+                </div><img src="/static/assets/img/content/home/bigGoods.png" alt="bigGoods.png"/>
               </div>
               <div class="ProductCard-picts"><a class="ProductCard-pict ProductCard-pict_ACTIVE" href="../static/assets/img/content/home/bigGoods.png"><img src="../static/assets/img/content/home/bigGoods.png" alt="bigGoods.png"/></a><a class="ProductCard-pict" href="../django-frontend/assets/img/content/home/slider.png"><img src="../django-frontend/assets/img/content/home/slider.png" alt="slider.png"/></a><a class="ProductCard-pict" href="../django-frontend/assets/img/content/home/videoca.png"><img src="../django-frontend/assets/img/content/home/videoca.png" alt="videoca.png"/></a>
               </div>
@@ -39,7 +39,25 @@
                     <div class="ProductCard-priceOld">${{product.price}}
                     </div>
                   </div>
-                  <div class="ProductCard-compare"><a class="btn btn_default" href="#"><img class="btn-icon" src="../static/assets/img/icons/card/change.svg" alt="change.svg"/></a>
+                  <div class="ProductCard-compare">
+                      <form
+						action="{% url 'compare_add' id=product.id %}"
+						method="POST"
+						class="btn btn_default"
+					    >
+						{% csrf_token %}
+						<input
+							type="hidden"
+							name="url_from"
+							value="{{request.path}}"
+						/>
+						<button class="btn btn_default">
+							<span>
+								 <img class="btn-icon" src="/static/assets/img/icons/card/change.svg" alt="change.svg"/>
+							</span>
+						</button>
+					</form>
+
                   </div>
                 </div>
               </div>
@@ -63,7 +81,7 @@
                     </button>
                   </div>
                 </div>
-                <div class="ProductCard-cartElement"><a class="btn btn_primary" href="#"><img class="btn-icon" src="../static/assets/img/icons/card/cart_white.svg" alt="cart_white.svg"/><span class="btn-content">Add To Cart</span></a>
+                <div class="ProductCard-cartElement"><a class="btn btn_primary" href="#"><img class="btn-icon" src="/static/assets/img/icons/card/cart_white.svg" alt="cart_white.svg"/><span class="btn-content">Add To Cart</span></a>
                 </div>
               </div>
               <div class="ProductCard-footer">
@@ -84,7 +102,7 @@
                 <p>Lorem ipsum dolor sit amet, consectetuer&#32;
                   <strong>adipiscing
                   </strong>&#32;elit doli. Aenean commodo ligula eget dolor. Aenean massa.&#32;<a href="#">Cumtipsu</a>&#32;sociis natoque penatibus et magnis dis parturient montesti, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eutu, pretiumem.
-                </p><img class="pict pict_right" src="../static/assets/img/content/home/bigGoods.png" alt="bigGoods.png"/>
+                </p><img class="pict pict_right" src="/static/assets/img/content/home/bigGoods.png" alt="bigGoods.png"/>
                 <ul>
                   <li>Lorem ipsum dolor sit amet, consectetuer
                   </li>

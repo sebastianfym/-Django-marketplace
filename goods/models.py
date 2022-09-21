@@ -3,16 +3,35 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from discounts.models import Promotion
-#from orders.models import Order
+from orders.models import Order
 from app_shop.models import Seller
 from customers.models import CustomerUser
 
 
-class Feature(models.Model):
-    pass
+class FeatureName(models.Model):
+    """
+    Модель наименований характеристик, отдельная модель, для того, чтобы избежать дублирования наименований
+    Содержит в себе:
+    name: наименование характеристики
+    """
+    name = models.CharField(max_length=100, verbose_name='наименование')
 
-    def __str__(self):
-        pass
+    def str(self):
+        return f'{self.name}'
+
+
+class Feature(models.Model):
+    """
+    Класс моделей характеристик
+    Содержит в себе:
+    name: наименование характеристики
+    value: значение характеристики
+    """
+    name = models.ForeignKey(FeatureName, on_delete=models.CASCADE, verbose_name='наименование')
+    value = models.CharField(max_length=100, verbose_name='значение характеристики')
+
+    def str(self):
+        return f'{self.name}, {self.value}'
 
 
 class Review(models.Model):
@@ -49,7 +68,7 @@ class Comment(models.Model):
     parent_review = models.ForeignKey(Review, on_delete=models.CASCADE, blank=False, related_name='comment') #-------
     author = models.ForeignKey(CustomerUser,
                                on_delete=models.DO_NOTHING,
-                               related_name='author')
+                               related_name='author_for_comment')
     text = models.CharField(verbose_name='review text', max_length=1500)
     date_created = models.DateTimeField(auto_now=True)
 
