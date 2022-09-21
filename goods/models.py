@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from discounts.models import Promotion
-from orders.models import Order
+#from orders.models import Order
 from app_shop.models import Seller
 from customers.models import CustomerUser
 
@@ -14,7 +14,7 @@ class FeatureName(models.Model):
     Содержит в себе:
     name: наименование характеристики
     """
-    name = models.CharField(max_length=100, verbose_name='наименование')
+    name = models.CharField(max_length=100, verbose_name='наименование', null=True, blank=True)
 
     def str(self):
         return f'{self.name}'
@@ -27,8 +27,8 @@ class Feature(models.Model):
     name: наименование характеристики
     value: значение характеристики
     """
-    name = models.ForeignKey(FeatureName, on_delete=models.CASCADE, verbose_name='наименование')
-    value = models.CharField(max_length=100, verbose_name='значение характеристики')
+    name = models.ForeignKey(FeatureName, on_delete=models.CASCADE, verbose_name='наименование', null=True)
+    value = models.CharField(max_length=100, verbose_name='значение характеристики', null=True)
 
     def str(self):
         return f'{self.name}, {self.value}'

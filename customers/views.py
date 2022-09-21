@@ -2,28 +2,23 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic import CreateView
+from .models import CustomerUser
+from django.urls import reverse_lazy
 
 from customers.forms import RegistrationForm, AccountAuthenticationForm
 
 
-class UserRegisterFormView(View):
+class UserRegisterFormView(CreateView):
+    model = CustomerUser
+    form_class = RegistrationForm
+    template_name = 'customers/register.html'
+    success_url = reverse_lazy('catalog')
 
-    def get(self, request):
-        form = RegistrationForm()
-        return render(request, 'customers/register.html', context={'form': form})
-
-    def post(self, request):
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            email = form.cleaned_data.get('email')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(email=email, password=raw_password)
-            login(request, user)
-            return redirect('/profile')
-        else:
-            form = RegistrationForm()
-        return render(request, 'customers/register.html', context={'form': form})
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect(self.success_url)
 
 
 class AccountAuthenticationView(View):
