@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CategoryView, detail_goods_page, ShowDetailProduct, CompareView, AddProductToCompareView
+from .views import CategoryView, detail_goods_page, ShowDetailProduct, CompareView, AddProductToCompareView, Catalog
 
 urlpatterns = [
     path('catalog/', Catalog.as_view(), name='catalog'),

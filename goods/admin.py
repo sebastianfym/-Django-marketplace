@@ -15,6 +15,10 @@ class FeatureNameAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
 
+class FeatureAdmin(admin.ModelAdmin):
+    list_display = ['id', 'value']
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Goods, GoodsAdmin)
 admin.site.register(FeatureName, FeatureNameAdmin)

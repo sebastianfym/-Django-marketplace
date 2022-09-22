@@ -3,41 +3,17 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from discounts.models import Promotion
-<<<<<<< HEAD
-from orders.models import Order
-=======
->>>>>>> stage3/catalog/dev
 from app_shop.models import Seller
 from customers.models import CustomerUser
 
 
 class FeatureName(models.Model):
-<<<<<<< HEAD
     """
     Модель наименований характеристик, отдельная модель, для того, чтобы избежать дублирования наименований
     Содержит в себе:
     name: наименование характеристики
     """
-    name = models.CharField(max_length=100, verbose_name='наименование')
-
-    def str(self):
-        return f'{self.name}'
-
-
-class Feature(models.Model):
-    """
-    Класс моделей характеристик
-    Содержит в себе:
-    name: наименование характеристики
-    value: значение характеристики
-    """
-    name = models.ForeignKey(FeatureName, on_delete=models.CASCADE, verbose_name='наименование')
-    value = models.CharField(max_length=100, verbose_name='значение характеристики')
-
-    def str(self):
-        return f'{self.name}, {self.value}'
-=======
-    name = models.CharField(verbose_name=_('title'), max_length=100, blank=True, null=True)
+    name = models.CharField(max_length=100, verbose_name=_('name'))
 
     def __str__(self):
         return self.name
@@ -55,7 +31,7 @@ class Feature(models.Model):
 
     def __str__(self):
         return self.value
->>>>>>> stage3/catalog/dev
+
 
 
 class Review(models.Model):
