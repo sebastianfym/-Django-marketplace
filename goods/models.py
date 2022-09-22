@@ -3,7 +3,6 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from discounts.models import Promotion
-from orders.models import Order
 from app_shop.models import Seller
 from customers.models import CustomerUser
 
@@ -170,3 +169,12 @@ class GoodsInMarket(models.Model):
 
     def __str__(self):
         return self.goods.name
+
+
+class ViewHistory(models.Model):
+    customer = models.ForeignKey(CustomerUser, on_delete=models.CASCADE, related_name='viewshistorys', verbose_name='покупатель')
+    goods = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='viewshistorys', verbose_name='просмотренный товар')
+    last_view = models.DateTimeField(auto_now=True, verbose_name='дата последнего просмотра')
+
+    class Meta:
+        ordering = ['-customer', '-last_view']
