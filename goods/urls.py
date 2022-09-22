@@ -6,5 +6,5 @@ urlpatterns = [
     path('compare/', CompareView.as_view(), name='compare'),
     path("<int:id>/compare_add/", AddProductToCompareView.as_view(), name="compare_add"),
     path("<slug:slug>/", detail_goods_page, name='post'),
-    path('detail/<slug:slug>/', ShowDetailProduct.as_view(), name='post'),
+    path('detail/<int:pk>/', ShowDetailProduct.as_view(), name='post'),
 ]

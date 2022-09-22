@@ -3,12 +3,16 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from discounts.models import Promotion
+<<<<<<< HEAD
 from orders.models import Order
+=======
+>>>>>>> stage3/catalog/dev
 from app_shop.models import Seller
 from customers.models import CustomerUser
 
 
 class FeatureName(models.Model):
+<<<<<<< HEAD
     """
     Модель наименований характеристик, отдельная модель, для того, чтобы избежать дублирования наименований
     Содержит в себе:
@@ -32,6 +36,26 @@ class Feature(models.Model):
 
     def str(self):
         return f'{self.name}, {self.value}'
+=======
+    name = models.CharField(verbose_name=_('title'), max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Feature(models.Model):
+    value = models.CharField(verbose_name=_('value'), max_length=30, blank=True, null=True)
+    name = models.ForeignKey(FeatureName,
+                             verbose_name=_('name'),
+                             on_delete=models.CASCADE,
+                             related_name='feature_value',
+                             blank=True,
+                             null=True
+                             )
+
+    def __str__(self):
+        return self.value
+>>>>>>> stage3/catalog/dev
 
 
 class Review(models.Model):
@@ -157,11 +181,7 @@ class GoodsInMarket(models.Model):
                               on_delete=models.DO_NOTHING,
                               related_name='goods_in_market'
                               )
-    #order = models.OneToOneField(Order,
-    #                             verbose_name=_('order'),
-    #                             on_delete=models.DO_NOTHING,
-    #                             related_name='goods_in_market'
-    #                             )
+
     seller = models.ForeignKey(Seller,
                                verbose_name=_('goods'),
                                on_delete=models.DO_NOTHING,

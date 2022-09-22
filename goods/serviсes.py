@@ -9,7 +9,6 @@ from django.core.cache import cache
 from typing import Dict
 
 
-
 def final_price(price_discount):
     pass
 
@@ -29,7 +28,7 @@ class CatalogMixin:
             value_param = query_params.get(param)
             if value_param:
                 if isinstance(value_param, list):  # Значения параметров приходят ввиде списка с одним элементом
-                    value_param = value_param[0]   # при исользовании urlparse значения необходимо извлекать вручную
+                    value_param = value_param[0]  # при исользовании urlparse значения необходимо извлекать вручную
                 if value_param:
                     params[param] = value_param
                 if params.get('trend') == '+':
@@ -61,7 +60,7 @@ class CatalogMixin:
             max_price = Decimal(range_price[1])
             filter_params.update({'price__gte': min_price, 'price__lte': max_price})
 
-        sort_params = {'sort': 'price', 'trend': ''}        # Параметры сортировки по умолчанию
+        sort_params = {'sort': 'price', 'trend': ''}  # Параметры сортировки по умолчанию
         previous_params = {}
         list_sort_params = list(sort_params.keys())
         current_param = self.get_params_from_request(list_sort_params, self.request.GET)
@@ -80,6 +79,7 @@ class CatalogMixin:
         return result_params
 
         # Выбираем ОРМ-запрос. Если есть параметры, которые требую использование метода annotate то:
+
     def select_orm_statement(self):
         """
         Возвращает кверисет с использованием метода annotate или без него в зависимости от значений
@@ -89,8 +89,9 @@ class CatalogMixin:
         params = self.get_parameters()
         filter_params = params.get('filter')
         sort_params = params.get('sort')
-        if filter_params.get('delivery__gte') or filter_params.get('in_stock__gte') or sort_params['sort'] == 'quantity':
-            queryset = Goods.objects.annotate(
+        if filter_params.get('delivery__gte') or filter_params.get('in_stock__gte') or sort_params[
+            'sort'] == 'quantity':
+            queryset = Goods.objects.select_related('category').annotate(
                 delivery=Sum('goods_in_market__free_delivery'),
                 in_stock=Sum('goods_in_market__quantity'),
                 quantity=Sum('goods_in_market__order__quantity')
@@ -98,7 +99,7 @@ class CatalogMixin:
             return queryset
 
         # Если фильтрация не требует метода annotate, то выражение ОРМ-запроса будет таким:
-        queryset = Goods.objects.filter(**filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}")
+        queryset = Goods.objects.select_related('category').filter(**filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}")
         return queryset
 
     def normalises_values_parameters(self) -> dict:
@@ -114,10 +115,7 @@ class CatalogMixin:
                 filter_params[param] = 'checked'
         return filter_params
 
-
-
-### написать функцию для извлечения нормальных гетпараметров.
-
+    ### написать функцию для извлечения нормальных гетпараметров.
 
     def final_price_calculation(self):
         pass
@@ -175,29 +173,3 @@ class GoodsInMarketMixin:
         """
         pass
 
-import random
-def get_entrys():
-    #Category.objects.create(title='Видеокарты')
-    #with open('jsons/videocards.json', 'r') as file:
-    #    products = json.load(file)
-#
-    #for product in products:
-    #    name = products[product]['name']
-    #    price = products[product]['price'][:6]
-    #    price = price if price[-1].isdigit() else price[:-1]
-    #    price = Decimal(price)
-    #    describe = products[product]['describe']
-    #    release = datetime.date(random.randint(2020, 2021), random.randint(1, 12), random.randint(1, 28))
-    #    category = Category.objects.get(title='Видеокарты')
-    #    limit_edition = random.choice([False, False, False, True])
-#
-    #    Goods.objects.create(name=name,
-    #                         price=price,
-    #                         describe=describe,
-    #                         release_date=release,
-    #                         category=category,
-    #                         limit_edition=limit_edition)
-    videocards = Goods.objects.filter(category__title='Видеокарты').order_by('id')
-    for num, item in enumerate(videocards):
-        item.image = f'videocards/{num}.png'
-        item.save()

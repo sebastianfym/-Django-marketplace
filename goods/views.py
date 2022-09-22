@@ -161,9 +161,3 @@ class CompareView(View):
                                                             'different_features': different_features})
         else:
             return render(request, 'goods/mycompare.html')
-
-
-
-def fixtures(request):
-    get_entrys()
-    return render(request, 'goods/get_entrys.html')
