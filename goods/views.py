@@ -9,10 +9,12 @@ from django.core.cache import cache
 from config.settings import CACHES_TIME
 from goods.serviсes import CatalogMixin
 
+
 class CategoryView(View):
     """
     Представление для категорий товаров у которых activity = True.
     """
+
     def get(self, request):
         cache_this = cache_page(3600 * CACHES_TIME)
         categories = Category.objects.filter(activity=True)
@@ -34,24 +36,23 @@ class Catalog(CatalogMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
         parameters = self.normalises_values_parameters()
-        print(parameters)
         context.update(parameters)
         context.update({'sellers': Seller.objects.all()})
+        context.update({'category': Category.objects.all()})
+        print(self.request.user)
         return context
 
 
-
-
-
-def detail_goods_page(request, slug):
+def detail_goods_page(request, pk):
     """
     Данная функция служит для детального представления определённого товара.
+    :param pk:
     :param request:
     :param slug:
     :return:
     """
     cache_this = cache_page(3600 * CACHES_TIME)
-    product = get_object_or_404(Goods, slug=slug)
+    product = get_object_or_404(Goods, pk=pk)
     return render(request, 'goods/product.html', context={'product': product})
 
 
@@ -64,6 +65,7 @@ class AddProductToCompareView(View):
     """
     Добавление товара в сравнение
     """
+
     def post(self, request, id, *args, **kwargs):
         if not request.session.get("compare"):
             request.session["compare"] = list()
@@ -80,6 +82,7 @@ class DeleteProductFromCompareView(View):
     """
     Удаление товара из списка сравнений
     """
+
     def post(self, request, *args, **kwargs):
         id_product = int(request.POST.get("id"))
         if id_product in request.session["compare"]:
@@ -92,6 +95,7 @@ class DeleteAllProductsFromCompareView(View):
     """
     Удаление всех товаров из сравнения
     """
+
     def post(self, request, *args, **kwargs):
         if request.session.get("compare"):
             del request.session["compare"]
@@ -160,7 +164,6 @@ class CompareView(View):
                                                             'different_features': different_features})
         else:
             return render(request, 'goods/mycompare.html')
-
 
 
 def fixtures(request):

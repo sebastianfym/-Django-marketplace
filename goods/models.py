@@ -13,7 +13,7 @@ class FeatureName(models.Model):
     Содержит в себе:
     name: наименование характеристики
     """
-    name = models.CharField(max_length=100, verbose_name='наименование')
+    name = models.CharField(max_length=100, verbose_name='наименование', null=True, blank=True)
 
     def str(self):
         return f'{self.name}'
@@ -26,8 +26,8 @@ class Feature(models.Model):
     name: наименование характеристики
     value: значение характеристики
     """
-    name = models.ForeignKey(FeatureName, on_delete=models.CASCADE, verbose_name='наименование')
-    value = models.CharField(max_length=100, verbose_name='значение характеристики')
+    name = models.ForeignKey(FeatureName, on_delete=models.CASCADE, verbose_name='наименование', null=True)
+    value = models.CharField(max_length=100, verbose_name='значение характеристики', null=True)
 
     def str(self):
         return f'{self.name}, {self.value}'
