@@ -82,7 +82,6 @@ class DeleteProductFromCompareView(View):
     """
     Удаление товара из списка сравнений
     """
-
     def post(self, request, *args, **kwargs):
         id_product = int(request.POST.get("id"))
         if id_product in request.session["compare"]:
@@ -95,7 +94,6 @@ class DeleteAllProductsFromCompareView(View):
     """
     Удаление всех товаров из сравнения
     """
-
     def post(self, request, *args, **kwargs):
         if request.session.get("compare"):
             del request.session["compare"]
@@ -164,8 +162,3 @@ class CompareView(View):
                                                             'different_features': different_features})
         else:
             return render(request, 'goods/mycompare.html')
-
-
-def fixtures(request):
-    get_entrys()
-    return render(request, 'goods/get_entrys.html')

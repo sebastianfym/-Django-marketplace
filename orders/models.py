@@ -6,6 +6,11 @@ from django.core.validators import MinValueValidator
 
 
 class Order(models.Model):
+    """
+    Модель заказов. Один заказ содержит в себе одно наименование товара в количестве, указанном в поле quantity
+    Вторичная модель с отношением FK к моделям GoodsInMarket и CustomerUser. Имеет простые поля
+    quantity и total_cost.
+    """
     quantity = models.PositiveIntegerField(verbose_name=_('quantity'), null=True)
     total_cost = models.DecimalField(verbose_name='total_cost',
                                      max_digits=10,
@@ -24,3 +29,13 @@ class Order(models.Model):
                                  null=True,
                                  on_delete=models.DO_NOTHING,
                                  related_name='order')
+
+
+#class OrderHistory(models.Model):
+#    customer = models.ForeignKey(CustomerUser,
+#                                 verbose_name=_('order_history'),
+#                                 null=True,
+#                                 on_delete=models.DO_NOTHING,
+#                                 related_name='order_history')
+#    order = models.ForeignKey(Order,
+    #                          verbose_name=)

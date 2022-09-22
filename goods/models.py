@@ -13,10 +13,10 @@ class FeatureName(models.Model):
     Содержит в себе:
     name: наименование характеристики
     """
-    name = models.CharField(max_length=100, verbose_name='наименование', null=True, blank=True)
+    name = models.CharField(max_length=100, verbose_name=_('name'))
 
-    def str(self):
-        return f'{self.name}'
+    def __str__(self):
+        return self.name
 
 
 class Feature(models.Model):
@@ -26,11 +26,18 @@ class Feature(models.Model):
     name: наименование характеристики
     value: значение характеристики
     """
-    name = models.ForeignKey(FeatureName, on_delete=models.CASCADE, verbose_name='наименование', null=True)
-    value = models.CharField(max_length=100, verbose_name='значение характеристики', null=True)
+    value = models.CharField(verbose_name=_('value'), max_length=30, blank=True, null=True)
+    name = models.ForeignKey(FeatureName,
+                             verbose_name=_('name'),
+                             on_delete=models.CASCADE,
+                             related_name='feature_value',
+                             blank=True,
+                             null=True
+                             )
 
-    def str(self):
-        return f'{self.name}, {self.value}'
+    def __str__(self):
+        return self.value
+
 
 
 class Review(models.Model):
@@ -156,11 +163,7 @@ class GoodsInMarket(models.Model):
                               on_delete=models.DO_NOTHING,
                               related_name='goods_in_market'
                               )
-    #order = models.OneToOneField(Order,
-    #                             verbose_name=_('order'),
-    #                             on_delete=models.DO_NOTHING,
-    #                             related_name='goods_in_market'
-    #                             )
+
     seller = models.ForeignKey(Seller,
                                verbose_name=_('goods'),
                                on_delete=models.DO_NOTHING,
