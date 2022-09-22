@@ -27,11 +27,10 @@ class CatalogMixin:
         print(list_params)
         for param in list_params:
             value_param = query_params.get(param)
+            if isinstance(value_param, list):        # Значения параметров приходят ввиде списка с одним элементом
+                value_param = value_param[0]        # при исользовании urlparse значения необходимо извлекать вручную
             if value_param:
-                if isinstance(value_param, list):  # Значения параметров приходят ввиде списка с одним элементом
-                    value_param = value_param[0]   # при исользовании urlparse значения необходимо извлекать вручную
-                if value_param:
-                    params[param] = value_param
+                params[param] = value_param
                 if params.get('trend') == '+':
                     params['trend'] = ''
         print('this params', params)
@@ -43,7 +42,17 @@ class CatalogMixin:
         фильтрации и параметрами сортировки соответственно.
         :return
         """
-        self.request.session.setdefault('filter_params', {})
+        #self.request.session.setdefault('category_filter_parameter', {})
+        #category_filter = self.request.session.get('category_filter_parameter')
+        #new_category_param = self.get_params_from_request(['category__title'], self.request.GET)
+        #category_filter.update(new_category_param)
+        #if category_filter.get('category__title') == 'all':
+        #    category_filter = {}
+
+
+        #self.request.session.setdefault('filter_params', {})
+        if not self.request.GET:
+            self.request.session['filter_params'] = {}
         filter_params = self.request.session.get('filter_params')
         list_filter_params = ['name__icontains',
                               'delivery__gte',

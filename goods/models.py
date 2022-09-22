@@ -3,7 +3,6 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from discounts.models import Promotion
-from orders.models import Order
 from app_shop.models import Seller
 from customers.models import CustomerUser
 

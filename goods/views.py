@@ -3,7 +3,6 @@ from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView
 from django.views.generic import DetailView
 from app_shop.models import Seller
-
 from .models import Category, Goods
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
