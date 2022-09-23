@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
     'customers',
     'app_shop',
     'cart',
@@ -151,5 +150,3 @@ CACHES = {
 AUTH_USER_MODEL = 'customers.CustomerUser'
 
 LOGIN_REDIRECT_URL = '/profile'
-
-FIXTURE_DIRS = os.path.join(BASE_DIR, 'fixtures')

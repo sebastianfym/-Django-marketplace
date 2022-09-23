@@ -127,7 +127,7 @@ class Goods(models.Model):
     feature = models.ManyToManyField(Feature,
                                      verbose_name=_('feature'),
                                      related_name='goods',
-                                     null=True, blank=True)
+                                     blank=True)
 
     rating = models.PositiveIntegerField(verbose_name='rating', default=0)
 

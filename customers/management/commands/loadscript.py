@@ -6,10 +6,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 
 
-try:
-    FOLDER_FIXTURES = settings.FOLDER_FIXTURES
-except AttributeError:
-    FOLDER_FIXTURES = 'fixtures'
+FOLDER_FIXTURES = 'fixtures'
 
 
 class Command(BaseCommand):
