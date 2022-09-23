@@ -1,7 +1,7 @@
 import datetime
 import json
 from decimal import Decimal
-
+from django.db.models import QuerySet
 from goods.models import *
 from urllib.parse import parse_qs, urlparse
 from django.db.models import Sum
@@ -23,16 +23,16 @@ class CatalogMixin:
         :return: params
         """
         params = {}
-        print(list_params)
+        # print(list_params)
         for param in list_params:
             value_param = query_params.get(param)
-            if isinstance(value_param, list):        # Значения параметров приходят ввиде списка с одним элементом
-                value_param = value_param[0]        # при исользовании urlparse значения необходимо извлекать вручную
+            if isinstance(value_param, list):  # Значения параметров приходят ввиде списка с одним элементом
+                value_param = value_param[0]  # при исользовании urlparse значения необходимо извлекать вручную
             if value_param:
                 params[param] = value_param
                 if params.get('trend') == '+':
                     params['trend'] = ''
-        print('this params', params)
+        # print('this params', params)
         return params
 
     def get_parameters(self) -> dict:
@@ -41,16 +41,18 @@ class CatalogMixin:
         фильтрации и параметрами сортировки соответственно.
         :return
         """
-        #self.request.session.setdefault('category_filter_parameter', {})
-        #category_filter = self.request.session.get('category_filter_parameter')
-        #new_category_param = self.get_params_from_request(['category__title'], self.request.GET)
-        #category_filter.update(new_category_param)
-        #if category_filter.get('category__title') == 'all':
-        #    category_filter = {}
 
+        #print('this session parameters', self.request.session.get('filter_params'))
+        # self.request.session.setdefault('category_filter_parameter', {})
+        # category_filter = self.request.session.get('category_filter_parameter')
+        # new_category_param = self.get_params_from_request(['category__title'], self.request.GET)
+        # category_filter.update(new_category_param)
+        # if category_filter.get('category__title') == 'all':
+        #    category_filter = {}
 
         #self.request.session.setdefault('filter_params', {})
         if not self.request.GET:
+            print('обнулили сессию')
             self.request.session['filter_params'] = {}
         filter_params = self.request.session.get('filter_params')
         list_filter_params = ['name__icontains',
@@ -62,12 +64,13 @@ class CatalogMixin:
 
         # Проверяем была ли нажата кнопка filter. Если нажата, то заполняем filter_params новыми значениями.
         if self.request.GET.get('filter') is not None:
+            print('нажата кнопка')
             filter_params.clear()
             filter_params.update(self.get_params_from_request(list_filter_params, self.request.GET))
-            range_price = filter_params.pop('price').split(';')
-            min_price = Decimal(range_price[0])
-            max_price = Decimal(range_price[1])
-            filter_params.update({'price__gte': min_price, 'price__lte': max_price})
+            #range_price = filter_params.pop('price').split(';')
+            #min_price = Decimal(range_price[0])
+            #max_price = Decimal(range_price[1])
+            #filter_params.update({'price__gte': min_price, 'price__lte': max_price})
 
         sort_params = {'sort': 'price', 'trend': ''}  # Параметры сортировки по умолчанию
         previous_params = {}
@@ -88,27 +91,34 @@ class CatalogMixin:
         return result_params
 
         # Выбираем ОРМ-запрос. Если есть параметры, которые требую использование метода annotate то:
-    def select_orm_statement(self):
+
+    def select_orm_statement(self) -> QuerySet:
         """
         Возвращает кверисет с использованием метода annotate или без него в зависимости от значений
         словаря, возвращаемого методом get_parameters()
         :return: queryset
         """
+        print('this session', self.request.session.get('filter_params'))
         params = self.get_parameters()
+        #print('this params', params)
         filter_params = params.get('filter')
+        #category_params = params.get('category_filter')
         sort_params = params.get('sort')
         if filter_params.get('delivery__gte') or filter_params.get('in_stock__gte') or sort_params[
-            'sort'] == 'quantity':
+            'sort'
+        ] == 'quantity':
             queryset = Goods.objects.select_related('category').annotate(
                 delivery=Sum('goods_in_market__free_delivery'),
                 in_stock=Sum('goods_in_market__quantity'),
                 quantity=Sum('goods_in_market__order__quantity')
             ).filter(**filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}")
+            #print('this more session', self.request.session.get('filter_params'))
             return queryset
 
         # Если фильтрация не требует метода annotate, то выражение ОРМ-запроса будет таким:
         queryset = Goods.objects.select_related('category').filter(
             **filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}")
+        #print('this more session', self.request.session.get('filter_params'))
         return queryset
 
     def normalises_values_parameters(self) -> dict:
@@ -117,13 +127,15 @@ class CatalogMixin:
         атрибутов в html тегах. Если чекбокс нажат, то значение '1' заменяется на 'checked'
         :return: dict
         """
-        filter_params = self.get_parameters().get('filter').copy()
+        filter_params = self.request.session.get('filter_params').copy()
+        print(filter_params)
+        #filter_params = self.get_parameters().get('filter').copy()
         list_checked_params = ['delivery__gte', 'in_stock__gte']
         for param in list_checked_params:
             if filter_params.get(param) == '1':
                 filter_params[param] = 'checked'
+        #print('this more session', self.request.session.get('filter_params'))
         return filter_params
-
 
     def final_price_calculation(self):
         pass
@@ -180,4 +192,3 @@ class GoodsInMarketMixin:
         :return:
         """
         pass
-

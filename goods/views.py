@@ -25,12 +25,13 @@ class CategoryView(View):
 
 class Catalog(CatalogMixin, ListView):
     model = Goods
-    template_name = 'goods/catalog.html'
+    template_name = 'goods/test_catalog.html'
     paginate_by = 8
     context_object_name = 'catalog'
 
     def get_queryset(self):
         queryset = self.select_orm_statement()
+        print('this session in queryset', self.request.session.get('filter_params'))
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -39,7 +40,7 @@ class Catalog(CatalogMixin, ListView):
         context.update(parameters)
         context.update({'sellers': Seller.objects.all()})
         context.update({'category': Category.objects.all()})
-        print(self.request.user)
+        print('this session in context_data', self.request.session.get('filter_params'))
         return context
 
 
