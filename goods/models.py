@@ -15,8 +15,8 @@ class FeatureName(models.Model):
     """
     name = models.CharField(max_length=100, verbose_name=_('name'))
 
-    def __str__(self):
-        return self.name
+    #def __str__(self):
+    #    return self.name
 
 
 class Feature(models.Model):
