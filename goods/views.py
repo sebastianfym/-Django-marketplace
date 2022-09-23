@@ -1,14 +1,18 @@
+import datetime
+
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView
 from django.views.generic import DetailView
 from app_shop.models import Seller
 
-from .models import Category, Goods
+from .models import Category, Goods, ViewHistory
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from config.settings import CACHES_TIME
 from goods.serviсes import CatalogMixin
+from customers.models import CustomerUser
 
 class CategoryView(View):
     """
@@ -41,9 +45,6 @@ class Catalog(CatalogMixin, ListView):
         return context
 
 
-
-
-
 def detail_goods_page(request, slug):
     """
     Данная функция служит для детального представления определённого товара.
@@ -53,6 +54,7 @@ def detail_goods_page(request, slug):
     """
     cache_this = cache_page(3600 * CACHES_TIME)
     product = get_object_or_404(Goods, slug=slug)
+    add_to_view_history(request.user, product)
     return render(request, 'goods/product.html', context={'product': product})
 
 
@@ -161,3 +163,28 @@ class CompareView(View):
                                                             'different_features': different_features})
         else:
             return render(request, 'goods/mycompare.html')
+
+    def get(self, request):
+        return render(request, "elements/account.html")
+
+
+def add_to_view_history(customer, goods: Goods) -> None:
+    ViewHistory.objects.update_or_create(customer=customer,
+                                         goods=goods,
+                                         defaults={'last_view': datetime.datetime.now()})
+
+
+def remove_from_view_history(customer, goods: Goods) -> None:
+    ViewHistory.objects.delete(customer=customer, goods=goods)
+
+
+def is_in_view_history(customer, goods: Goods) -> bool:
+    if ViewHistory.objects.get(customer=customer, goods=goods):
+        return True
+    else:
+        return False
+
+
+def view_history(request: HttpRequest) -> HttpResponse:
+    history_list = ViewHistory.objects.filter(customer=request.user)[:20]
+    return render(request, 'goods/historyview.html', context={'history_list': history_list})
