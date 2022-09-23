@@ -13,7 +13,7 @@ class FeatureName(models.Model):
     Содержит в себе:
     name: наименование характеристики
     """
-    name = models.CharField(max_length=100, verbose_name=_('name'))
+    name = models.CharField(max_length=100, verbose_name=_('name'), null=True)
 
     def __str__(self):
         return self.name
@@ -56,7 +56,7 @@ class Review(models.Model):
     score = models.IntegerField(default=0, choices=SCORES)
     author = models.ForeignKey(CustomerUser,
                                on_delete=models.DO_NOTHING,
-                               related_name='review')    #-------------
+                               related_name='review')
     text = models.CharField(verbose_name='review text', max_length=1500)
     image = models.ImageField(upload_to='images/review/', blank=True, null=True, width_field=1000, height_field=800)
     date_created = models.DateTimeField(auto_now=True)
@@ -150,6 +150,7 @@ class GoodsInMarket(models.Model):
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))]
                                 )
     quantity = models.PositiveIntegerField(verbose_name=_('quantity'))
+    free_delivery = models.BooleanField(verbose_name=_('free_delivery'), default=False)
     goods = models.ForeignKey(Goods,
                               verbose_name=_('goods'),
                               on_delete=models.DO_NOTHING,
