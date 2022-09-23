@@ -39,7 +39,7 @@ class Review(models.Model):
                                on_delete=models.DO_NOTHING,
                                related_name='author')
     text = models.CharField(verbose_name='review text', max_length=1500)
-    image = models.ImageField(upload_to='images/review/', blank=True, null=True, width_field=1000, heigh_field=800)
+    image = models.ImageField(upload_to='images/review/', blank=True, null=True, width_field=1000)
     date_created = models.DateTimeField(auto_now=True)
     date_edited = models.DateTimeField(auto_now_add=True)
 
@@ -48,8 +48,8 @@ class Comment(models.Model):
     """Comment class for add any comments to any review """
     parent_review = models.ForeignKey(Review, on_delete=models.CASCADE, blank=False)
     author = models.ForeignKey(CustomerUser,
-                               on_delete=models.DO_NOTHING,
-                               related_name='author')
+                               on_delete=models.DO_NOTHING,)
+                               # related_name='author')
     text = models.CharField(verbose_name='review text', max_length=1500)
     date_created = models.DateTimeField(auto_now=True)
 
@@ -105,11 +105,10 @@ class Goods(models.Model):
     feature = models.ManyToManyField(Feature,
                                      verbose_name=_('feature'),
                                      related_name='goods')
-    review = models.ForeignKey(Review,
-                               verbose_name='review',
-                               verbose_name_plural='reviews',
-                               on_delete=models.CASCADE,
-                               related_name='goods')
+    # review = models.ForeignKey(Review,
+    #                            verbose_name='review',
+    #                            on_delete=models.CASCADE,
+    #                            related_name='goods')
 
     def __str__(self):
         return f'{self.name}'

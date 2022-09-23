@@ -20,18 +20,10 @@ class CategoryView(View):
         return render(request, 'category/category.html', context={'categories': categories})
 
 
-def detail_goods_page(request, slug):
+class ShowDetailProduct(DetailView):
     """
-    Данная функция служит для детального представления определённого товара.
-    :param request:
-    :param slug:
-    :return:
+    Данный класс служит для детального представления определённого товара
     """
     cache_this = cache_page(3600 * CACHES_TIME)
-    product = get_object_or_404(Goods, slug=slug)
-    return render(request, 'goods/product.html', context={'product': product})
-
-
-class ShowDetailProduct(DetailView):
     model = Goods
     template_name = 'goods/product.html'
