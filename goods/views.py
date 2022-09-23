@@ -59,6 +59,10 @@ def detail_goods_page(request, slug):
 
 
 class ShowDetailProduct(DetailView):
+    """
+    Данный класс служит для детального представления определённого товара
+    """
+    cache_this = cache_page(3600 * CACHES_TIME)
     model = Goods
     template_name = 'goods/product.html'
 

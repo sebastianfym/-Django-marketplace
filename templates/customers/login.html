@@ -17,27 +17,30 @@
             margin: 0 auto ;
         }
     </style>
+    <form method="post">
     {% csrf_token %}
-    <div class="wrap" style="margin-top: 15px; text-align: center">
-        {% for field in form %}
-        <div class="form-group">
-            <div class="form-label">
-                {{ field.label_tag }}
+        <div class="wrap" style="margin-top: 15px; text-align: center">
+            {% for field in form %}
+                <div class="form-group">
+                    <div class="form-label">
+                        {{ field.label_tag }}
+                    </div>
+                    <div class="form-input">
+                        {{ field.as_text }}
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="btn_outline" style="margin-top: 15px">
+                <button class="btn btn_success" type="submit">Войти</button>
             </div>
-            <div class="form-input">
-                {{ field.as_text }}
+
+            <div class="btn_outline" style="margin-top: 15px">
+                <button class="btn btn_success" type="submit">
+                    <a style="color: white" href="register">Зарегестироваться</a>
+                </button>
             </div>
         </div>
-    {% endfor %}
-    <div class="btn_outline" style="margin-top: 15px">
-        <button class="btn btn_success" type="submit">Войти</button>
-    </div>
-    <div class="btn_outline" style="margin-top: 15px">
-        <button class="btn btn_success" type="submit">
-            <a style="color: white" href="register">Зарегестироваться</a>
-        </button>
-    </div>
-    </div>
+    </form>
 {% endblock %}
 {% block footer %}
      {% include 'elements/footer.html' %}

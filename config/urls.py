@@ -26,5 +26,6 @@ urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
     path('goods/', include('goods.urls')),
     path('banners/', include('banners.urls')),
+    path('customers/', include('customers.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

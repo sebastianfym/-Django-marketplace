@@ -150,14 +150,11 @@ class GoodsInMarket(models.Model):
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))]
                                 )
     quantity = models.PositiveIntegerField(verbose_name=_('quantity'))
-
-    free_delivery = models.BooleanField(verbose_name=_('free_delivery'), default=False)
     goods = models.ForeignKey(Goods,
                               verbose_name=_('goods'),
                               on_delete=models.DO_NOTHING,
                               related_name='goods_in_market'
                               )
-
     seller = models.ForeignKey(Seller,
                                verbose_name=_('goods'),
                                on_delete=models.DO_NOTHING,
