@@ -1,20 +1,23 @@
+import datetime
+
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView
 from django.views.generic import DetailView
 from app_shop.models import Seller
-from .models import Category, Goods
+
+from .models import Category, Goods, ViewHistory
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from config.settings import CACHES_TIME
 from goods.serviсes import CatalogMixin
-
+from customers.models import CustomerUser
 
 class CategoryView(View):
     """
     Представление для категорий товаров у которых activity = True.
     """
-
     def get(self, request):
         cache_this = cache_page(3600 * CACHES_TIME)
         categories = Category.objects.filter(activity=True)
@@ -25,13 +28,12 @@ class CategoryView(View):
 
 class Catalog(CatalogMixin, ListView):
     model = Goods
-    template_name = 'goods/test_catalog.html'
+    template_name = 'goods/catalog.html'
     paginate_by = 8
     context_object_name = 'catalog'
 
     def get_queryset(self):
         queryset = self.select_orm_statement()
-        print('this session in queryset', self.request.session.get('filter_params'))
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -58,6 +60,10 @@ def detail_goods_page(request, pk):
 
 
 class ShowDetailProduct(DetailView):
+    """
+    Данный класс служит для детального представления определённого товара
+    """
+    cache_this = cache_page(3600 * CACHES_TIME)
     model = Goods
     template_name = 'goods/product.html'
 
@@ -66,7 +72,6 @@ class AddProductToCompareView(View):
     """
     Добавление товара в сравнение
     """
-
     def post(self, request, id, *args, **kwargs):
         if not request.session.get("compare"):
             request.session["compare"] = list()
@@ -163,3 +168,28 @@ class CompareView(View):
                                                             'different_features': different_features})
         else:
             return render(request, 'goods/mycompare.html')
+
+    def get(self, request):
+        return render(request, "elements/account.html")
+
+
+def add_to_view_history(customer, goods: Goods) -> None:
+    ViewHistory.objects.update_or_create(customer=customer,
+                                         goods=goods,
+                                         defaults={'last_view': datetime.datetime.now()})
+
+
+def remove_from_view_history(customer, goods: Goods) -> None:
+    ViewHistory.objects.delete(customer=customer, goods=goods)
+
+
+def is_in_view_history(customer, goods: Goods) -> bool:
+    if ViewHistory.objects.get(customer=customer, goods=goods):
+        return True
+    else:
+        return False
+
+
+def view_history(request: HttpRequest) -> HttpResponse:
+    history_list = ViewHistory.objects.filter(customer=request.user)[:20]
+    return render(request, 'goods/historyview.html', context={'history_list': history_list})
