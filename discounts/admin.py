@@ -1,3 +1,7 @@
 from django.contrib import admin
+from discounts.models import DiscountTypes, DiscountMech, Discount
 
-# Register your models here.
+
+admin.site.register(DiscountTypes)
+admin.site.register(DiscountMech)
+admin.site.register(Discount)

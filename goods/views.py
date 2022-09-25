@@ -1,5 +1,7 @@
 import datetime
+import decimal
 
+from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
@@ -7,12 +9,14 @@ from django.views.generic import ListView, DetailView, DeleteView
 from django.views.generic import DetailView
 from app_shop.models import Seller
 
-from .models import Category, Goods, ViewHistory
+from .models import Category, Goods, ViewHistory, GoodsInMarket
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from config.settings import CACHES_TIME
 from goods.serviсes import CatalogMixin
 from customers.models import CustomerUser
+from discounts.models import Discount
+
 
 class CategoryView(View):
     """
@@ -188,3 +192,77 @@ def is_in_view_history(customer, goods: Goods) -> bool:
 def view_history(request: HttpRequest) -> HttpResponse:
     history_list = ViewHistory.objects.filter(customer=request.user)[:20]
     return render(request, 'goods/historyview.html', context={'history_list': history_list})
+
+
+def price_with_discount(goods: Goods, old_price=0.00) -> decimal:
+    """
+    Метод для расчета скидки по товару. Если не указана старая цена, выбирается максимальная из всех предложенных.
+    Выбираются все действующие скидки на товар, или на его категорию, возвращается цена с максимальной скидкой,
+    но не меньше 1 руб.
+    :param goods: товар, по которому ищем цену
+    :param old_price: старая цена
+    :return: цена с учетом скидки
+    """
+    if not old_price:
+        old_price = GoodsInMarket.objects.filter(goods=goods).aggregate(max('price'))
+    today = datetime.date.today()
+    goods_discounts = Discount.objects.filter(Q(goods_1=goods) | Q(category_1=goods.category),
+                                              discount_type__pk=1,
+                                              date_start__lte=today,
+                                              date_end__gte=today
+                                              )
+    percent_discount = goods_discounts.objects.filter(discount_mech__pk=1).aggregate(max('discount_value'))
+    percent_discount_price = round((1 - percent_discount) / 100 * old_price, 2)
+    absolute_discount = goods_discounts.objects.filter(discount_mech__pk=2).aggregate(max('discount_value'))
+    absolute_discount_price = old_price - absolute_discount
+    if absolute_discount_price <= 0:
+        return 1.00
+    if percent_discount_price < absolute_discount_price:
+        return percent_discount_price
+    return absolute_discount_price
+
+
+def cart_cost(cart: dict) -> dict:
+    """
+    Метод получает в качестве параметра словарь вида «товар и исходная цена» и пытается применить
+    самую приоритетную скидку на корзину или на набор. Если такая скидка есть, то применяется она; если нет,
+    то тогда метод получает цену на каждый товар словаря.
+    :param cart: {товар: исходная цена}
+    :return: {товар: исходная цена, цена со скидкой, применена ли скидка}
+    :rtype: dict
+    """
+    today = datetime.date.today()
+    goods_count = len(cart)
+    goods_cost = sum(cart.values())
+    cart_discount = Discount.objects.filter(Q(discount_type__pk=3),
+                                            date_start__lte=today,
+                                            date_end__gte=today,
+                                            min_amount__lte=goods_count,
+                                            max_amount__gte=goods_count,
+                                            min_cost__lte=goods_cost,
+                                            max_cost__lte=goods_cost,
+                                            ).order_by('-weight').first()
+
+    set_discount = Discount.objects.filter(Q(discount_type__pk=2),
+                                           Q(goods_1__in=cart.keys()) | Q(category_1__in=cart.keys.category),
+                                           Q(goods_2__in=cart.keys()) | Q(category_2__in=cart.keys.category),
+                                           date_start__lte=today,
+                                           date_end__gte=today,
+                                           ).order_by('-weight').first()
+    res = {}
+    if cart_discount.weight >= set_discount.weight:
+        total_discount = cart_discount.value
+    elif set_discount:
+        total_discount = set_discount.value
+    else:
+        for goods, price in cart.items():
+            new_price = price_with_discount(goods, price)
+            if new_price < price:
+                res[goods] = (price, new_price, True)
+            else:
+                res[goods] = (price, price, False)
+        else:
+            return res
+    for goods, price in cart.items():
+        res[goods] = (price, round(price * (1 - total_discount / 100)), True)
+    return res
