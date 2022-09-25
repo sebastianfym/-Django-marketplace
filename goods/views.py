@@ -13,6 +13,7 @@ from django.core.cache import cache
 from config.settings import CACHES_TIME
 from goods.serviсes import CatalogMixin
 from customers.models import CustomerUser
+from .forms import FilterForm
 
 class CategoryView(View):
     """
@@ -37,12 +38,12 @@ class Catalog(CatalogMixin, ListView):
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
+
         context = super().get_context_data()
         parameters = self.normalises_values_parameters()
         context.update(parameters)
         context.update({'sellers': Seller.objects.all()})
         context.update({'category': Category.objects.all()})
-        print('this session in context_data', self.request.session.get('filter_params'))
         return context
 
 
