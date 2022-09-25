@@ -37,9 +37,5 @@ class CustomerUser(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
 
-class ViewsHistory(models.Model):
-    pass
-
-
 class OrderHistory(models.Model):
     pass

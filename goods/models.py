@@ -172,9 +172,11 @@ class GoodsInMarket(models.Model):
 
 
 class ViewHistory(models.Model):
-    customer = models.ForeignKey(CustomerUser, on_delete=models.CASCADE, related_name='viewshistorys', verbose_name='покупатель')
-    goods = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='viewshistorys', verbose_name='просмотренный товар')
-    last_view = models.DateTimeField(auto_now=True, verbose_name='дата последнего просмотра')
+    customer = models.ForeignKey(CustomerUser, on_delete=models.CASCADE, related_name='viewshistorys', verbose_name=_('customer'))
+    goods = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='viewshistorys', verbose_name=_('viewed_goods'))
+    last_view = models.DateTimeField(auto_now=True, verbose_name=_('last_view'))
 
     class Meta:
         ordering = ['-customer', '-last_view']
+        verbose_name = 'view_history'
+        verbose_name_plural = 'view_history'
