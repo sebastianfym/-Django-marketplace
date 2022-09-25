@@ -42,8 +42,10 @@ class Catalog(CatalogMixin, ListView):
         context = super().get_context_data()
         parameters = self.normalises_values_parameters()
         context.update(parameters)
+        print(parameters)
         context.update({'sellers': Seller.objects.all()})
         context.update({'category': Category.objects.all()})
+        print(context)
         return context
 
 

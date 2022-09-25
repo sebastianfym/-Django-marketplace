@@ -160,12 +160,11 @@ class CatalogMixin:
 
         list_checked_params = ['delivery__gte', 'in_stock__gte', 'price__lte', 'price__gte']
         for param in list_checked_params:
-            params_for_form_filter.update({param: str(params_for_form_filter[param]})
+            params_for_form_filter[param] = str(params_for_form_filter[param])
             print('--------', type(params_for_form_filter[param]))
             if params_for_form_filter.get(param) == '1':
                 params_for_form_filter[param] = 'checked'
         print('this more session', params_for_form_filter)
-
         return params_for_form_filter
 
     def final_price_calculation(self):
