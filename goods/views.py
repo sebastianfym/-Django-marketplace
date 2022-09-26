@@ -13,7 +13,7 @@ from django.core.cache import cache
 from config.settings import CACHES_TIME
 from goods.serviсes import CatalogMixin
 from customers.models import CustomerUser
-from .forms import FilterForm
+
 
 class CategoryView(View):
     """
@@ -45,7 +45,6 @@ class Catalog(CatalogMixin, ListView):
         print(parameters)
         context.update({'sellers': Seller.objects.all()})
         context.update({'category': Category.objects.all()})
-        print(context)
         return context
 
 
