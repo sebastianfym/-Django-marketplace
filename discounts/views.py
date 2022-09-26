@@ -12,3 +12,7 @@ def sale_list(request: HttpRequest) -> HttpResponse:
                                         # date_end__gte=today)
     return render(request, 'discounts/sale.html', context={'discounts': discounts})
 
+
+def sale_detail_view(request: HttpRequest, pk: int) -> HttpResponse:
+    discount = Discount.objects.get(id=pk)
+    return render(request, 'discounts/sale_detail.html', context={'discount': discount})

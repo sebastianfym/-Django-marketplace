@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block header %}
+    {% include 'elements/header.html' %}
+{% endblock %}
+{% block content %}
+  <div class="Middle Middle_top">
+    <div class="Middle-top">
+      <div class="wrap">
+        <div class="Middle-header">
+          <h1 class="Middle-title">Megano Sale
+          </h1>
+          <ul class="breadcrumbs Middle-breadcrumbs">
+            <li class="breadcrumbs-item"><a href="index.html">home</a>
+            </li>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>Blog</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="Section">
+      <div class="wrap">
+        <div class="Article-section">
+          {% if discount %}
+            <div class="row-block">
+                <h2>{{ discount.date_start }} - {{ discount.date_end }}</h2>
+                <h3>{{ discount.tittle }}</h3>
+                <p>{{ discount.descr }}</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block footer %}
+     {% include 'elements/footer.html' %}
+{% endblock %}

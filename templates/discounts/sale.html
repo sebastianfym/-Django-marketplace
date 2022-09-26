@@ -8,7 +8,7 @@
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">Megano Blog
+          <h1 class="Middle-title">Megano Sale
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
             <li class="breadcrumbs-item"><a href="index.html">home</a>
@@ -24,7 +24,7 @@
         <div class="Cards Cards_blog">
           {% if discounts %}
             {% for discount in discounts %}
-              <div class="Card"><a class="Card-picture" href="#"><img src="/static/assets/img/content/sale/product.png" alt="product.png"/></a>
+              <div class="Card"><a class="Card-picture" href="/sale/{{ discount.id }}"><img src="/static/assets/img/content/sale/product.png" alt="product.png"/></a>
                 {% if discount.date_start %}
                   <div class="Card-date">
                     <strong class="Card-date-number">{{ discount.day_start }}</strong>
@@ -39,7 +39,7 @@
                 {% endif %}
                 <div class="Card-content">
                   <strong class="Card-title">
-                    <a href="#">{{ discount.title }}</a>
+                    <a href="/sale/{{ discount.id }}">{{ discount.title }}</a>
                   </strong>
                   <div class="Card-description">
                       {{ discount.descr }}
