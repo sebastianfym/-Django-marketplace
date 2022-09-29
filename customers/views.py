@@ -80,14 +80,10 @@ class UserProfile(View):
         return redirect('../account/')
 
 
-class UserAccount(DetailView):
+class UserAccount(View):
     """
     Данный класс является представлением аккаунта пользователя со всеми его данными
     """
-    #model = CustomerUser
-    #template_name = 'customers/account.html'
-    #context_object_name = 'user'
-
     def get(self, request):
        user = request.user
        return render(request, "customers/account.html", context={
