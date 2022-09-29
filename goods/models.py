@@ -15,8 +15,8 @@ class FeatureName(models.Model):
     """
     name = models.CharField(max_length=100, verbose_name=_('name'), null=True)
 
-    #def __str__(self):
-    #    return self.name
+    def __str__(self):
+        return self.name
 
 
 class Feature(models.Model):
@@ -163,7 +163,7 @@ class GoodsInMarket(models.Model):
                               related_name='goods_in_market'
                               )
     seller = models.ForeignKey(Seller,
-                               verbose_name=_('goods'),
+                               verbose_name=_('seller'),
                                on_delete=models.DO_NOTHING,
                                related_name='goods_in_market'
                                )

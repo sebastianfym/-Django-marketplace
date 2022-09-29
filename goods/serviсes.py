@@ -1,9 +1,7 @@
-import datetime
-import json
-from decimal import Decimal
 from django.db.models import QuerySet
-from goods.models import *
+from goods.models import Goods
 from django.db.models import Sum
+from customers.models import CustomerUser
 
 
 def final_price(price_discount):
@@ -19,11 +17,8 @@ class CatalogMixin:
         :return: params
         """
         params = {}
-        # print(list_params)
         for param in list_params:
             value_param = query_params.get(param)
-            #if isinstance(value_param, list):  # Значения параметров приходят ввиде списка с одним элементом
-            #    value_param = value_param[0]   # при исользовании urlparse значения необходимо извлекать вручную
             if value_param:
                 params[param] = value_param
                 if params.get('trend') == '+':
@@ -36,20 +31,18 @@ class CatalogMixin:
         'filter_params' и возвращает его для дальнейшего формирования ОРМ-запроса с этими параметрами фильтрации.
         Когда пользователь в первый раз за сеанс заходит на страницу каталога, то значение в сессии по ключу
         'filter_params' становится пустым словарём.
-        :return:
+        :return: self.request.session.get('filter_params')
         """
         self.request.session.setdefault('filter_params', {})
         if not self.request.GET:
             self.request.session['filter_params'].clear()
-        elif self.request.GET.get('filter') == 'filter':          # Если нажат Если нажата кнопка filter
-            print('кнопка нажата')                                # обнуляем фильтр-параметры в сессии
+        elif self.request.GET.get('filter') == 'filter':
             self.request.session.update({'filter_params': {}})
             filter_query_params = self.request.GET.dict()
             range_price = filter_query_params.pop('price').split(';')
             min_price = int(range_price[0])
             max_price = int(range_price[1])
             filter_query_params.update({'price__gte': min_price, 'price__lte': max_price})
-            print('----', filter_query_params)
             list_filter_params = list(filter_query_params.keys())
             filter_params = self.get_params_from_request(list_filter_params, filter_query_params)
             filter_params.update({'price__gte': min_price, 'price__lte': max_price})
@@ -59,11 +52,11 @@ class CatalogMixin:
 
     def get_category_filter(self) -> dict:
         """
-        Метод формирует словарь с ключём 'category__title' из значения, выбранного в выпадающем меню 'category'
+        Метод формирует словарь с ключом 'category__title' из значения, выбранного в выпадающем меню 'category'
         на странице каталога и переданного на сервер в виде гет-параметра 'category__title'. Если в гет-параметрах
         ничего не передано (пользователь только зашёл на страницу каталога) или передан параметр
         category__title=all, то словарь очищается и передаётся пустым, в противном случае в словарь передаётся
-        значение равное полю title выбранной категории. Словарь сохраняется в сессии с ключём
+        значение равное полю title выбранной категории. Словарь сохраняется в сессии с ключом
         'category_filter_parameter'.
         :return: category_filter
         """
@@ -79,6 +72,11 @@ class CatalogMixin:
         return category_filter
 
     def get_sort_parameters(self) -> dict:
+        """
+        Метод создаёт в сессии словарь с ключом 'sort', значением которого является словарь с параметрами сортировки.
+        По умолчанию сортировка происводится по цене по возрастанию.
+        :return: sortparams
+        """
         self.request.session.setdefault('sort', {'sort': 'price', 'trend': ''})
         sort_params = self.request.session.get('sort')
         list_sort_params = list(sort_params.keys())
@@ -89,6 +87,11 @@ class CatalogMixin:
         return sort_params
 
     def get_all_parameters(self) -> dict:
+        """
+        Метод формирует словарь с ключами 'all_filter', 'sort_params'. Значения этих ключей являются словарями
+        с параметрами фильтрации и сортировки. Эти словари используются в ОРМ выражении для получения нужного кверисета
+        :return: all_parameters
+        """
         filter_parameters = self.get_filter_parameters()
         category_filter = self.get_category_filter()
         sort_params = self.get_sort_parameters()
@@ -133,7 +136,6 @@ class CatalogMixin:
         for param in list_checked_params:
             if params_for_form_filter.get(param) == '1':
                 params_for_form_filter[param] = 'checked'
-        print(params_for_form_filter)
         return params_for_form_filter
 
     def final_price_calculation(self):

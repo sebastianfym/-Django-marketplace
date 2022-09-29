@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+{% include 'elements/header.html' %}
+{% endblock header %}
+
+{% block content %}
+    <p> <a href="{% url 'catalog' %}"> catalog </a> </p>
+    <p> <a href="{% url 'history_orders' %}"> order_history </a> </p>
+    <p> <a href="{% url 'account' %}"> account </a> </p>
+    <p><a href="{% url 'login' %}"> login </a></p>
+    <p><a href="{% url 'logout' %}"> logout </a> </p>
+
+{% endblock %}
+
+{% block footer %}
+    {% include 'elements/footer.html' %}
+{% endblock %}

@@ -1,0 +1,1 @@
+[{"model": "goods.goodsinmarket", "pk": 1, "fields": {"price": "50000.00", "quantity": 20, "free_delivery": false, "goods": 63, "seller": 1}}, {"model": "goods.goodsinmarket", "pk": 2, "fields": {"price": "70000.00", "quantity": 40, "free_delivery": true, "goods": 45, "seller": 1}}]

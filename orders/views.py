@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from django.views import View
+from django.views.generic import ListView, DetailView, TemplateView
 from config.settings import CACHES_TIME
 from .services import PaymentGoods
 from django.views.decorators.cache import cache_page
+from .models import Order
+from customers.models import CustomerUser
+from customers.views import UserAccount
 
 
 class PaymentGoodsView(View):
@@ -37,3 +41,7 @@ class ProductStatusView(View):
         """
 
         return render(request, '../..', context={})
+
+
+class UserHistoryOrder(TemplateView):
+    template_name = 'orders/history_order.html'

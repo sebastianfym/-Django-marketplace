@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, DetailView, TemplateView
 
 from customers.forms import RegistrationForm, AccountAuthenticationForm, ChangeUserData
 from customers.models import CustomerUser
@@ -57,6 +57,7 @@ class UserProfile(View):
     """
     Данный класс служит для получения профиля авторизированного юзера и даёт возможность изменить данные.
     """
+
     def get(self, request):
         user = request.user
         form = ChangeUserData()
@@ -69,7 +70,6 @@ class UserProfile(View):
         form = ChangeUserData(request.POST)
         user = request.user
         if form.is_valid():
-
             user.full_name = form.cleaned_data.get('full_name')
             user.phone = form.cleaned_data.get('phone_number')
             user.email = form.cleaned_data.get('email')
@@ -80,12 +80,16 @@ class UserProfile(View):
         return redirect('../account/')
 
 
-class UserAccount(View):
+class UserAccount(DetailView):
     """
     Данный класс является представлением аккаунта пользователя со всеми его данными
     """
+    #model = CustomerUser
+    #template_name = 'customers/account.html'
+    #context_object_name = 'user'
+
     def get(self, request):
-        user = request.user
-        return render(request, "customers/account.html", context={
-            'user': user
-        })
+       user = request.user
+       return render(request, "customers/account.html", context={
+           'user': user
+       })
