@@ -9,7 +9,7 @@ from django.views.generic import FormView
 from banners.forms import ClearCacheForm
 from banners.utils import clear_cache
 from banners.models import BannerModel
-
+from django.utils.translation import gettext as _
 
 class BannerView(View):
 
@@ -36,12 +36,12 @@ class ClearCacheAdminView(FormView):
         try:
             cache_name = form.cleaned_data['cache_name']
             clear_cache(cache_name)
-            messages.success(self.request, f"Successfully cleared '{form.cleaned_data['cache_name']}' cache")
+            messages.success(self.request, _(f"Successfully cleared '{form.cleaned_data['cache_name']}' cache)"))
         except Exception as err:
-            messages.error(self.request, f"Couldn't clear cache, something went wrong. Received error: {err}")
+            messages.error(self.request, _(f"Couldn't clear cache, something went wrong. Received error: {err}"))
         return HttpResponseRedirect(self.success_url)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Clear cache'
+        context['title'] = _('Clear cache')
         return context

@@ -27,5 +27,6 @@ urlpatterns = [
     path('goods/', include('goods.urls')),
     path('banners/', include('banners.urls')),
     path('customers/', include('customers.urls')),
+    path('i18n', include('django.conf.urls.i18n')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

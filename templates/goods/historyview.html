@@ -2,20 +2,21 @@
 {% block header %}
     {% include 'elements/header.html' %}
 {% endblock %}
+{% load i18n %}
 {% block content %}
   <div class="Middle Middle_top">
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
           <h1 class="Middle-title">
-            История просмотра
+            {% translate 'Viewing history' %}
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
             <li class="breadcrumbs-item">
-              <a href="index.html">home</a>
+              <a href="index.html">{% translate 'home' %}</a>
             </li>
             <li class="breadcrumbs-item breadcrumbs-item_current">
-              <span>История просмотра</span>
+              <span>{% translate 'Viewing history' %}</span>
             </li>
           </ul>
         </div>
@@ -26,22 +27,22 @@
         <div class="Section-column">
           <div class="Section-columnSection">
             <header class="Section-header">
-              <strong class="Section-title">Навигация</strong>
+              <strong class="Section-title">{% translate 'Navigation' %}</strong>
             </header>
             <div class="Section-columnContent">
               <div class="NavigateProfile">
                 <ul class="menu menu_vt">
                   <li class="menu-item">
-                    <a class="menu-link" href="account.html">Личный кабинет</a>
+                    <a class="menu-link" href="account.html">{% translate 'Personal account' %}</a>
                   </li>
                   <li class="menu-item">
-                    <a class="menu-link" href="profile.html">Профиль</a>
+                    <a class="menu-link" href="profile.html">{% translate 'Profile' %}</a>
                   </li>
                   <li class="menu-item">
-                    <a class="menu-link" href="historyorder.html">История заказов</a>
+                    <a class="menu-link" href="historyorder.html">{% translate 'Order history' %}</a>
                   </li>
                   <li class="menu-item_ACTIVE menu-item">
-                    <a class="menu-link" href="historyview">История просмотра</a>
+                    <a class="menu-link" href="historyview">{% translate 'Viewing history' %}</a>
                   </li>
                 </ul>
               </div>
@@ -55,12 +56,12 @@
             {% for card in history_list %}
               <div class="Card"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg"/></a>
                 <div class="Card-content">
-                  <strong class="Card-title"><a href="#">{{ card.goods.name }}</a></strong>
+                  <strong class="Card-title"><a href="#">{% translate {{ card.goods.name }} %}</a></strong>
                 </div>
                 <div class="Card-description">
                   <div class="Card-cost">
-                    <span class="Card-priceOld">{{ card.goods.price }}</span>
-                    <span class="Card-price">promotion</span>
+                    <span class="Card-priceOld">{% translate {{ card.goods.price }} %}</span>
+                    <span class="Card-price">{% translate 'promotion' %}</span>
                   </div>
                   <div class="Card-category">
                     Games / xbox

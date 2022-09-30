@@ -2,6 +2,7 @@
 {% block header %}
     {% include 'elements/header.html' %}
 {% endblock %}
+{% load i18n %}
 {% block content %}
     <form method="post">
     {% csrf_token %}
@@ -20,7 +21,7 @@
         </div>
     {% endfor %}
     <div class="btn_outline" style="margin-top: 15px">
-        <button class="btn btn_success" type="submit">Sign up</button>
+        <button class="btn btn_success" type="submit">{% translate 'Register' %}</button>
     </div>
     </div>
     </form>

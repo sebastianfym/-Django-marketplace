@@ -12,7 +12,7 @@ class Order(models.Model):
     quantity и total_cost.
     """
     quantity = models.PositiveIntegerField(verbose_name=_('quantity'), null=True)
-    total_cost = models.DecimalField(verbose_name='total_cost',
+    total_cost = models.DecimalField(verbose_name=_('total_cost'),
                                      max_digits=10,
                                      null=True,
                                      decimal_places=2,

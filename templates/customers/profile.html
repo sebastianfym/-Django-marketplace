@@ -2,6 +2,7 @@
 {% block header %}
     {% include 'elements/header.html' %}
 {% endblock %}
+{% load i18n %}
 {% block content %}
   <div class="Middle Middle_top">
     <div class="Middle-top">
@@ -12,7 +13,7 @@
           <ul class="breadcrumbs Middle-breadcrumbs">
             <li class="breadcrumbs-item"><a href="index.html">home</a>
             </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current"><span>Профиль</span>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% translate 'Profile' %}</span>
             </li>
           </ul>
         </div>
@@ -23,23 +24,23 @@
         <div class="Section-column">
           <div class="Section-columnSection">
             <header class="Section-header">
-              <strong class="Section-title">Навигация
+              <strong class="Section-title">{% translate 'Navigation' %}
               </strong>
             </header>
             <div class="Section-columnContent">
               <div class="NavigateProfile">
                 <ul class="menu menu_vt">
                   <li class="menu-item">
-                    <a class="menu-link" href="../account/">Личный кабинет</a>
+                    <a class="menu-link" href="../account/">{% translate 'Personal account' %}</a>
                   </li>
                   <li class="menu-item_ACTIVE menu-item">
-                    <a class="menu-link" href="profile.html">Профиль</a>
+                    <a class="menu-link" href="profile.html">{% translate 'Profile' %}</a>
                   </li>
                   <li class="menu-item">
-                    <a class="menu-link" href="historyorder.html">История заказов</a>
+                    <a class="menu-link" href="historyorder.html">{% translate 'Order history' %}</a>
                   </li>
                   <li class="menu-item">
-                    <a class="menu-link" href="historyview.html">История просмотра</a>
+                    <a class="menu-link" href="historyview.html">{% translate 'Viewing history' %}</a>
                   </li>
                 </ul>
               </div>
@@ -53,49 +54,49 @@
                 <div class="row">
                   <div class="row-block">
                     <div class="form-group">
-                      <label class="form-label" for="avatar">Аватар
+                      <label class="form-label" for="avatar">{% translate 'Avatar' %}
                       </label>
                       <div class="Profile-avatar Profile-avatar_noimg">
                         <div class="Profile-img"><img src="assets/img/#.png" alt="#.png"/>
                         </div>
-                        <label class="Profile-fileLabel" for="avatar">Выберите аватар
+                        <label class="Profile-fileLabel" for="avatar">{% translate 'Choose an avatar' %}
                         </label>
                         <input class="Profile-file form-input" id="avatar" name="avatar" type="file" data-validate="onlyImgAvatar"/>
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="form-label" for="full_name">ФИО
+                      <label class="form-label" for="full_name">{% translate 'full name' %}
                       </label>
                       <input class="form-input" id="full_name" name="full_name" type="text" value="" />
                     </div>
                   </div>
                   <div class="row-block">
                     <div class="form-group">
-                      <label class="form-label" for="phone_number">Телефон
+                      <label class="form-label" for="phone_number">{% translate 'phone number' %}
                       </label>
                       <input class="form-input" id="phone_number" name="phone_number" type="text" value="+70000000000"/>
                     </div>
                     <div class="form-group">
-                      <label class="form-label" for="email">E-mail
+                      <label class="form-label" for="email">{% translate 'E-mail' %}
                       </label>
                       <input class="form-input" id="email" name="email" type="text" value="send@test.test"/>
                     </div>
                     <div class="form-group">
-                      <label class="form-label" for="password1">Пароль
+                      <label class="form-label" for="password1">{% translate 'Password' %}
                       </label>
                       <input class="form-input" id="password1" name="password1" type="password" placeholder="Тут можно изменить пароль"/>
                     </div>
                     <div class="form-group">
-                      <label class="form-label" for="password2">Подтверждение пароля
+                      <label class="form-label" for="password2">{% translate 'Password Confirmation' %}
                       </label>
                       <input class="form-input" id="password2" name="password2" type="password" placeholder="Введите пароль повторно"/>
                     </div>
                     <div class="form-group">
                       <div class="Profile-btn">
-                        <button class="btn btn_success" type="submit">Сохранить
+                        <button class="btn btn_success" type="submit">{% translate 'Save' %}
                         </button>
                       </div>
-                      <div class="Profile-success">Профиль успешно сохранен
+                      <div class="Profile-success">{% translate 'Profile saved successfully' %}
                       </div>
                     </div>
                   </div>

@@ -1,16 +1,16 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
     <div class="Middle Middle_top">
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">Megano Product
+          <h1 class="Middle-title">{% translate 'Megano Product' %}
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="index.html">home</a>
+            <li class="breadcrumbs-item"><a href="index.html">{% translate 'Home' %}</a>
             </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current"><span>Product</span>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% translate 'Product' %}</span>
             </li>
           </ul>
         </div>
@@ -30,13 +30,13 @@
             </div>
             <div class="ProductCard-desc">
               <div class="ProductCard-header">
-                <h2 class="ProductCard-title">{{product.name}}
+                <h2 class="ProductCard-title">{% translate {{product.name}} %}
                 </h2>
                 <div class="ProductCard-info">
                   <div class="ProductCard-cost">
                     <div class="ProductCard-price">$55.00
                     </div>
-                    <div class="ProductCard-priceOld">${{product.price}}
+                    <div class="ProductCard-priceOld">${% translate {{product.price}} %}
                     </div>
                   </div>
                   <div class="ProductCard-compare">
@@ -97,7 +97,7 @@
             </div>
             <div class="Tabs-wrap">
               <div class="Tabs-block" id="description">
-                <h2>Megano Store Hystory
+                <h2>{% translate 'history of the Megano store' %}
                 </h2>
                 <p>Lorem ipsum dolor sit amet, consectetuer&#32;
                   <strong>adipiscing
@@ -122,9 +122,9 @@
                 <div class="table">
                   <table>
                     <tr>
-                      <th>Характеристика
+                      <th>{% translate 'Characteristic' %}
                       </th>
-                      <th>Значение
+                      <th>{% trans 'value' %}
                       </th>
                     </tr>
                     <tr>
@@ -141,7 +141,7 @@
                   <div class="Categories-row">
                     <div class="Categories-block Categories-block_info">
                       <div class="Categories-info">
-                        <strong>Очень дешево
+                        <strong>{% translate 'Very cheap' %}
                         </strong>
                       </div>
                     </div>
@@ -267,7 +267,7 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <button class="btn btn_muted" type="submit">Submit Review
+                      <button class="btn btn_muted" type="submit">{% translate 'Send feedback' %}
                       </button>
                     </div>
                   </form>
