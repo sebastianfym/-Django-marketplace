@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block header %}
     {% include 'elements/header.html' %}
 {% endblock %}
@@ -75,6 +76,20 @@
                 </div>
               {% endfor %}
             {% endif %}
+          </div>
+          <div class="Pagination">
+            <div class="Pagination-ins">
+                <a class="Pagination-element Pagination-element_prev" href="#"><img src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg"/></a>
+
+                {% for page in paginator.page_range %}
+                    {% if page_obj.number == page %}
+                        <a class="Pagination-element Pagination-element_current" href="#"><span class="Pagination-text">{{ page }}</span></a>
+                    {% else %}
+                        <a class="Pagination-element " href="{% url 'historyview' %}?page={{ page }}"><span class="Pagination-text">{{ page }}</span></a>
+                    {% endif %}
+                    {% endfor %}
+                <a class="Pagination-element Pagination-element_prev" href="{% url 'historyview' %}?page={{ page }}"><img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/></a>
+            </div>
           </div>
         </div>
       </div>

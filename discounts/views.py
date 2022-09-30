@@ -1,18 +1,22 @@
 import datetime
+from django.views.generic import DetailView, ListView
 
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
 from discounts.models import Discount
 
 
-def sale_list(request: HttpRequest) -> HttpResponse:
-    today = datetime.datetime.today()
-    discounts = Discount.objects.filter(is_active=True)
+class SaleList(ListView):
+    model = Discount
+    template_name = 'discounts/sale.html'
+    context_object_name = 'discounts'
+
+    def get_queryset(self):
+        today = datetime.datetime.today()
+        return Discount.objects.filter(is_active=True)
                                         # date_start__lte=today,
                                         # date_end__gte=today)
-    return render(request, 'discounts/sale.html', context={'discounts': discounts})
 
 
-def sale_detail_view(request: HttpRequest, pk: int) -> HttpResponse:
-    discount = Discount.objects.get(id=pk)
-    return render(request, 'discounts/sale_detail.html', context={'discount': discount})
+class SaleDetailView(DetailView):
+    model = Discount
+    template_name = 'discounts/sale_detail.html'
+    context_object_name = 'discount'

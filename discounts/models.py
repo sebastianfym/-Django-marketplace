@@ -5,10 +5,6 @@ from goods.models import Goods, Category
 from django.utils.translation import gettext_lazy as _
 
 
-class Promotion(models.Model):
-    pass
-
-
 class DiscountTypes(models.Model):
     """
     Тип скидки. Содержит 3 записи.

@@ -49,7 +49,7 @@ class Catalog(CatalogMixin, ListView):
         return context
 
 
-def detail_goods_page(request, slug):
+def detail_goods_page(request, pk):
     """
     Данная функция служит для детального представления определённого товара.
     :param request:
@@ -57,7 +57,7 @@ def detail_goods_page(request, slug):
     :return:
     """
     cache_this = cache_page(3600 * CACHES_TIME)
-    product = get_object_or_404(Goods, slug=slug)
+    product = get_object_or_404(Goods, id=pk)
     add_to_view_history(request.user, product)
     return render(request, 'goods/product.html', context={'product': product})
 
@@ -189,9 +189,14 @@ def is_in_view_history(customer, goods: Goods) -> bool:
         return False
 
 
-def view_history(request: HttpRequest) -> HttpResponse:
-    history_list = ViewHistory.objects.filter(customer=request.user)[:20]
-    return render(request, 'goods/historyview.html', context={'history_list': history_list})
+class HistoryList(ListView):
+    model = ViewHistory
+    template_name = 'goods/historyview.html'
+    context_object_name = 'history_list'
+    paginate_by = 8
+
+    def get_queryset(self):
+        return ViewHistory.objects.filter(customer=self.request.user)[:20]
 
 
 def price_with_discount(goods: Goods, old_price=0.00) -> decimal:
