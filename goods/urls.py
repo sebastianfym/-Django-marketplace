@@ -3,7 +3,7 @@ from .views import CategoryView, detail_goods_page, ShowDetailProduct, CompareVi
 
 urlpatterns = [
     path('catalog/', Catalog.as_view(), name='catalog'),
-    path('historyview/', view_history, name='historyview'),
+    path('historyview/', HistoryList.as_view(), name='historyview'),
     path('compare/', CompareView.as_view(), name='compare'),
     path("<int:id>/compare_add/", AddProductToCompareView.as_view(), name="compare_add"),
     path("<int:pk>/", detail_goods_page, name='post'),

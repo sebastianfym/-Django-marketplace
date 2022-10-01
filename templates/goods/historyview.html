@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block header %}
     {% include 'elements/header.html' %}
 {% endblock %}
@@ -41,7 +42,7 @@
                     <a class="menu-link" href="historyorder.html">История заказов</a>
                   </li>
                   <li class="menu-item_ACTIVE menu-item">
-                    <a class="menu-link" href="historyview">История просмотра</a>
+                    <a class="menu-link" href="/goods/historyview/">История просмотра</a>
                   </li>
                 </ul>
               </div>
@@ -53,9 +54,9 @@
         <div class="Cards">
           {% if history_list %}
             {% for card in history_list %}
-              <div class="Card"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg"/></a>
+              <div class="Card"><a class="Card-picture" href="/goods/{{ card.goods.pk }}"><img src="{{ card.goods.image }}" alt="card.jpg"/></a>
                 <div class="Card-content">
-                  <strong class="Card-title"><a href="#">{{ card.goods.name }}</a></strong>
+                  <strong class="Card-title"><a href="/goods/{{ card.goods.pk }}">{{ card.goods.name }}</a></strong>
                 </div>
                 <div class="Card-description">
                   <div class="Card-cost">
@@ -63,10 +64,10 @@
                     <span class="Card-price">promotion</span>
                   </div>
                   <div class="Card-category">
-                    Games / xbox
+                    {{ card.goods.category.title }}
                   </div>
                   <div class="Card-hover">
-                    <a class="Card-btn" href="#"><img src="{{ card.goods.image }}" alt="bookmark.svg"/></a>
+                    <a class="Card-btn" href="/goods/{{ card.goods.pk }}"><img src="{{ card.goods.image }}" alt="bookmark.svg"/></a>
                   </div>
                   </div>
                   <div class="Card-sale">
@@ -75,6 +76,20 @@
                 </div>
               {% endfor %}
             {% endif %}
+          </div>
+          <div class="Pagination">
+            <div class="Pagination-ins">
+                <a class="Pagination-element Pagination-element_prev" href="#"><img src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg"/></a>
+
+                {% for page in paginator.page_range %}
+                    {% if page_obj.number == page %}
+                        <a class="Pagination-element Pagination-element_current" href="#"><span class="Pagination-text">{{ page }}</span></a>
+                    {% else %}
+                        <a class="Pagination-element " href="{% url 'historyview' %}?page={{ page }}"><span class="Pagination-text">{{ page }}</span></a>
+                    {% endif %}
+                    {% endfor %}
+                <a class="Pagination-element Pagination-element_prev" href="{% url 'historyview' %}?page={{ page }}"><img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/></a>
+            </div>
           </div>
         </div>
       </div>

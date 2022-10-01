@@ -2,7 +2,6 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
-from discounts.models import Promotion
 from app_shop.models import Seller
 from customers.models import CustomerUser
 
@@ -123,13 +122,13 @@ class Goods(models.Model):
     release_date = models.DateField(verbose_name=_('release_date'), null=True, blank=True)
     limit_edition = models.BooleanField(verbose_name=_('limit_edition'), default=False)
     category = models.ForeignKey(Category, verbose_name=_('category'), on_delete=models.CASCADE, related_name='goods')
-    promotion = models.ForeignKey(Promotion,
-                                  blank=True,
-                                  verbose_name=_('promotion'),
-                                  on_delete=models.DO_NOTHING,
-                                  related_name='goods',
-                                  null=True
-                                  )
+    # promotion = models.ForeignKey(Promotion,
+    #                               blank=True,
+    #                               verbose_name=_('promotion'),
+    #                               on_delete=models.DO_NOTHING,
+    #                               related_name='goods',
+    #                               null=True
+    #                               )
     feature = models.ManyToManyField(Feature,
                                      verbose_name=_('feature'),
                                      related_name='goods',
@@ -173,9 +172,11 @@ class GoodsInMarket(models.Model):
 
 
 class ViewHistory(models.Model):
-    customer = models.ForeignKey(CustomerUser, on_delete=models.CASCADE, related_name='viewshistorys', verbose_name='покупатель')
-    goods = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='viewshistorys', verbose_name='просмотренный товар')
-    last_view = models.DateTimeField(auto_now=True, verbose_name='дата последнего просмотра')
+    customer = models.ForeignKey(CustomerUser, on_delete=models.CASCADE, related_name='viewshistorys', verbose_name=_('customer'))
+    goods = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='viewshistorys', verbose_name=_('viewed_goods'))
+    last_view = models.DateTimeField(auto_now=True, verbose_name=_('last_view'))
 
     class Meta:
         ordering = ['-customer', '-last_view']
+        verbose_name = 'view_history'
+        verbose_name_plural = 'view_history'
