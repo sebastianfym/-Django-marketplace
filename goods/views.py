@@ -14,6 +14,7 @@ from config.settings import CACHES_TIME
 from goods.serviсes import CatalogMixin
 from customers.models import CustomerUser
 
+
 class CategoryView(View):
     """
     Представление для категорий товаров у которых activity = True.
@@ -37,24 +38,26 @@ class Catalog(CatalogMixin, ListView):
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
+
         context = super().get_context_data()
         parameters = self.normalises_values_parameters()
-        print(parameters)
         context.update(parameters)
+        print(parameters)
         context.update({'sellers': Seller.objects.all()})
+        context.update({'category': Category.objects.all()})
         return context
 
 
-def detail_goods_page(request, slug):
+def detail_goods_page(request, pk):
     """
     Данная функция служит для детального представления определённого товара.
+    :param pk:
     :param request:
     :param slug:
     :return:
     """
     cache_this = cache_page(3600 * CACHES_TIME)
-    product = get_object_or_404(Goods, slug=slug)
-    add_to_view_history(request.user, product)
+    product = get_object_or_404(Goods, pk=pk)
     return render(request, 'goods/product.html', context={'product': product})
 
 

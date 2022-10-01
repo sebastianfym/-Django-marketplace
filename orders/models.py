@@ -6,12 +6,28 @@ from django.core.validators import MinValueValidator
 
 
 class Order(models.Model):
+    STATUS_VALUE = (
+        (0, _('not_pay')),
+        (1, _('goods_shipped')),
+        (3, _('delivered'))
+    )
+    DELIVERY_METHOD = (
+        (0, _('delivery')),
+        (1, _('express_delivery'))
+    )
+    PAYMENT_METHOD = (
+        (0, _('online_card')),
+        (1, _('online_card_from_someone_else_account'))
+    )
     """
     Модель заказов. Один заказ содержит в себе одно наименование товара в количестве, указанном в поле quantity
     Вторичная модель с отношением FK к моделям GoodsInMarket и CustomerUser. Имеет простые поля
     quantity и total_cost.
     """
     quantity = models.PositiveIntegerField(verbose_name=_('quantity'), null=True)
+    status = models.PositiveIntegerField(verbose_name=_('status'), choices=STATUS_VALUE, default=0)
+    delivery_method = models.PositiveIntegerField(verbose_name=_('delivery_type'), choices=DELIVERY_METHOD, default=0)
+    payment_method = models.PositiveIntegerField(verbose_name=_('payment_method'), choices=PAYMENT_METHOD, default=0)
     total_cost = models.DecimalField(verbose_name='total_cost',
                                      max_digits=10,
                                      null=True,

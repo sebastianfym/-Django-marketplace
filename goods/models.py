@@ -20,6 +20,12 @@ class FeatureName(models.Model):
 
 
 class Feature(models.Model):
+    """
+    Класс моделей характеристик
+    Содержит в себе:
+    name: наименование характеристики
+    value: значение характеристики
+    """
     value = models.CharField(verbose_name=_('value'), max_length=30, blank=True, null=True)
     name = models.ForeignKey(FeatureName,
                              verbose_name=_('name'),
@@ -157,7 +163,7 @@ class GoodsInMarket(models.Model):
                               related_name='goods_in_market'
                               )
     seller = models.ForeignKey(Seller,
-                               verbose_name=_('goods'),
+                               verbose_name=_('seller'),
                                on_delete=models.DO_NOTHING,
                                related_name='goods_in_market'
                                )

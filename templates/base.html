@@ -57,7 +57,6 @@
 
 
     {% block content %}
-        {% include 'goods/test_catalog.html' %}
     {% endblock %}
 
     <footer class="Footer">
@@ -66,7 +65,7 @@
     </footer>
     {% block scripts %}
         <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
-        <script src="{% static '../static/assets/plg/form/jquery.maskedinput.min.js' %}"></script>
+        <script src="{% static '/assets/plg/form/jquery.maskedinput.min.js' %}"></script>
         <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
         <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
         <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>

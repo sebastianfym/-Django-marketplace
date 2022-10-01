@@ -2,30 +2,22 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import UpdateView
-
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
 from customers.forms import RegistrationForm, AccountAuthenticationForm, ChangeUserData
 from customers.models import CustomerUser
 
 
-class UserRegisterFormView(View):
+class UserRegisterFormView(CreateView):
+    model = CustomerUser
+    form_class = RegistrationForm
+    template_name = 'customers/register.html'
+    success_url = reverse_lazy('catalog')
 
-    def get(self, request):
-        form = RegistrationForm()
-        return render(request, 'customers/register.html', context={'form': form})
-
-    def post(self, request):
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            email = form.cleaned_data.get('email')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(email=email, password=raw_password)
-            login(request, user)
-            return redirect('/profile')
-        else:
-            form = RegistrationForm()
-        return render(request, 'customers/register.html', context={'form': form})
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect(self.success_url)
 
 
 class AccountAuthenticationView(View):
@@ -57,6 +49,7 @@ class UserProfile(View):
     """
     Данный класс служит для получения профиля авторизированного юзера и даёт возможность изменить данные.
     """
+
     def get(self, request):
         user = request.user
         form = ChangeUserData()
@@ -69,7 +62,6 @@ class UserProfile(View):
         form = ChangeUserData(request.POST)
         user = request.user
         if form.is_valid():
-
             user.full_name = form.cleaned_data.get('full_name')
             user.phone = form.cleaned_data.get('phone_number')
             user.email = form.cleaned_data.get('email')
@@ -84,6 +76,7 @@ class UserAccount(View):
     """
     Данный класс является представлением аккаунта пользователя со всеми его данными
     """
+
     def get(self, request):
         user = request.user
         return render(request, "customers/account.html", context={
