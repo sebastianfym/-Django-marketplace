@@ -62,7 +62,7 @@ class Review(models.Model):
     author = models.ForeignKey(CustomerUser,
                                on_delete=models.DO_NOTHING,
                                related_name='review')
-    text = models.CharField(verbose_name='review text', max_length=1500)
+    text = models.CharField(verbose_name=_('review text'), max_length=1500)
     image = models.ImageField(upload_to='images/review/', blank=True, null=True, width_field=1000, height_field=800)
     date_created = models.DateTimeField(auto_now=True)
     date_edited = models.DateTimeField(auto_now_add=True)
@@ -70,11 +70,11 @@ class Review(models.Model):
 
 class Comment(models.Model):
     """Comment class for add any comments to any review """
-    parent_review = models.ForeignKey(Review, on_delete=models.CASCADE, blank=False, related_name='comment') #-------
+    parent_review = models.ForeignKey(Review, on_delete=models.CASCADE, blank=False, related_name='comment')
     author = models.ForeignKey(CustomerUser,
                                on_delete=models.DO_NOTHING,
                                related_name='author_for_comment')
-    text = models.CharField(verbose_name='review text', max_length=1500)
+    text = models.CharField(verbose_name=_('review text'), max_length=1500)
     date_created = models.DateTimeField(auto_now=True)
 
 
@@ -92,8 +92,22 @@ class Category(models.Model):
     activity = models.BooleanField(default=False, blank=True, null=True)
 
     class Meta:
-        verbose_name = 'категория'
-        verbose_name_plural = 'категории'
+        verbose_name = _('category')
+        verbose_name_plural = _('categories')
+
+    def __str__(self):
+        return f'{self.title},{self.activity}'
+
+
+class Subcategory:
+    main_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category', verbose_name=_('subcategory'))
+    title = models.CharField(max_length=150, blank=True, null=True)
+    imagen = models.ImageField(upload_to='images/', blank=True, null=True)
+    activity = models.BooleanField(default=False, blank=True, null=True)
+
+    class Meta:
+        verbose_name = _('subcategory')
+        verbose_name_plural = _('subcategories')
 
     def __str__(self):
         return f'{self.title},{self.activity}'
@@ -109,15 +123,15 @@ class Goods(models.Model):
     Поле feature имеет отношение м2м с полем goods модели feature
     Модель является первичной с FK отношением к моделями goods_in_market и review
     """
-    name = models.CharField(verbose_name='name', max_length=50)
+    name = models.CharField(verbose_name=_('name'), max_length=50)
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL", blank=True, null=True)
     brand = models.CharField(verbose_name=_('brand'), max_length=50, blank=True, null=True)
-    price = models.DecimalField(verbose_name='price',
+    price = models.DecimalField(verbose_name=_('price'),
                                 max_digits=10,
                                 null=True,
                                 decimal_places=2,
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))])
-    describe = models.TextField(verbose_name='describe',)
+    describe = models.TextField(verbose_name=_('describe'),)
     image = models.ImageField(upload_to=None, height_field=None, width_field=None, blank=True, null=True)
     release_date = models.DateField(verbose_name=_('release_date'), null=True, blank=True)
     limit_edition = models.BooleanField(verbose_name=_('limit_edition'), default=False)
@@ -134,7 +148,7 @@ class Goods(models.Model):
                                      related_name='goods',
                                      blank=True)
 
-    rating = models.PositiveIntegerField(verbose_name='rating', default=0)
+    rating = models.PositiveIntegerField(verbose_name=_('rating'), default=0)
 
     def __str__(self):
         return f'{self.name}'
@@ -149,7 +163,7 @@ class GoodsInMarket(models.Model):
     Имеет поля price, quantity, goods, order, salesman.
     Поля goods, order, salesman имеют отношение FK с первичными моделями goods, order, salesman соответственно.
     """
-    price = models.DecimalField(verbose_name='price',
+    price = models.DecimalField(verbose_name=_('price'),
                                 decimal_places=2,
                                 max_digits=10,
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))]
@@ -162,7 +176,7 @@ class GoodsInMarket(models.Model):
                               related_name='goods_in_market'
                               )
     seller = models.ForeignKey(Seller,
-                               verbose_name=_('seller'),
+                               verbose_name=_('goods'),
                                on_delete=models.DO_NOTHING,
                                related_name='goods_in_market'
                                )

@@ -1,13 +1,14 @@
 {% load static %}
+{% load i18n %}
 <header>
     <div class="ControlPanel">
         <div class="wrap">
             <div class="row ControlPanel-row">
                 <div class="row-block">
                     <div class="row ControlPanel-rowSplit">
-                        <div class="row-block"><a class="ControlPanel-title" href="#">Бесплатная доставка</a>
+                        <div class="row-block"><a class="ControlPanel-title" href="#">{% translate 'Free delivery' %}</a>
                         </div>
-                        <div class="row-block hide_700"><span class="ControlPanel-title">Подпишитесь на нас в</span>
+                        <div class="row-block hide_700"><span class="ControlPanel-title">{% translate 'Subscribe to us at' %}</span>
                             <ul class="menu menu_img menu_smallImg ControlPanel-menu">
                                 <li class="menu-item"><a class="menu-link" href="#"><img
                                         src="{% static 'assets/img/icons/socialHeader/fb.svg' %}"
@@ -31,13 +32,28 @@
                                 </li>
                             </ul>
                         </div>
+
+                            <form action="{%  url 'set_language'  %}" method="post">{%  csrf_token  %}
+                                <input name="next" type="hidden" value="{{ redirect_to }}">
+                                <select name="language">
+                                    {%  get_current_language as LANGUAGE_CODE %}
+                                    {%  get_available_languages as LANGUAGES %}
+                                    {%  get_language_info_list for LANGUAGES as languages %}
+                                    {%  for language in languages  %}
+                                        <option value="{{  language.code  }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                            {{  language.name_local  }} ({{ language.code }})
+                                        </option>
+                                    {%  endfor  %}
+                                </select>
+                                <input type="submit" value="Go">
+                            </form>
                     </div>
                 </div>
                 <nav class="row-block">
                     <div class="row ControlPanel-rowSplit">
                         <div class="row-block">
-                            <a class="ControlPanel-title" href="login">Войти</a>/
-                            <a class="ControlPanel-title" href="register">Зарегестироваться</a>
+                            <a class="ControlPanel-title" href="{% url 'login' %}">{% translate 'Enter' %}</a>/
+                            <a class="ControlPanel-title" href="{% url 'register' %}">{% translate 'Register' %}</a>
                         </div>
                     </div>
                 </nav>
@@ -53,21 +69,21 @@
             <nav class="row-block row-block_right Header-menu">
                 <div class="menuModal" id="navigate">
                     <ul class="menu menu_main" style="position: static;">
-                        <li class="menu-item"><a class="menu-link" href="#">Премиум</a>
+                        <li class="menu-item"><a class="menu-link" href="#">{% translate 'Premium' %}</a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="#">Магазины</a>
+                        <li class="menu-item"><a class="menu-link" href="#">{% translate 'Shops' %}</a>
                         </li>
-                        <li class="menu-item"><span class="menu-label menu-label_danger">Новое</span><a class="menu-link"
-                                                                                                        href="#">Рассрочка</a>
+                        <li class="menu-item"><span class="menu-label menu-label_danger">{% translate 'New' %}</span><a class="menu-link"
+                                                                                                        href="#">{% translate 'Installment plan' %}</a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="#">Акции</a>
+                        <li class="menu-item"><a class="menu-link" href="#">{% translate 'Stocks' %}</a>
                         </li>
-                        <li class="menu-item"><span class="menu-label menu-label_success">Топ</span><a class="menu-link"
-                                                                                                       href="#">Бренды</a>
+                        <li class="menu-item"><span class="menu-label menu-label_success">Top</span><a class="menu-link"
+                                                                                                       href="#">{% translate 'Brands' %}</a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="#">Электроника</a>
+                        <li class="menu-item"><a class="menu-link" href="#">{% translate 'Electronics' %}</a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="#">Одежда и обувь</a>
+                        <li class="menu-item"><a class="menu-link" href="#">{% translate 'Clothing and shoes' %}</a>
                         </li>
                     </ul>
                 </div>
@@ -85,7 +101,7 @@
                 </div>
             </div>
             <div class="row-block Header-trigger"><a class="menuTrigger" href="#navigate">
-                <div class="menuTrigger-content">Показать навигацию
+                <div class="menuTrigger-content">{% translate 'Показать навигацию' %}
                 </div>
                 <span></span><span></span><span></span></a>
             </div>

@@ -1,12 +1,12 @@
 from django.contrib.auth.base_user import BaseUserManager
-
+from django.utils.translation import gettext as _
 
 class UserManager(BaseUserManager):
     def create_user(self, email, phone, avatar=None, password=None, **extra_fields):
         if not email:
-            raise ValueError("User must have an email")
+            raise ValueError(_("User must have an email"))
         if not password:
-            raise ValueError("User must have a password")
+            raise ValueError(_("User must have a password"))
 
         email = self.normalize_email(email)
         user = self.model(
@@ -26,13 +26,13 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
 
         if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
+            raise ValueError(_('Superuser must have is_staff=True.'))
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
+            raise ValueError(_('Superuser must have is_superuser=True.'))
         if not email:
-            raise ValueError("User must have an email")
+            raise ValueError(_("User must have an email"))
         if not password:
-            raise ValueError("User must have a password")
+            raise ValueError(_("User must have a password"))
 
         email = self.normalize_email(email)
         user = self.model(

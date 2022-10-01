@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load i18n %}
 <head>
     <meta charset="UTF-8">
     <title>Category</title>
 </head>
 <body>
 {% for category in categories %}
-    <a href="/goods/category/{{ category.id }}/">{{ category.title }}</a>
+    <a href="/goods/category/{{ category.id }}/">{% translate {{ category.title }} %}</a>
     <br>
 
 {% endfor %}

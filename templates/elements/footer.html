@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <footer>
     <div class="wrap">
         <div class="row Footer-main">
@@ -32,20 +33,20 @@
                 </ul>
             </div>
             <div class="row-block">
-                <strong class="Footer-title">Useful Links
+                <strong class="Footer-title">{% translate 'Useful Links' %}
                 </strong>
                 <ul class="menu menu_vt Footer-menu">
-                    <li class="menu-item"><a class="menu-link" href="#">Checkout</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% translate 'Check' %}</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">My Cart</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% translate 'My Shopping cart' %}</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Delivery</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% translate 'Delivery' %}</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Order Info</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% translate 'Order Information' %}</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Terms</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% translate 'Rules' %}</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Conditions</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% translate 'term' %}</a>
                     </li>
                 </ul>
             </div>
@@ -53,24 +54,24 @@
                 <strong class="Footer-title">My Account
                 </strong>
                 <ul class="menu menu_vt Footer-menu">
-                    <li class="menu-item"><a class="menu-link" href="#">Accessories</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% translate 'Accessories' %}</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Bags</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% translate 'Bags' %}</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Cameras</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% translate 'Cameras' %}</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Clothings</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% translate 'Clothes' %}</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Electronics</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% translate 'Electronics' %}</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#">Fashion</a>
+                    <li class="menu-item"><a class="menu-link" href="#">{% translate 'Fashion' %}</a>
                     </li>
                 </ul>
             </div>
             <div class="row-block">
-                <strong class="Footer-title">Contacts
+                <strong class="Footer-title">{% translate 'Contacts' %}
                 </strong>
-                <p>Phone: 8.800.200.600<br>Email: Support@ninzio.com<br>Skype: techno<br>Address: New York, north<br>Avenue
+                <p>{% translate 'Телефон' %}: 8.800.200.600<br>Email: Support@ninzio.com<br>Skype: techno<br>{% trans 'Адрес' %}: New York, north<br>{% trans 'Улица' %}
                     26/7<br>0057
                 </p>
             </div>

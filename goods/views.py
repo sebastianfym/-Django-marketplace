@@ -10,6 +10,8 @@ from django.views.generic import DetailView
 from app_shop.models import Seller
 
 from .models import Category, Goods, ViewHistory, GoodsInMarket
+from django.utils.translation import gettext as _
+from .models import Category, Goods, ViewHistory
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from config.settings import CACHES_TIME
@@ -130,7 +132,7 @@ class CompareView(View):
             if len(set(categories_list)) > 1:
                 context = {
                     'compare_list_products': compare_list_products,
-                    'message': 'Невозможно сравнивать товары из разных категорий'
+                    'message': _('It is impossible to compare products from different categories')
                 }
                 return render(request, 'goods/mycompare.html', context=context)
             all_features = dict()
