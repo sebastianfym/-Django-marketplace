@@ -18,7 +18,7 @@
                                 alt="allDep.svg">
                         </div>
                         <a href="{% url 'catalog' %}?category__title=all">
-                        <span class="CategoriesButton-text">Все категории</span>
+                        <span class="CategoriesButton-text">{% translate 'All categorues' %}</span>
                         </a>
                         <div class="CategoriesButton-arrow">
                         </div>
@@ -144,12 +144,12 @@
           {% for goods in catalog %}
             <div class="Card"><a class="Card-picture" href="{{ goods.get_absolute_url }}"><img src="{{ goods.image.url }}" alt="card.jpg"/></a>
               <div class="Card-content">
-                <strong class="Card-title"><a href="{{ goods.get_absolute_url }}">{% translate {{ goods.name }} %}l</a>
+                <strong class="Card-title"><a href="{{ goods.get_absolute_url }}"> {{ goods.name }} </a>
                 </strong>
                 <div class="Card-description">
-                  <div class="Card-cost"><span class="Card-priceOld">${% translate '{{ goods.price }}' %}</span><span class="Card-price">${% translate {{ goods.price }} %}</span>
+                  <div class="Card-cost"><span class="Card-priceOld">${% translate '{{ goods.price }}' %}</span><span class="Card-price"> {{ goods.price }} </span>
                   </div>
-                  <div class="Card-category">{% translate {{ goods.category.title }} %}
+                  <div class="Card-category"> {{ goods.category.title }}
                   </div>
                   <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
                   </div>
@@ -166,9 +166,9 @@
 
                 {% for page in paginator.page_range %}
                     {% if page_obj.number == page %}
-                        <a class="Pagination-element Pagination-element_current" href="#"><span class="Pagination-text">{% translate {{ page }} %}</span></a>
+                        <a class="Pagination-element Pagination-element_current" href="#"><span class="Pagination-text"> {{ page }} </span></a>
                     {% else %}
-                        <a class="Pagination-element " href="{% url 'catalog' %}?page={{ page }}"><span class="Pagination-text">{% translate {{ page }} %}</span></a>
+                        <a class="Pagination-element " href="{% url 'catalog' %}?page={{ page }}"><span class="Pagination-text"> {{ page }} </span></a>
                     {% endif %}
                     {% endfor %}
                 <a class="Pagination-element Pagination-element_prev" href="{% url 'catalog' %}?page={{ page }}"><img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/></a>

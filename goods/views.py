@@ -176,7 +176,7 @@ class CompareView(View):
             return render(request, 'goods/mycompare.html')
 
     def get(self, request):
-        return render(request, "elements/account.html")
+        return render(request, "customers/account.html")
 
 
 def add_to_view_history(customer, goods: Goods) -> None:
