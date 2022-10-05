@@ -24,6 +24,14 @@
                         </div>
                     </div>
                     <div class="CategoriesButton-content">
+                        <div class="CategoriesButton-link"><a href="{% url 'catalog' %}?category__title=all">
+                            <div class="CategoriesButton-icon"><img
+                                    src="{% static 'assets/img/icons/departments/1.svg' %}"
+                                    alt="1.svg">
+                            </div>
+                            <span class="CategoriesButton-text">ALL CATEGORIES</span></a>
+                        </div>
+
                         {% for cat in category %}
                         <div class="CategoriesButton-link"><a href="{% url 'catalog' %}?category__title={{ cat.title }}">
                             <div class="CategoriesButton-icon"><img
@@ -90,13 +98,18 @@
                 </div>
                 <div class="form-group">
                   <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
-                  <select class="form-select">
-                    <option value="seller" selected="selected" disabled="disabled">{% translate 'Seller' %}
+                  <select class="form-select" name="goods_in_market__seller__title">
+
+                    <option value="" selected="selected">
                     </option>
-                    <option value="kkk">Kkkk
-                    </option>
-                    <option value="sdfsdf">sdfsdf
-                    </option>
+                      {% for seller in sellers %}
+                          {% if goods_in_market__seller__title == seller.title %}
+                              <option selected> {{ seller.title }}
+                          {% else %}
+                              <option> {{ seller.title }}
+                          {% endif %}
+                        </option>
+                      {% endfor %}
                   </select>
                 </div>
                 <div class="form-group">
@@ -151,7 +164,7 @@
                   </div>
                   <div class="Card-category"> {{ goods.category.title }}
                   </div>
-                  <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
+                  <div class="Card-hover"><a class="Card-btn" href="{{ goods.get_absolute_url }}"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Card-btn" href="{% url 'compare_add' goods.id %}"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
                   </div>
                 </div>
               </div>

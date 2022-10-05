@@ -66,7 +66,10 @@ class CatalogMixin:
             category_filter.clear()
         current_category = self.get_params_from_request(['category__title'], self.request.GET)
         if current_category.get('category__title') == 'all':
+            print(current_category.get('category__title'))
+            current_category.clear()
             category_filter.clear()
+            print(current_category)
         category_filter.update(current_category)
         self.request.session['category_filter_parameter'] = category_filter
         return category_filter

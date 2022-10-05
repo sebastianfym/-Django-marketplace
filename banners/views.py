@@ -22,8 +22,7 @@ class BannerView(View):
 
     def cache_this(self, request):
         self.get(request)
-
-    cache_this = cache_page(cache=cache_this, timeout=CACHES_TIME * 15)
+        cache_this = cache_page(cache=cache_this, timeout=CACHES_TIME * 15)
 
 
 class ClearCacheAdminView(FormView):

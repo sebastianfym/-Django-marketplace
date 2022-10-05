@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 
 User = get_user_model()
 
+
 class Seller(models.Model):
     title = models.CharField(max_length=50, verbose_name=_('title'))
     slug = models.SlugField(verbose_name='slug', unique=True)

@@ -11,7 +11,7 @@
           <h1 class="Middle-title">Профиль
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="index.html">home</a>
+            <li class="breadcrumbs-item"><a href="{% url 'index' %}">home</a>
             </li>
             <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% translate 'Profile' %}</span>
             </li>
@@ -31,13 +31,13 @@
               <div class="NavigateProfile">
                 <ul class="menu menu_vt">
                   <li class="menu-item">
-                    <a class="menu-link" href="../account/">{% translate 'Personal account' %}</a>
+                    <a class="menu-link" href="{% url 'account' %}">{% translate 'Personal account' %}</a>
                   </li>
                   <li class="menu-item_ACTIVE menu-item">
-                    <a class="menu-link" href="profile.html">{% translate 'Profile' %}</a>
+                    <a class="menu-link" href="{% url 'profile %}">{% translate 'Profile' %}</a>
                   </li>
                   <li class="menu-item">
-                    <a class="menu-link" href="historyorder.html">{% translate 'Order history' %}</a>
+                    <a class="menu-link" href="{% url 'history_orders' %}">{% translate 'Order history' %}</a>
                   </li>
                   <li class="menu-item">
                     <a class="menu-link" href="historyview.html">{% translate 'Viewing history' %}</a>

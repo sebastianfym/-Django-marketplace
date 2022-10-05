@@ -3,7 +3,7 @@ from .models import *
 
 
 class AdminSeller(admin.ModelAdmin):
-    list_display = ('title', 'description', 'address', 'email')
+    list_display = ('id', 'title', 'description', 'address', 'email')
 
 
 admin.site.register(Seller, AdminSeller)

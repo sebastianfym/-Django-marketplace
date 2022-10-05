@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load i18n %}
 {% block content %}
     <div class="Middle Middle_top">
@@ -8,7 +9,7 @@
           <h1 class="Middle-title">{% translate 'Megano Product' %}
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="index.html">{% translate 'Home' %}</a>
+            <li class="breadcrumbs-item"><a href="{% url 'index' %}">{% translate 'Home' %}</a>
             </li>
             <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% translate 'Product' %}</span>
             </li>
@@ -23,25 +24,25 @@
             <div class="ProductCard-look">
               <div class="ProductCard-photo">
                 <div class="ProductCard-sale">-15%
-                </div><img src="/static/assets/img/content/home/bigGoods.png" alt="bigGoods.png"/>
+                </div><img src="{{ goods.image.url }}" alt="bigGoods.png"/>
               </div>
               <div class="ProductCard-picts"><a class="ProductCard-pict ProductCard-pict_ACTIVE" href="../static/assets/img/content/home/bigGoods.png"><img src="../static/assets/img/content/home/bigGoods.png" alt="bigGoods.png"/></a><a class="ProductCard-pict" href="../django-frontend/assets/img/content/home/slider.png"><img src="../django-frontend/assets/img/content/home/slider.png" alt="slider.png"/></a><a class="ProductCard-pict" href="../django-frontend/assets/img/content/home/videoca.png"><img src="../django-frontend/assets/img/content/home/videoca.png" alt="videoca.png"/></a>
               </div>
             </div>
             <div class="ProductCard-desc">
               <div class="ProductCard-header">
-                <h2 class="ProductCard-title">{% translate {{product.name}} %}
+                <h2 class="ProductCard-title"> {{goods.name}}
                 </h2>
                 <div class="ProductCard-info">
                   <div class="ProductCard-cost">
-                    <div class="ProductCard-price">$55.00
+                    <div class="ProductCard-price">{{ goods.price }}
                     </div>
-                    <div class="ProductCard-priceOld">${% translate {{product.price}} %}
+                    <div class="ProductCard-priceOld"> {{goods.price}}
                     </div>
                   </div>
                   <div class="ProductCard-compare">
                       <form
-						action="{% url 'compare_add' id=product.id %}"
+
 						method="POST"
 						class="btn btn_default"
 					    >

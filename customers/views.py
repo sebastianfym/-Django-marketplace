@@ -12,7 +12,7 @@ class UserRegisterFormView(CreateView):
     model = CustomerUser
     form_class = RegistrationForm
     template_name = 'customers/register.html'
-    success_url = reverse_lazy('catalog')
+    success_url = reverse_lazy('index')
 
     def form_valid(self, form):
         user = form.save()
@@ -20,29 +20,32 @@ class UserRegisterFormView(CreateView):
         return redirect(self.success_url)
 
 
-class AccountAuthenticationView(View):
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect("account/")
-        form = AccountAuthenticationForm()
-        return render(request, "customers/login.html", context={"form": form})
-
-    def post(self, request, *args, **kwargs):
-        form = AccountAuthenticationForm(request.POST or None)
-        if form.is_valid():
-            email = form.cleaned_data.get("email")
-            password = form.cleaned_data.get("password")
-            user = authenticate(email=email, password=password)
-            login(request, user)
-            return redirect('/profile')
-        context = {
-            "form": form,
-        }
-        return render(request, "customers/login.html", context)
+class AccountAuthenticationView(LoginView):
+    template_name = 'customers/login.html'
+    success_url = reverse_lazy('index')
+    #form_class = AccountAuthenticationForm
+    #def get(self, request, *args, **kwargs):
+    #    if request.user.is_authenticated:
+    #        return redirect("account/")
+    #    form = AccountAuthenticationForm()
+    #    return render(request, "customers/login.html", context={"form": form})
+#
+    #def post(self, request, *args, **kwargs):
+    #    form = AccountAuthenticationForm(request.POST or None)
+    #    if form.is_valid():
+    #        email = form.cleaned_data.get("email")
+    #        password = form.cleaned_data.get("password")
+    #        user = authenticate(email=email, password=password)
+    #        login(request, user)
+    #        return redirect('/profile')
+    #    context = {
+    #        "form": form,
+    #    }
+    #    return render(request, "customers/login.html", context)
 
 
 class MyLogoutView(LogoutView):
-    next_page = 'main'
+    next_page = reverse_lazy('index')
 
 
 class UserProfile(View):

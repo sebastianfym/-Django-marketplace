@@ -1,6 +1,5 @@
 import datetime
 import decimal
-
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -49,6 +48,7 @@ class Catalog(CatalogMixin, ListView):
         context.update(parameters)
         context.update({'sellers': Seller.objects.all()})
         context.update({'category': Category.objects.all()})
+        print(context)
         return context
 
 
@@ -175,8 +175,7 @@ class CompareView(View):
         else:
             return render(request, 'goods/mycompare.html')
 
-    def get(self, request):
-        return render(request, "customers/account.html")
+
 
 
 def add_to_view_history(customer, goods: Goods) -> None:
