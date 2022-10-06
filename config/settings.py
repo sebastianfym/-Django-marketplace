@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'discounts',
     'goods',
     'orders',
+    'celery',
+    'data_import'
 ]
 
 MIDDLEWARE = [
@@ -164,3 +166,9 @@ AUTH_USER_MODEL = 'customers.CustomerUser'
 LOGIN_REDIRECT_URL = 'index'
 
 FIXTURE_DIRS = os.path.join(BASE_DIR, 'fixtures')
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = '6379'
+BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
