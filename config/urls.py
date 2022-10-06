@@ -23,9 +23,10 @@ urlpatterns = [
     path('admin/clearcache/', include('banners.urls')),
     path('admin/', admin.site.urls),
     path('', include('customers.urls')),
-    path('__debug__/', include('debug_toolbar.urls')),
-    path('goods/', include('goods.urls')),
+    # path('__debug__/', include('debug_toolbar.urls')),
+    path('goods/', include(('goods.urls', 'goods'), namespace='goods')),
     path('banners/', include('banners.urls')),
     path('customers/', include('customers.urls')),
+    path('cart/', include(('cart.urls', 'cart'), namespace='cart'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
