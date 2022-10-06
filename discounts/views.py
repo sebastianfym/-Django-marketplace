@@ -20,3 +20,12 @@ class SaleDetailView(DetailView):
     model = Discount
     template_name = 'discounts/sale_detail.html'
     context_object_name = 'discount'
+
+
+def get_banners():
+    today = datetime.datetime.today()
+    queryset = Discount.objects.filter(is_active=True,
+                                       date_start__lte=today,
+                                       date_end__gte=today).order_by('?')[:3]
+    return queryset
+

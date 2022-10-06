@@ -17,6 +17,7 @@ from config.settings import CACHES_TIME
 from goods.serviсes import CatalogMixin
 from customers.models import CustomerUser
 from discounts.models import Discount
+from discounts.views import get_banners
 
 
 class CategoryView(View):
@@ -45,10 +46,14 @@ class Catalog(CatalogMixin, ListView):
 
         context = super().get_context_data()
         parameters = self.normalises_values_parameters()
+        banners = get_banners()
         context.update(parameters)
+
         context.update({'sellers': Seller.objects.all()})
         context.update({'category': Category.objects.all()})
-        print(context)
+        context.update({'banners': banners})
+        # print(context)
+
         return context
 
 
