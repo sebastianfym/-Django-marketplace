@@ -58,6 +58,9 @@
             </div>
         </div>
     </div>
+
+  {% include 'banners/banner.html' %}
+
   <div class="Middle Middle_top">
     <div class="Middle-top">
       <div class="wrap">
@@ -163,7 +166,7 @@
                   </div>
                   <div class="Card-category"> {{ goods.category.title }}
                   </div>
-                  <div class="Card-hover"><a class="Card-btn" href="{{ goods.get_absolute_url }}"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a><a class="Compare-btn" id="cart" product_id="{{ goods.id }}" href="{% url 'cart:add' goods.id %}"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Card-btn" href="{% url 'compare_add' goods.id %}"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
+                  <div class="Card-hover"><a class="Card-btn" href="{{ goods.get_absolute_url }}"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Card-btn" href="{% url 'compare_add' goods.id %}"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
                   </div>
                 </div>
               </div>
