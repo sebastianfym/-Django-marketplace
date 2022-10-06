@@ -36,7 +36,3 @@ class CustomerUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
-
-
-class ViewsHistory(models.Model):
-    pass
