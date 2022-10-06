@@ -26,14 +26,14 @@
                     {% for key, value in item.items %}
                         <div class="Cart-product">
                             <div class="Cart-block Cart-block_row">
-                                <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img" src="{{ key.0.goods.image.url }}" alt="card.jpg"></a>
+                                <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img" src="{{ key.image.url }}" alt="card.jpg"></a>
                                 </div>
-                                <div class="Cart-block Cart-block_info"><a class="Cart-title" href="{% url 'post' key.0.goods.id %}"> {{ key.0.goods.name }}</a>
+                                <div class="Cart-block Cart-block_info"><a class="Cart-title" href="{% url 'goods:post' key.id %}"> {{ key.name }}</a>
                                     <div class="Cart-desc">
                                     </div>
                                 </div>
                                 <div class="Cart-block Cart-block_price">
-                                                        <div class="Cart-price Cart-price_old" id="{{ key.0.goods.id }}">{{ key.0.price }}руб
+                                                        <div class="Cart-price Cart-price_old" id="{{ key.id }}">{{ value.0.price }}руб
                                                         </div>
                                                         <div class="Cart-price">40.99$
                                                         </div>
@@ -45,13 +45,8 @@
                                     <div class="form-selectWrap">
                                         <select id="select" class="form-select" name="seller">
                                             {% for shop in value %}
-                                                {% if shop.title == key.0.seller.title %}
-                                                    <option value="{{ key.0.goods.id }}" selected="selected"> {{ shop.title }}
-                                                    </option>
-                                                {% else %}
-                                                     <option value="{{ key.0.goods.id }}"> {{ shop.title }}
-                                                    </option>
-                                                {% endif %}
+                                                <option value="{{ key.id }}"> {{ shop.title }}
+                                                </option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -59,16 +54,16 @@
                                 <div class="Cart-block Cart-block_amount">
                                     <div class="Cart-amount">
                                         <div class="Amount">
-                                            <button class="Amount-remove" value="{{ key.0.goods.id }}amount" type="button">
+                                            <button class="Amount-remove" type="button">
                                             </button>
-                                            <input id="{{ key.0.goods.id }}amount" class="Amount-input form-input" name="amount{{ key.0.goods.id }}" type="text" value="{{ key.1 }}">
-                                            <button class="Amount-add" value="{{ key.0.goods.id }}amount" type="button">
+                                            <input class="Amount-input form-input" name="amount" type="text" value="1">
+                                            <button class="Amount-add" type="button">
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="Cart-block Cart-block_delete">
-                                    <a class="Cart-delete" href="{% url 'cart:remove' key.0.id %}">
+                                    <a class="Cart-delete" href="{% url 'cart:remove' key.id %}">
                                         <img src="/static/assets/img/icons/card/delete.svg" alt="change.svg">
                                     </a>
                                 </div>
@@ -102,77 +97,18 @@ $(document).ready(function (){
             method: 'post',
             dataType: 'json',
             data: {
-                product_id: $(this).val(),
+                prod_id: $(this).val(),
                 shop: $(this).find('option:selected').text(),
+                prev_price: document.getElementById(product).textContent,
+                prev_total_price: document.getElementById('prev_price').textContent,
                 csrfmiddlewaretoken: csrf
             },
             success: function (response) {
                 document.getElementById(product).textContent = response.data
-                document.getElementById(product).textContent += 'руб'
-                var total_price = 0
-                $(".Cart-price_old").each(function(){
-                    var price = parseInt(this.textContent.replace('руб', ''))
-                    var price_id = parseInt($(this).attr('id'))
-                    $(".Amount-input").each(function(){
-                        var id_from_input = parseInt($(this).attr('id'))
-                        var count = parseInt($(this).val())
-                        if (id_from_input === price_id) {
-                            total_price += (price * count)
-                        }
-                    })
-                })
-                document.getElementById('prev_price').textContent = total_price
-                document.getElementById('prev_price').textContent += 'руб'
+                document.getElementById('prev_price').textContent = response.total_price
             }
         })
-    });
-})
-</script>
-<script>
-$(document).ready(function (){
-    var csrf = $("input[name=csrfmiddlewaretoken]").val();
-    $(".Amount-add").click(function(){
-        var id_of_product=$(this).val()
-        var price = document.getElementById(parseInt(id_of_product)).textContent.replace('руб', '')
-        var total_price = parseInt(document.getElementById('prev_price').textContent)
-        total_price += parseInt(price)
-        document.getElementById('prev_price').textContent = total_price
-        var count = $('#'+id_of_product).val()
-        $.ajax({
-            url: '{% url "cart:change_count" %}',
-            method: 'post',
-            dataType: 'json',
-            data: {
-                product_id: parseInt(id_of_product),
-                count_of_product: (parseInt(count)+1),
-                csrfmiddlewaretoken: csrf
-            },
-            success: function (response) {
-            }
-        })
-    });
-
-
-    $(".Amount-remove").click(function(){
-        var id_of_product=$(this).val()
-        var price = document.getElementById(parseInt(id_of_product)).textContent.replace('руб', '')
-        var total_price = parseInt(document.getElementById('prev_price').textContent)
-        total_price -= parseInt(price)
-        document.getElementById('prev_price').textContent = total_price
-        var count = $('#'+id_of_product).val()
-        $.ajax({
-            url: '{% url "cart:change_count" %}',
-            method: 'post',
-            dataType: 'json',
-            data: {
-                product_id: parseInt(id_of_product),
-                count_of_product: (parseInt(count)-1),
-                csrfmiddlewaretoken: csrf
-            },
-            success: function (response) {
-            }
-        })
-    });
+    })
 })
 </script>
 {% endblock %}
