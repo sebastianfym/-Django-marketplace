@@ -170,7 +170,6 @@ class CompareView(View):
                         different_features.update({key: {'diff ': values}})
                     else:
                         different_features.update({key: {'same': values}})
-            print(different_features)
             return render(request, 'goods/mycompare.html', {'compare_list': compare_list_products,
                                                             'different_features': different_features})
         else:

@@ -11,14 +11,6 @@ class GoodsAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
-class GoodsInMarketAdmin(admin.ModelAdmin):
-    list_display = ['goods',
-                    'quantity',
-                    'price',
-                    'free_delivery',
-                    'seller']
-
-
 class FeatureNameAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
@@ -27,8 +19,13 @@ class FeatureAdmin(admin.ModelAdmin):
     list_display = ['id', 'value']
 
 
+
+class GoodsInMarketAdmin(admin.ModelAdmin):
+    list_display = ['price', 'seller', 'goods']
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Goods, GoodsAdmin)
-admin.site.register(GoodsInMarket, GoodsInMarketAdmin)
 admin.site.register(FeatureName, FeatureNameAdmin)
 admin.site.register(Feature, FeatureAdmin)
+admin.site.register(GoodsInMarket, GoodsInMarketAdmin)

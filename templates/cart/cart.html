@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block header %}
+    {% include 'elements/header.html' %}
+{% endblock %}
+{% block content %}
+{%  csrf_token %}
+<div class="Middle Middle_top">
+    <div class="Middle-top">
+      <div class="wrap">
+        <div class="Middle-header">
+          <h1 class="Middle-title">Корзина
+          </h1>
+          <ul class="breadcrumbs Middle-breadcrumbs">
+            <li class="breadcrumbs-item"><a href="index.html">home</a>
+            </li>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>Корзина</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="Section">
+        <div class="wrap">
+            <form class="form Cart" action="#" method="post" name="cart_order">
+                {% for item in cart %}
+                    {% for key, value in item.items %}
+                        <div class="Cart-product">
+                            <div class="Cart-block Cart-block_row">
+                                <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img" src="{{ key.image.url }}" alt="card.jpg"></a>
+                                </div>
+                                <div class="Cart-block Cart-block_info"><a class="Cart-title" href="{% url 'goods:post' key.id %}"> {{ key.name }}</a>
+                                    <div class="Cart-desc">
+                                    </div>
+                                </div>
+                                <div class="Cart-block Cart-block_price">
+                                                        <div class="Cart-price Cart-price_old" id="{{ key.id }}">{{ value.0.price }}руб
+                                                        </div>
+                                                        <div class="Cart-price">40.99$
+                                                        </div>
+                                </div>
+                            </div>
+
+                            <div class="Cart-block Cart-block_row">
+                                <div class="Cart-block Cart-block_seller">
+                                    <div class="form-selectWrap">
+                                        <select id="select" class="form-select" name="seller">
+                                            {% for shop in value %}
+                                                <option value="{{ key.id }}"> {{ shop.title }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="Cart-block Cart-block_amount">
+                                    <div class="Cart-amount">
+                                        <div class="Amount">
+                                            <button class="Amount-remove" type="button">
+                                            </button>
+                                            <input class="Amount-input form-input" name="amount" type="text" value="1">
+                                            <button class="Amount-add" type="button">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="Cart-block Cart-block_delete">
+                                    <a class="Cart-delete" href="{% url 'cart:remove' key.id %}">
+                                        <img src="/static/assets/img/icons/card/delete.svg" alt="change.svg">
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+
+                <div class="Cart-total">
+                    <div class="Cart-block Cart-block_total">
+                        <strong class="Cart-title">Итого:
+                        </strong><span class="Cart-price">200.99$</span><span class="Cart-price_old" id="prev_price">{{ total_price }}руб</span>
+                    </div>
+                    <div class="Cart-block"><a class="btn btn_success btn_lg" href="order.html">Оформить заказ</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+
+<script>
+$(document).ready(function (){
+    var csrf = $("input[name=csrfmiddlewaretoken]").val();
+    $(".form-select").change(function(){
+        var product=$(this).val();
+        $.ajax({
+            url: '{% url "cart:change_price" %}',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                prod_id: $(this).val(),
+                shop: $(this).find('option:selected').text(),
+                prev_price: document.getElementById(product).textContent,
+                prev_total_price: document.getElementById('prev_price').textContent,
+                csrfmiddlewaretoken: csrf
+            },
+            success: function (response) {
+                document.getElementById(product).textContent = response.data
+                document.getElementById('prev_price').textContent = response.total_price
+            }
+        })
+    })
+})
+</script>
+{% endblock %}
+{% block footer %}
+     {% include 'elements/footer.html' %}
+{% endblock %}
