@@ -1,6 +1,8 @@
 import datetime
 
 from django.db import models
+from django.urls import reverse
+
 from goods.models import Goods, Category
 from django.utils.translation import gettext_lazy as _
 
@@ -56,6 +58,7 @@ class Discount(models.Model):
     title = models.CharField(max_length=200, default='_', verbose_name=_('discount_title'))
     descr = models.CharField(max_length=200, default='_', verbose_name=_('discount_description'))
     discount_type = models.ForeignKey(DiscountTypes, on_delete=models.CASCADE, related_name='discounts', verbose_name=_('discount_type'))
+    discount_image = models.ImageField(upload_to='discounts', height_field=None, width_field=None, blank=True, null=True, verbose_name=_('discount_image'))
     goods_1 = models.ManyToManyField(Goods, blank=True, null=True, related_name='discount_1', verbose_name=_('goods_1'))
     category_1 = models.ManyToManyField(Category, blank=True, null=True, related_name='discount_1', verbose_name=_('category_1'))
     goods_2 = models.ManyToManyField(Goods, blank=True, null=True, related_name='discount_2', verbose_name=_('goods_2'))
@@ -84,12 +87,15 @@ class Discount(models.Model):
 
     @property
     def day_end(self) -> str:
-        # if not self.date_end:
-        #     return None
+        if not self.date_end:
+            return None
         return datetime.date.strftime(self.date_end, '%d')
 
     @property
     def month_end(self) -> str:
-        # if not self.date_end:
-        #     return None
+        if not self.date_end:
+            return None
         return datetime.date.strftime(self.date_end, '%b')
+
+    def get_absolute_url(self):
+        return reverse('sale_detail', kwargs={'pk': self.pk})

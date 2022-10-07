@@ -34,16 +34,16 @@
               <div class="NavigateProfile">
                 <ul class="menu menu_vt">
                   <li class="menu-item">
-                    <a class="menu-link" href="account.html">{% translate 'Personal account' %}</a>
+                    <a class="menu-link" href="{% url "account" %}">{% translate 'Personal account' %}</a>
                   </li>
                   <li class="menu-item">
-                    <a class="menu-link" href="profile.html">{% translate 'Profile' %}</a>
+                    <a class="menu-link" href="{% url "profile" %}>{% translate 'Profile' %}</a>
                   </li>
                   <li class="menu-item">
-                    <a class="menu-link" href="historyorder.html">{% translate 'Order history' %}</a>
+                    <a class="menu-link" href="#">{% translate 'Order history' %}</a>
                   </li>
                   <li class="menu-item_ACTIVE menu-item">
-                    <a class="menu-link" href="historyview">{% translate 'Viewing history' %}</a>
+                    <a class="menu-link" href="{% url 'historyview' %}">{% translate 'Viewing history' %}</a>
                   </li>
                 </ul>
               </div>
@@ -55,9 +55,9 @@
         <div class="Cards">
           {% if history_list %}
             {% for card in history_list %}
-              <div class="Card"><a class="Card-picture" href="/goods/{{ card.goods.pk }}"><img src="{{ card.goods.image }}" alt="card.jpg"/></a>
+              <div class="Card"><a class="Card-picture" href="{{ card.goods.get_absolute_url }}"><img src="{{ card.goods.image.url }}" alt="card.jpg"/></a>
                 <div class="Card-content">
-                  <strong class="Card-title"><a href="/goods/{{ card.goods.pk }}">{{ card.goods.name }}</a></strong>
+                  <strong class="Card-title"><a href="{{ card.goods.get_absolute_url }}">{{ card.goods.name }}</a></strong>
                 </div>
                 <div class="Card-description">
                   <div class="Card-cost">
@@ -67,8 +67,7 @@
                   <div class="Card-category">
                     {{ card.goods.category.title }}
                   </div>
-                  <div class="Card-hover">
-                    <a class="Card-btn" href="/goods/{{ card.goods.pk }}"><img src="{{ card.goods.image }}" alt="bookmark.svg"/></a>
+                  <div class="Card-hover"><a class="Card-btn" href="{{ card.goods.get_absolute_url }}"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Card-btn" href="{% url 'compare_add' card.goods.id %}"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
                   </div>
                   </div>
                   <div class="Card-sale">

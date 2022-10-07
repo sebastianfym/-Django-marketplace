@@ -19,6 +19,7 @@ from customers.models import CustomerUser
 from discounts.models import Discount
 
 
+
 class CategoryView(View):
     """
     Представление для категорий товаров у которых activity = True.
@@ -48,7 +49,7 @@ class Catalog(CatalogMixin, ListView):
         context.update(parameters)
         context.update({'sellers': Seller.objects.all()})
         context.update({'category': Category.objects.all()})
-        print(context)
+        # print(context)
         return context
 
 
