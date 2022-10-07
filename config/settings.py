@@ -165,7 +165,7 @@ AUTH_USER_MODEL = 'customers.CustomerUser'
 
 LOGIN_REDIRECT_URL = 'index'
 
-FIXTURE_DIRS = os.path.join(BASE_DIR, 'fixtures')
+#FIXTURE_DIRS = os.path.join(BASE_DIR, 'fixtures')
 
 REDIS_HOST = 'localhost'
 REDIS_PORT = '6379'
