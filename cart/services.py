@@ -41,9 +41,6 @@ def get_cart(request):
 
 def new_price_and_total_price(request):
     shop_title = request.POST.get('shop').strip()
-    prod_id = request.POST.get('prod_id')
-    prev_price = request.POST.get('prev_price').strip().replace('руб', '')
-    prev_total_price = request.POST.get('prev_total_price').strip().replace('руб', '')
+    prod_id = request.POST.get('product_id')
     price = GoodsInMarket.objects.only('price').get(goods=prod_id, seller__title__contains=shop_title)
-    total_price = float(prev_total_price) - float(prev_price) + float(price.price)
-    return price.price, total_price
+    return price.price

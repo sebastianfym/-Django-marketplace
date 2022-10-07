@@ -2,10 +2,9 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
 
-from app_shop.models import Seller
 from cart.models import CartItems
 from cart.services import get_cart, new_price_and_total_price
-from goods.models import Goods, GoodsInMarket
+from goods.models import Goods
 
 
 class AddProductToCartView(View):
@@ -51,5 +50,5 @@ class CartView(View):
 
 class ChangePriceAjax(View):
     def post(self, request, *args, **kwargs):
-        price, total_price = new_price_and_total_price(request)
-        return JsonResponse({'data': price, 'total_price': total_price}, status=200)
+        price = new_price_and_total_price(request)
+        return JsonResponse({'data': price}, status=200)

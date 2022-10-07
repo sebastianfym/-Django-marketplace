@@ -54,10 +54,10 @@
                                 <div class="Cart-block Cart-block_amount">
                                     <div class="Cart-amount">
                                         <div class="Amount">
-                                            <button class="Amount-remove" type="button">
+                                            <button class="Amount-remove" value="{{ key.id }}amount" type="button">
                                             </button>
-                                            <input class="Amount-input form-input" name="amount" type="text" value="1">
-                                            <button class="Amount-add" type="button">
+                                            <input id="{{ key.id }}amount" class="Amount-input form-input" name="amount{{ key.id }}" type="text" value="1">
+                                            <button class="Amount-add" value="{{ key.id }}amount" type="button">
                                             </button>
                                         </div>
                                     </div>
@@ -97,18 +97,49 @@ $(document).ready(function (){
             method: 'post',
             dataType: 'json',
             data: {
-                prod_id: $(this).val(),
+                product_id: $(this).val(),
                 shop: $(this).find('option:selected').text(),
-                prev_price: document.getElementById(product).textContent,
-                prev_total_price: document.getElementById('prev_price').textContent,
                 csrfmiddlewaretoken: csrf
             },
             success: function (response) {
                 document.getElementById(product).textContent = response.data
-                document.getElementById('prev_price').textContent = response.total_price
+                var total_price = 0
+                $(".Cart-price_old").each(function(){
+                    var price = parseInt(this.textContent.replace('руб', ''))
+                    var price_id = parseInt($(this).attr('id'))
+                    $(".Amount-input").each(function(){
+                        var id_from_input = parseInt($(this).attr('id'))
+                        var count = parseInt($(this).val())
+                        if (id_from_input === price_id) {
+                            total_price += (price * count)
+                        }
+                    })
+                })
+                document.getElementById('prev_price').textContent = total_price
             }
         })
-    })
+    });
+})
+</script>
+<script>
+$(document).ready(function (){
+
+    $(".Amount-add").click(function(){
+        var id_of_product=$(this).val()
+        var price = document.getElementById(parseInt(id_of_product)).textContent.replace('руб', '')
+        var total_price = parseInt(document.getElementById('prev_price').textContent)
+        total_price += parseInt(price)
+        document.getElementById('prev_price').textContent = total_price
+    });
+
+
+    $(".Amount-remove").click(function(){
+        var id_of_product=$(this).val()
+        var price = document.getElementById(parseInt(id_of_product)).textContent.replace('руб', '')
+        var total_price = parseInt(document.getElementById('prev_price').textContent)
+        total_price -= parseInt(price)
+        document.getElementById('prev_price').textContent = total_price
+    });
 })
 </script>
 {% endblock %}
