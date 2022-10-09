@@ -2,7 +2,7 @@ from django.urls import path
 
 from cart.views import CartView, AddProductToCartView, DeleteProductFromCartView, ChangePriceAjax
 
-app_name = "cart"
+zapp_name = "cart"
 
 urlpatterns = [
     path("", CartView.as_view(), name="cart"),
