@@ -30,6 +30,7 @@ urlpatterns = [
     path('', include('app_shop.urls')),
     path('orders/', include('orders.urls')),
     path('sale/', include('discounts.urls')),
+    path('import/', include('data_import.urls')),
     path('i18n', include('django.conf.urls.i18n')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

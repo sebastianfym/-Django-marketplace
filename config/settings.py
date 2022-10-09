@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'celery',
     'customers',
     'app_shop',
     'cart',
@@ -50,8 +51,7 @@ INSTALLED_APPS = [
     'discounts',
     'goods',
     'orders',
-    'celery',
-    'data_import'
+    'data_import',
 ]
 
 MIDDLEWARE = [
