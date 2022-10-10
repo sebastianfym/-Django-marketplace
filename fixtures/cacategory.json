@@ -1,1 +1,0 @@
-[{"model": "goods.category", "pk": 1, "fields": {"title": "Смартфоны", "imagen": "", "activity": false}}, {"model": "goods.category", "pk": 2, "fields": {"title": "Мониторы", "imagen": "", "activity": false}}, {"model": "goods.category", "pk": 3, "fields": {"title": "Видеокарты", "imagen": "", "activity": false}}]
