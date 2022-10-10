@@ -83,8 +83,12 @@
                   </div>
                 </div>
                 <div class="ProductCard-cartElement">
-                    <a class="btn btn_primary" href="{% url 'compare_add' goods.id %}"><img class="btn-icon" src="/static/assets/img/icons/card/cart_white.svg" alt="cart_white.svg"/><span class="btn-content">Add To Cart</span></a>
-                    <input type="hidden" id="url_from" name="url_from" value="{{request.path}}">
+                    {% if in_cart_or_not %}
+                        <a class="btn btn_primary" href='{% url 'cart:mycart' %}'><button class="btn btn_primary"> В корзине</button></a>
+                    {% else %}
+                        <a class="btn btn_primary" id="redirect" ><button class="btn btn_primary" id="add_cart" value="{{ goods.id }}"> Добавить в корзину</button></a>
+                        <input type="hidden" id="url_from" name="url_from" value="{{request.path}}">
+                    {% endif %}
                 </div>
               </div>
               <div class="ProductCard-footer">
@@ -282,4 +286,25 @@
       </div>
     </div>
   </div>
+    <script>
+    $(document).ready(function (){
+        var csrf = $("input[name=csrfmiddlewaretoken]").val();
+        $("#add_cart").click(function(){
+            $.ajax({
+                url: '{% url "cart:add" goods.id%}',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    product_id: {{ goods.id }},
+                    count: $(".Amount-input").val(),
+                    csrfmiddlewaretoken: csrf
+                },
+                success: function () {
+                    document.getElementById('add_cart').textContent = 'В корзинe'
+                    document.getElementById('redirect').setAttribute('href', '{% url 'cart:mycart' %}')
+                }
+            })
+        });
+    })
+    </script>
 {% endblock %}

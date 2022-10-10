@@ -26,14 +26,14 @@
                     {% for key, value in item.items %}
                         <div class="Cart-product">
                             <div class="Cart-block Cart-block_row">
-                                <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="{{ cart.product.goods.get_absolute_url }}"><img class="Cart-img" src="{{ cart.product.goods.image.url }}" alt="card.jpg"></a>
+                                <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img" src="{{ key.0.image.url }}" alt="card.jpg"></a>
                                 </div>
-                                <div class="Cart-block Cart-block_info"><a class="Cart-title" href="{{ cart.product.goods.get_absolute_url }}"> {{ cart.product.goods }}</a>
+                                <div class="Cart-block Cart-block_info"><a class="Cart-title" href="{% url 'post' key.0.id %}"> {{ key.0.name }}</a>
                                     <div class="Cart-desc">
                                     </div>
                                 </div>
                                 <div class="Cart-block Cart-block_price">
-                                                        <div class="Cart-price Cart-price_old" id="{{ key.id }}">{{ value.0.price }}руб
+                                                        <div class="Cart-price Cart-price_old" id="{{ key.0.id }}">{{ value.0.price }}руб
                                                         </div>
                                                         <div class="Cart-price">40.99$
                                                         </div>
@@ -45,7 +45,7 @@
                                     <div class="form-selectWrap">
                                         <select id="select" class="form-select" name="seller">
                                             {% for shop in value %}
-                                                <option value="{{ key.id }}"> {{ shop.title }}
+                                                <option value="{{ key.0.id }}"> {{ shop.title }}
                                                 </option>
                                             {% endfor %}
                                         </select>
@@ -54,16 +54,16 @@
                                 <div class="Cart-block Cart-block_amount">
                                     <div class="Cart-amount">
                                         <div class="Amount">
-                                            <button class="Amount-remove" value="{{ key.id }}amount" type="button">
+                                            <button class="Amount-remove" value="{{ key.0.id }}amount" type="button">
                                             </button>
-                                            <input id="{{ key.id }}amount" class="Amount-input form-input" name="amount{{ key.id }}" type="text" value="1">
-                                            <button class="Amount-add" value="{{ key.id }}amount" type="button">
+                                            <input id="{{ key.0.id }}amount" class="Amount-input form-input" name="amount{{ key.0.id }}" type="text" value="{{ key.1 }}">
+                                            <button class="Amount-add" value="{{ key.0.id }}amount" type="button">
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="Cart-block Cart-block_delete">
-                                    <a class="Cart-delete" href="{% url 'cart:remove' key.id %}">
+                                    <a class="Cart-delete" href="{% url 'cart:remove' key.0.id %}">
                                         <img src="/static/assets/img/icons/card/delete.svg" alt="change.svg">
                                     </a>
                                 </div>
@@ -123,13 +123,26 @@ $(document).ready(function (){
 </script>
 <script>
 $(document).ready(function (){
-
+    var csrf = $("input[name=csrfmiddlewaretoken]").val();
     $(".Amount-add").click(function(){
         var id_of_product=$(this).val()
         var price = document.getElementById(parseInt(id_of_product)).textContent.replace('руб', '')
         var total_price = parseInt(document.getElementById('prev_price').textContent)
         total_price += parseInt(price)
         document.getElementById('prev_price').textContent = total_price
+        var count = $('#'+id_of_product).val()
+        $.ajax({
+            url: '{% url "cart:change_count" %}',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                product_id: parseInt(id_of_product),
+                count_of_product: (parseInt(count)+1),
+                csrfmiddlewaretoken: csrf
+            },
+            success: function (response) {
+            }
+        })
     });
 
 
@@ -139,6 +152,19 @@ $(document).ready(function (){
         var total_price = parseInt(document.getElementById('prev_price').textContent)
         total_price -= parseInt(price)
         document.getElementById('prev_price').textContent = total_price
+        var count = $('#'+id_of_product).val()
+        $.ajax({
+            url: '{% url "cart:change_count" %}',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                product_id: parseInt(id_of_product),
+                count_of_product: (parseInt(count)-1),
+                csrfmiddlewaretoken: csrf
+            },
+            success: function (response) {
+            }
+        })
     });
 })
 </script>
