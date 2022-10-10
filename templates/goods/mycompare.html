@@ -55,7 +55,7 @@
                   <div class="Compare-product">
                       <div class="Compare-nameProduct"> {{ product.name }}
                       </div>
-                      <div class="Compare-feature"><a class="Compare-btn" id="cart" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Compare-btn" href="{% url 'compare_delete' product.id %}"><img src="{% static 'assets/img/icons/card/delete.svg' %}" alt="delete.svg"/></a>
+                      <div class="Compare-feature"><a class="Compare-btn" id="cart" product_id="{{ product.id }}" href="{% url 'cart:add' product.id %}"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Compare-btn" href="{% url 'compare_delete' product.id %}"><img src="{% static 'assets/img/icons/card/delete.svg' %}" alt="delete.svg"/></a>
                       </div>
                   </div>
               {% endfor %}
@@ -118,6 +118,8 @@
         }
     });
 </script>
+
+
 {% endblock %}
 {% block footer %}
      {% include 'elements/footer.html' %}
