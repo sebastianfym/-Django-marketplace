@@ -32,5 +32,6 @@ urlpatterns = [
     path('sale/', include('discounts.urls')),
     path('import/', include('data_import.urls')),
     path('i18n', include('django.conf.urls.i18n')),
+    path('cart/', include(('cart.urls', 'cart'), namespace='cart'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
