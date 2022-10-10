@@ -1,0 +1,1 @@
+[{"model": "discounts.discounttypes", "pk": 1, "fields": {"discount_type": "Скидка на товар"}}, {"model": "discounts.discounttypes", "pk": 2, "fields": {"discount_type": "Скидка на набор"}}, {"model": "discounts.discounttypes", "pk": 3, "fields": {"discount_type": "Скидка на корзину"}}]
