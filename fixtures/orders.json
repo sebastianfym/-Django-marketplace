@@ -1,1 +1,0 @@
-[{"model": "orders.order", "pk": 1, "fields": {"quantity": 5, "status": 0, "delivery_method": 1, "payment_method": 0, "total_cost": "200000.00", "goods_in_market": 1, "customer": 1}}, {"model": "orders.order", "pk": 2, "fields": {"quantity": 2, "status": 1, "delivery_method": 1, "payment_method": 0, "total_cost": "140000.00", "goods_in_market": 2, "customer": 1}}]
