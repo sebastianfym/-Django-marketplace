@@ -95,23 +95,12 @@ class DeleteProductFromCompareView(View):
     """
     Удаление товара из списка сравнений
     """
-    def post(self, request, *args, **kwargs):
-        id_product = int(request.POST.get("id"))
+    def get(self, request, id,  *args, **kwargs):
+        id_product = int(id)
         if id_product in request.session["compare"]:
             request.session["compare"].remove(id_product)
             request.session.modified = True
-        return redirect(request.POST.get("url_from"))
-
-
-class DeleteAllProductsFromCompareView(View):
-    """
-    Удаление всех товаров из сравнения
-    """
-    def post(self, request, *args, **kwargs):
-        if request.session.get("compare"):
-            del request.session["compare"]
-            request.session.modified = True
-        return redirect(request.POST.get("url_from"))
+        return redirect('compare')
 
 
 class CompareView(View):
@@ -149,15 +138,6 @@ class CompareView(View):
                         }
 
             different_features = dict()
-            # for key, values in all_features.items():
-            #     if len(values.values()) != len(compare_list):
-            #         different_features.update({key: values})
-            #     else:
-            #         value_list = list()
-            #         for value in values.values():
-            #             value_list.append(value)
-            #         if len(set(value_list)) > 1:
-            #             different_features.update({key: values})
             for key, values in all_features.items():
                 if len(values.values()) != len(compare_list):
                     different_features.update({key: {'diff': values}})
@@ -174,8 +154,6 @@ class CompareView(View):
                                                             'different_features': different_features})
         else:
             return render(request, 'goods/mycompare.html')
-
-
 
 
 def add_to_view_history(customer, goods: Goods) -> None:
