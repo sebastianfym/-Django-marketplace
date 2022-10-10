@@ -21,7 +21,6 @@
       </div>
     </div>
     <div class="Section">
-    {% if compare_list %}
       <div class="wrap">
         <article class="Article">
           <p>{% translate 'Diverse and rich experience, constant quantitative growth and the scope of our activity provides a wide range of (specialists) participation in the formation of a personnel training system, meets urgent needs. Ideological considerations of the highest order, as well as consultation with a broad asset, require the definition and clarification of the appropriate activation conditions.' %}
@@ -56,7 +55,7 @@
                   <div class="Compare-product">
                       <div class="Compare-nameProduct"> {{ product.name }}
                       </div>
-                      <div class="Compare-feature"><a class="Compare-btn" href="{% url 'compare_delete' product.id %}"><img src="{% static 'assets/img/icons/card/delete.svg' %}" alt="delete.svg"/></a>
+                      <div class="Compare-feature"><a class="Compare-btn" id="cart" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Compare-btn" href="{% url 'compare_delete' product.id %}"><img src="{% static 'assets/img/icons/card/delete.svg' %}" alt="delete.svg"/></a>
                       </div>
                   </div>
               {% endfor %}
@@ -76,11 +75,7 @@
                             {% for key_product_id, feature_value in value.items %}
                             <div class="Compare-product">
                             <div class="Compare-nameProduct"> {{ key_product_id }}</div>
-                            {% if feature_value %}
-                                <div class="Compare-feature"> {{ feature_value }}</div>
-                            {% else %}
-                                <div class="Compare-feature"> </div>
-                            {%  endif %}
+                            <div class="Compare-feature"> {{ feature_value }}</div>
                             </div>
                             {% endfor %}
                         </div>
@@ -97,15 +92,10 @@
                     <div class="Compare-nameProduct">  {{ product.name }}
                     </div>
                     <div class="Compare-feature">
-                      {% if product.discount_price < product.price %}
-                          <strong class="Compare-priceOld">{{ product.price }}
-                          </strong>
-                          <strong class="Compare-price"> {{ product.discount_price }}
-                          </strong>
-                      {% else %}
-                          <strong class="Compare-price"> {{ product.price }}
-                          </strong>
-                      {% endif %}
+                      <strong class="Compare-priceOld">{{ product.price }}
+                      </strong>
+                      <strong class="Compare-price"> $115.00
+                      </strong>
                     </div>
                   </div>
               {% endfor %}
@@ -113,12 +103,7 @@
             </div>
               </div>
               </div>
-    {% else %}
-        <div class="wrap">
-            Вы ничего не добавили в сравнение
         </div>
-    {% endif %}
-    </div>
 <script>
     const differentCheckBox = document.querySelector('[name="differentFeature"]')
     differentCheckBox.addEventListener('change', function () {
@@ -133,8 +118,6 @@
         }
     });
 </script>
-
-
 {% endblock %}
 {% block footer %}
      {% include 'elements/footer.html' %}

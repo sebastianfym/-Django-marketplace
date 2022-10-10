@@ -95,23 +95,12 @@ class DeleteProductFromCompareView(View):
     """
     Удаление товара из списка сравнений
     """
-    def post(self, request, *args, **kwargs):
-        id_product = int(request.POST.get("id"))
+    def get(self, request, id,  *args, **kwargs):
+        id_product = int(id)
         if id_product in request.session["compare"]:
             request.session["compare"].remove(id_product)
             request.session.modified = True
-        return redirect(request.POST.get("url_from"))
-
-
-class DeleteAllProductsFromCompareView(View):
-    """
-    Удаление всех товаров из сравнения
-    """
-    def post(self, request, *args, **kwargs):
-        if request.session.get("compare"):
-            del request.session["compare"]
-            request.session.modified = True
-        return redirect(request.POST.get("url_from"))
+        return redirect('compare')
 
 
 class CompareView(View):
@@ -149,15 +138,6 @@ class CompareView(View):
                         }
 
             different_features = dict()
-            # for key, values in all_features.items():
-            #     if len(values.values()) != len(compare_list):
-            #         different_features.update({key: values})
-            #     else:
-            #         value_list = list()
-            #         for value in values.values():
-            #             value_list.append(value)
-            #         if len(set(value_list)) > 1:
-            #             different_features.update({key: values})
             for key, values in all_features.items():
                 if len(values.values()) != len(compare_list):
                     different_features.update({key: {'diff': values}})
@@ -176,6 +156,23 @@ class CompareView(View):
             return render(request, 'goods/mycompare.html')
 
 
+def add_to_view_history(customer, goods: Goods) -> None:
+    ViewHistory.objects.update_or_create(customer=customer,
+                                         goods=goods,
+                                         defaults={'last_view': datetime.datetime.now()})
+
+
+def remove_from_view_history(customer, goods: Goods) -> None:
+    ViewHistory.objects.delete(customer=customer, goods=goods)
+
+
+def is_in_view_history(customer, goods: Goods) -> bool:
+    if ViewHistory.objects.get(customer=customer, goods=goods):
+        return True
+    else:
+        return False
+
+
 class HistoryList(ListView):
     model = ViewHistory
     template_name = 'goods/historyview.html'
@@ -184,3 +181,77 @@ class HistoryList(ListView):
 
     def get_queryset(self):
         return ViewHistory.objects.filter(customer=self.request.user)[:20]
+
+
+def price_with_discount(goods: Goods, old_price=0.00) -> decimal:
+    """
+    Метод для расчета скидки по товару. Если не указана старая цена, выбирается максимальная из всех предложенных.
+    Выбираются все действующие скидки на товар, или на его категорию, возвращается цена с максимальной скидкой,
+    но не меньше 1 руб.
+    :param goods: товар, по которому ищем цену
+    :param old_price: старая цена
+    :return: цена с учетом скидки
+    """
+    if not old_price:
+        old_price = GoodsInMarket.objects.filter(goods=goods).aggregate(max('price'))
+    today = datetime.date.today()
+    goods_discounts = Discount.objects.filter(Q(goods_1=goods) | Q(category_1=goods.category),
+                                              discount_type__pk=1,
+                                              date_start__lte=today,
+                                              date_end__gte=today
+                                              )
+    percent_discount = goods_discounts.objects.filter(discount_mech__pk=1).aggregate(max('discount_value'))
+    percent_discount_price = round((1 - percent_discount) / 100 * old_price, 2)
+    absolute_discount = goods_discounts.objects.filter(discount_mech__pk=2).aggregate(max('discount_value'))
+    absolute_discount_price = old_price - absolute_discount
+    if absolute_discount_price <= 0:
+        return 1.00
+    if percent_discount_price < absolute_discount_price:
+        return percent_discount_price
+    return absolute_discount_price
+
+
+def cart_cost(cart: dict) -> dict:
+    """
+    Метод получает в качестве параметра словарь вида «товар и исходная цена» и пытается применить
+    самую приоритетную скидку на корзину или на набор. Если такая скидка есть, то применяется она; если нет,
+    то тогда метод получает цену на каждый товар словаря.
+    :param cart: {товар: исходная цена}
+    :return: {товар: исходная цена, цена со скидкой, применена ли скидка}
+    :rtype: dict
+    """
+    today = datetime.date.today()
+    goods_count = len(cart)
+    goods_cost = sum(cart.values())
+    cart_discount = Discount.objects.filter(Q(discount_type__pk=3),
+                                            date_start__lte=today,
+                                            date_end__gte=today,
+                                            min_amount__lte=goods_count,
+                                            max_amount__gte=goods_count,
+                                            min_cost__lte=goods_cost,
+                                            max_cost__lte=goods_cost,
+                                            ).order_by('-weight').first()
+
+    set_discount = Discount.objects.filter(Q(discount_type__pk=2),
+                                           Q(goods_1__in=cart.keys()) | Q(category_1__in=cart.keys.category),
+                                           Q(goods_2__in=cart.keys()) | Q(category_2__in=cart.keys.category),
+                                           date_start__lte=today,
+                                           date_end__gte=today,
+                                           ).order_by('-weight').first()
+    res = {}
+    if cart_discount.weight >= set_discount.weight:
+        total_discount = cart_discount.value
+    elif set_discount:
+        total_discount = set_discount.value
+    else:
+        for goods, price in cart.items():
+            new_price = price_with_discount(goods, price)
+            if new_price < price:
+                res[goods] = (price, new_price, True)
+            else:
+                res[goods] = (price, price, False)
+        else:
+            return res
+    for goods, price in cart.items():
+        res[goods] = (price, round(price * (1 - total_discount / 100)), True)
+    return res
