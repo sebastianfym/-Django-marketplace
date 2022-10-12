@@ -2,11 +2,11 @@
 {% load i18n %}
 {% load static %}
 
-{% block header %}
-{% include 'elements/header.html' %}
-{% endblock header %}
+  {% block header %}
+    {% include 'elements/header.html' %}
+  {% endblock header %}
 
-{% block content %}
+  {% block content %}
 
   <div class="Header-searchWrap">
         <div class="wrap">
@@ -29,7 +29,7 @@
                                     src="{% static 'assets/img/icons/departments/1.svg' %}"
                                     alt="1.svg">
                             </div>
-                            <span class="CategoriesButton-text">{% translate 'ALL CATEGORIES' %}</span></a>
+                            <span class="CategoriesButton-text">ALL CATEGORIES</span></a>
                         </div>
 
                         {% for cat in category %}
@@ -50,8 +50,8 @@
             <div class="Header-search">
                 <div class="search">
                     <form class="form form_search" action="#" method="post">
-                        <input class="search-input" id="query" name="query" type="text" placeholder="{% translate 'What are you looking for' %}">
-                        <button class="search-button" type="submit" name="search" id="search"><img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg">{% translate 'Search' %}
+                        <input class="search-input" id="query" name="query" type="text" placeholder="Что вы ищете">
+                        <button class="search-button" type="submit" name="search" id="search"><img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg">Найти
                         </button>
                     </form>
                 </div>
@@ -86,14 +86,14 @@
                 <div class="form-group">
                   <div class="range Section-columnRange">
                     <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="7" data-max="500000" data-from="{{ price__gte }}" data-to="{{ price__lte }}"/>
-                    <div class="range-price">{% translate 'Price' %}:&#32;
+                    <div class="range-price">Price:&#32;
                       <div class="rangePrice">
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <input class="form-input form-input_full" value="{{ name__icontains }}" id="title" name="name__icontains" type="text" placeholder="{% translate 'Title' %}"/>
+                  <input class="form-input form-input_full" value="{{ name__icontains }}" id="title" name="name__icontains" type="text" placeholder="Название"/>
                 </div>
                 <div class="form-group">
                   <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
@@ -113,16 +113,16 @@
                 </div>
                 <div class="form-group">
                   <label class="toggle">
-                    <input type="checkbox"/ {{ in_stock__gte }} name="in_stock__gte" value="1"><span class="toggle-box"></span><span class="toggle-text">{% translate 'Only products in stock' %}</span>
+                    <input type="checkbox"/ {{ in_stock__gte }} name="in_stock__gte" value="1"><span class="toggle-box"></span><span class="toggle-text">Только товары в наличии</span>
                   </label>
                 </div>
                 <div class="form-group">
                   <label class="toggle">
-                    <input type="checkbox"/ {{ delivery__gte }} name="delivery__gte" value="1"><span class="toggle-box"></span><span class="toggle-text">{% translate 'With free shipping' %}</span>
+                    <input type="checkbox"/ {{ delivery__gte }} name="delivery__gte" value="1"><span class="toggle-box"></span><span class="toggle-text">С бесплатной доставкой</span>
                   </label>
                 </div>
                 <div class="form-group">
-                  <div class="buttons"><button name="filter" value="filter" class="btn btn_square btn_dark btn_narrow" type="submit">{% translate 'Filter' %}</button>
+                  <div class="buttons"><button name="filter" value="filter" class="btn btn_square btn_dark btn_narrow" type="submit">Filter</button>
                   </div>
                 </div>
               </form>
@@ -134,7 +134,7 @@
               </strong>
             </header>
             <div class="Section-columnContent">
-              <div class="buttons"><a class="btn btn_default btn_sm" href="#">Video</a><a class="btn btn_default btn_sm" href="#">Development</a><a class="btn btn_default btn_sm" href="#">Gaming</a><a class="btn btn_default btn_sm" href="#">Asus</a><a class="btn btn_default btn_sm" href="#">Development</a><a class="btn btn_default btn_sm" href="#">{% translate 'Video' %}</a>
+              <div class="buttons"><a class="btn btn_default btn_sm" href="#">Video</a><a class="btn btn_default btn_sm" href="#">Development</a><a class="btn btn_default btn_sm" href="#">Gaming</a><a class="btn btn_default btn_sm" href="#">Asus</a><a class="btn btn_default btn_sm" href="#">Development</a><a class="btn btn_default btn_sm" href="#">Video</a>
               </div>
             </div>
           </div>
@@ -154,16 +154,16 @@
 
           <div class="Cards">
           {% for goods in catalog %}
-            <div class="Card"><a class="Card-picture" href="{{ goods.get_absolute_url }}"><img src="{{ goods.goods_image.first.image.url }}" alt="card.jpg"/></a>
+            <div class="Card"><a class="Card-picture" href="{{ goods.get_absolute_url }}"><img src="{{ goods.image.url }}" alt="card.jpg"/></a>
               <div class="Card-content">
                 <strong class="Card-title"><a href="{{ goods.get_absolute_url }}"> {{ goods.name }} </a>
                 </strong>
                 <div class="Card-description">
-                  <div class="Card-cost"><span class="Card-priceOld">${{ goods.price }}</span><span class="Card-price"> {{ goods.price }} </span>
+                  <div class="Card-cost"><span class="Card-priceOld">${% translate '{{ goods.price }}' %}</span><span class="Card-price"> {{ goods.price }} </span>
                   </div>
                   <div class="Card-category"> {{ goods.category.title }}
                   </div>
-                  <div class="Card-hover"><a class="Card-btn" href="{{ goods.get_absolute_url }}"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a><a class="Compare-btn" id="cart" product_id="{{ goods.id }}" href="{% url 'cart:add' goods.id %}"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Card-btn" href="{% url 'compare_add' goods.id %}"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
+                  <div class="Card-hover"><a class="Card-btn" href="{{ goods.get_absolute_url }}"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a><a class="Card-btn" href="url 'cart-add/{{ goods.id }}'"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Card-btn" href="{% url 'compare_add' goods.id %}"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
                   </div>
                 </div>
               </div>

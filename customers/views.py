@@ -6,10 +6,7 @@ from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from customers.forms import RegistrationForm, AccountAuthenticationForm, ChangeUserData
 from customers.models import CustomerUser
-from django.contrib import messages
-from django.utils.translation import gettext as _
-from goods.models import ViewHistory, Image
-from orders.models import Order
+from goods.models import ViewHistory
 
 
 class UserRegisterFormView(CreateView):
@@ -27,6 +24,25 @@ class UserRegisterFormView(CreateView):
 class AccountAuthenticationView(LoginView):
     template_name = 'customers/login.html'
     success_url = reverse_lazy('index')
+    #form_class = AccountAuthenticationForm
+    #def get(self, request, *args, **kwargs):
+    #    if request.user.is_authenticated:
+    #        return redirect("account/")
+    #    form = AccountAuthenticationForm()
+    #    return render(request, "customers/login.html", context={"form": form})
+#
+    #def post(self, request, *args, **kwargs):
+    #    form = AccountAuthenticationForm(request.POST or None)
+    #    if form.is_valid():
+    #        email = form.cleaned_data.get("email")
+    #        password = form.cleaned_data.get("password")
+    #        user = authenticate(email=email, password=password)
+    #        login(request, user)
+    #        return redirect('/profile')
+    #    context = {
+    #        "form": form,
+    #    }
+    #    return render(request, "customers/login.html", context)
 
 
 class MyLogoutView(LogoutView):
@@ -40,34 +56,24 @@ class UserProfile(View):
 
     def get(self, request):
         user = request.user
-        form = ChangeUserData(instance=user)
-
+        form = ChangeUserData()
         return render(request, "customers/profile.html", context={
             'user': user,
             'form': form,
         })
 
     def post(self, request):
+        form = ChangeUserData(request.POST)
         user = request.user
-        form = ChangeUserData(request.POST, instance=user)
         if form.is_valid():
             user.full_name = form.cleaned_data.get('full_name')
-            user.phone = form.cleaned_data.get('phone')
+            user.phone = form.cleaned_data.get('phone_number')
             user.email = form.cleaned_data.get('email')
-            user.password = form.cleaned_data.get('password')
-            user.avatar = form.cleaned_data.get('avatar')
-            form.save()
+            user.password = form.cleaned_data.get('password1')
+
             user.save()
-            messages.success(request, _('Profile details updated.'))
-
-            return redirect(f"../account/")
-
-        messages.error(request, _('Error updating your profile'))
-        messages.add_message(
-            request, messages.SUCCESS, _('Error updating your profile'),
-            fail_silently=True,
-        )
-        return redirect(f"../account/")
+            return redirect("../account/")
+        return redirect('../account/')
 
 
 class UserAccount(View):
@@ -77,6 +83,8 @@ class UserAccount(View):
 
     def get(self, request):
         user = request.user
+        cards = ViewHistory.objects.filter(customer=self.request.user)[:3]
         return render(request, "customers/account.html", context={
-            'user': user
+            'user': user,
+            'cards': cards,
         })
