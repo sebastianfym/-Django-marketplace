@@ -7,6 +7,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView
 from django.views.generic import DetailView
 from app_shop.models import Seller
+from cart.models import CartItems
 
 from .models import Category, Goods, ViewHistory, GoodsInMarket
 from django.utils.translation import gettext as _
@@ -74,6 +75,23 @@ class ShowDetailProduct(DetailView):
     model = Goods
     template_name = 'goods/product.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(ShowDetailProduct, self).get_context_data(**kwargs)
+        product_id = context['goods'].id
+        if self.request.user.is_authenticated:
+            context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product=product_id).exists()
+        else:
+            cart = list()
+            if self.request.session.get("cart"):
+                cart = self.request.session.get("cart")
+            for result, dic_ in enumerate(cart):
+                if dic_.get('inplay', '') == 'False':
+                    context['in_cart_or_not'] = True
+                    break
+                else:
+                    context['in_cart_or_not'] = False
+        return context
+
 
 class AddProductToCompareView(View):
     """
@@ -95,23 +113,12 @@ class DeleteProductFromCompareView(View):
     """
     Удаление товара из списка сравнений
     """
-    def post(self, request, *args, **kwargs):
-        id_product = int(request.POST.get("id"))
+    def get(self, request, id,  *args, **kwargs):
+        id_product = int(id)
         if id_product in request.session["compare"]:
             request.session["compare"].remove(id_product)
             request.session.modified = True
-        return redirect(request.POST.get("url_from"))
-
-
-class DeleteAllProductsFromCompareView(View):
-    """
-    Удаление всех товаров из сравнения
-    """
-    def post(self, request, *args, **kwargs):
-        if request.session.get("compare"):
-            del request.session["compare"]
-            request.session.modified = True
-        return redirect(request.POST.get("url_from"))
+        return redirect('compare')
 
 
 class CompareView(View):
@@ -149,15 +156,6 @@ class CompareView(View):
                         }
 
             different_features = dict()
-            # for key, values in all_features.items():
-            #     if len(values.values()) != len(compare_list):
-            #         different_features.update({key: values})
-            #     else:
-            #         value_list = list()
-            #         for value in values.values():
-            #             value_list.append(value)
-            #         if len(set(value_list)) > 1:
-            #             different_features.update({key: values})
             for key, values in all_features.items():
                 if len(values.values()) != len(compare_list):
                     different_features.update({key: {'diff': values}})
@@ -174,8 +172,6 @@ class CompareView(View):
                                                             'different_features': different_features})
         else:
             return render(request, 'goods/mycompare.html')
-
-
 
 
 def add_to_view_history(customer, goods: Goods) -> None:
