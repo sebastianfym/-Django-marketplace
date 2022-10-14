@@ -49,6 +49,7 @@ class CartView(View):
     def get(self, request, *args, **kwargs):
         print(request.session["cart"])
         cart, total_price = get_cart(request)
+        print(cart)
         return render(request, 'cart/cart.html', {'cart': cart,
                                                   'total_price': total_price})
 
