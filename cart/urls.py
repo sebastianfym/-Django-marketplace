@@ -1,18 +1,19 @@
 from django.urls import path
 
-from cart.views import CartView, AddProductToCartView, DeleteProductFromCartView, ChangePriceAjax, ChangeCountAjax
+from cart.views import CartView, AddProductToCartView, DeleteProductFromCartView, ChangePriceAjax, CartListView
 
 zapp_name = "cart"
 
 urlpatterns = [
-    path("", CartView.as_view(), name="mycart"),
+    path("", CartView.as_view(), name="cart"),
     path(
-        "add/<int:id>",
+        "add/<int:prod_id>/<int:amount>/<int:seller>",
         AddProductToCartView.as_view(),
-        name="add",
+        name="cart-add",
     ),
+
     path(
-        "remove/<int:id>",
+        "remove/<int:prod_id>",
         DeleteProductFromCartView.as_view(),
         name="remove",
     ),
@@ -21,9 +22,6 @@ urlpatterns = [
         ChangePriceAjax.as_view(),
         name='change_price'
     ),
-    path(
-        'change_count',
-        ChangeCountAjax.as_view(),
-        name='change_count'
-    )
+
+    path('another_cart', CartListView.as_view(), name='cart_list')
 ]
