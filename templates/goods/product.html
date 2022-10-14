@@ -41,23 +41,7 @@
                     </div>
                   </div>
                   <div class="ProductCard-compare">
-                      <form
-                        action="{% url 'compare_add' goods.id %}"
-						method="POST"
-						class="btn btn_default"
-					    >
-						{% csrf_token %}
-						<input
-							type="hidden"
-							name="url_from"
-							value="{{request.path}}"
-						/>
-						<button class="btn btn_default">
-							<span>
-								 <img class="btn-icon" src="/static/assets/img/icons/card/change.svg" alt="change.svg"/>
-							</span>
-						</button>
-					</form>
+                      <a class="Card-btn" href="{% url 'compare_add' goods.id %}" ><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
 
                   </div>
                 </div>

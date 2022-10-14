@@ -21,6 +21,7 @@
       </div>
     </div>
     <div class="Section">
+    {% if compare_list %}
       <div class="wrap">
         <article class="Article">
           <p>{% translate 'Diverse and rich experience, constant quantitative growth and the scope of our activity provides a wide range of (specialists) participation in the formation of a personnel training system, meets urgent needs. Ideological considerations of the highest order, as well as consultation with a broad asset, require the definition and clarification of the appropriate activation conditions.' %}
@@ -55,7 +56,7 @@
                   <div class="Compare-product">
                       <div class="Compare-nameProduct"> {{ product.name }}
                       </div>
-                      <div class="Compare-feature"><a class="Compare-btn" id="cart" product_id="{{ product.id }}" href="{% url 'cart:add' product.id %}"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Compare-btn" href="{% url 'compare_delete' product.id %}"><img src="{% static 'assets/img/icons/card/delete.svg' %}" alt="delete.svg"/></a>
+                      <div class="Compare-feature"><a class="Compare-btn" href="{% url 'compare_delete' product.id %}"><img src="{% static 'assets/img/icons/card/delete.svg' %}" alt="delete.svg"/></a>
                       </div>
                   </div>
               {% endfor %}
@@ -103,7 +104,12 @@
             </div>
               </div>
               </div>
+    {% else %}
+        <div class="wrap">
+            Вы ничего не добавли в сравненте
         </div>
+    {% endif %}
+    </div>
 <script>
     const differentCheckBox = document.querySelector('[name="differentFeature"]')
     differentCheckBox.addEventListener('change', function () {

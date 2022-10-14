@@ -25,6 +25,7 @@ def get_total_price(cart: list[dict], total_price=0) -> float:
     Функция получения суммароной стоимости товаров в корзине
     """
     for item in cart:
+        print(cart)
         for key, value in item.items():
             total_price += value[0]['price'] * int(key[1])
     return total_price
