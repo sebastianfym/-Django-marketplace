@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import CategoryView, detail_goods_page, ShowDetailProduct, CompareView, AddProductToCompareView, Catalog, \
-    HistoryList, DeleteProductFromCompareView
+from .views import CategoryView, ShowDetailProduct, CompareView, AddProductToCompareView, Catalog, \
+    HistoryList, DeleteProductFromCompareView #, detail_goods_page
 
 urlpatterns = [
     path('catalog/', Catalog.as_view(), name='catalog'),
@@ -8,6 +8,6 @@ urlpatterns = [
     path('compare/', CompareView.as_view(), name='compare'),
     path("compare_add/<int:id>", AddProductToCompareView.as_view(), name="compare_add"),
     path("compare_delete/<int:id>", DeleteProductFromCompareView.as_view(), name="compare_delete"),
-    path("<int:pk>/", detail_goods_page, name='post'),
+    # path("<int:pk>/", detail_goods_page, name='post'),
     path('detail/<int:pk>/', ShowDetailProduct.as_view(), name='post'),
 ]
