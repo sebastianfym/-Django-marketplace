@@ -97,7 +97,7 @@ class AddProductToCompareView(View):
     """
     Добавление товара в сравнение
     """
-    def post(self, request, id, *args, **kwargs):
+    def get(self, request, id, *args, **kwargs):
         if not request.session.get("compare"):
             request.session["compare"] = list()
         if id not in request.session['compare']:
@@ -106,7 +106,7 @@ class AddProductToCompareView(View):
         else:
             request.session['compare'].remove(id)
             request.session.modified = True
-        return redirect(request.POST.get("url_from"))
+        return redirect(request.META['HTTP_REFERER'])
 
 
 class DeleteProductFromCompareView(View):
@@ -139,7 +139,8 @@ class CompareView(View):
             }
             if len(set(categories_list)) > 1:
                 context = {
-                    'compare_list_products': compare_list_products,
+                    'compare_list': compare_list_products,
+                    'different_features': 0,
                     'message': _('It is impossible to compare products from different categories')
                 }
                 return render(request, 'goods/mycompare.html', context=context)
@@ -168,6 +169,7 @@ class CompareView(View):
                         different_features.update({key: {'diff ': values}})
                     else:
                         different_features.update({key: {'same': values}})
+            print(compare_list_products)
             return render(request, 'goods/mycompare.html', {'compare_list': compare_list_products,
                                                             'different_features': different_features})
         else:
