@@ -26,14 +26,14 @@
                     {% for key, value in item.items %}
                         <div class="Cart-product">
                             <div class="Cart-block Cart-block_row">
-                                <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img" src="{{ key.0.image.url }}" alt="card.jpg"></a>
+                                <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img" src="{{ key.0.goods.image.url }}" alt="card.jpg"></a>
                                 </div>
-                                <div class="Cart-block Cart-block_info"><a class="Cart-title" href="{% url 'post' key.0.id %}"> {{ key.0.name }}</a>
+                                <div class="Cart-block Cart-block_info"><a class="Cart-title" href="{% url 'post' key.0.goods.id %}"> {{ key.0.goods.name }}</a>
                                     <div class="Cart-desc">
                                     </div>
                                 </div>
                                 <div class="Cart-block Cart-block_price">
-                                                        <div class="Cart-price Cart-price_old" id="{{ key.0.id }}">{{ value.0.price }}руб
+                                                        <div class="Cart-price Cart-price_old" id="{{ key.0.goods.id }}">{{ key.0.price }}руб
                                                         </div>
                                                         <div class="Cart-price">40.99$
                                                         </div>
@@ -45,8 +45,13 @@
                                     <div class="form-selectWrap">
                                         <select id="select" class="form-select" name="seller">
                                             {% for shop in value %}
-                                                <option value="{{ key.0.id }}"> {{ shop.title }}
-                                                </option>
+                                                {% if shop.title == key.0.seller.title %}
+                                                    <option value="{{ key.0.goods.id }}" selected="selected"> {{ shop.title }}
+                                                    </option>
+                                                {% else %}
+                                                     <option value="{{ key.0.goods.id }}"> {{ shop.title }}
+                                                    </option>
+                                                {% endif %}
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -54,10 +59,10 @@
                                 <div class="Cart-block Cart-block_amount">
                                     <div class="Cart-amount">
                                         <div class="Amount">
-                                            <button class="Amount-remove" value="{{ key.0.id }}amount" type="button">
+                                            <button class="Amount-remove" value="{{ key.0.goods.id }}amount" type="button">
                                             </button>
-                                            <input id="{{ key.0.id }}amount" class="Amount-input form-input" name="amount{{ key.0.id }}" type="text" value="{{ key.1 }}">
-                                            <button class="Amount-add" value="{{ key.0.id }}amount" type="button">
+                                            <input id="{{ key.0.goods.id }}amount" class="Amount-input form-input" name="amount{{ key.0.goods.id }}" type="text" value="{{ key.1 }}">
+                                            <button class="Amount-add" value="{{ key.0.goods.id }}amount" type="button">
                                             </button>
                                         </div>
                                     </div>
@@ -103,6 +108,7 @@ $(document).ready(function (){
             },
             success: function (response) {
                 document.getElementById(product).textContent = response.data
+                document.getElementById(product).textContent += 'руб'
                 var total_price = 0
                 $(".Cart-price_old").each(function(){
                     var price = parseInt(this.textContent.replace('руб', ''))
@@ -116,6 +122,7 @@ $(document).ready(function (){
                     })
                 })
                 document.getElementById('prev_price').textContent = total_price
+                document.getElementById('prev_price').textContent += 'руб'
             }
         })
     });

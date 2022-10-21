@@ -174,7 +174,7 @@ class GoodsInMarket(models.Model):
                                )
 
     def __str__(self):
-        return self.goods.name
+        return f'{self.goods.name} {self.seller.title}'
 
 
 class ViewHistory(models.Model):
