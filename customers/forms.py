@@ -8,10 +8,13 @@ from customers.models import CustomerUser
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
                              max_length=64,
-                             help_text=_('Enter your email address'))
+                             error_messages={'invalid': _('Enter the correct email!')},
+                             required=True,
+                             help_text=_('Enter your email address')
+                             )
     full_name = forms.CharField(required=True,
                                 label=_("First/Last Name/Middle name"))
-    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,12}$',
+    phone_number = forms.RegexField(regex=r'^\+?7?\d{9,12}$',
                                     label=_("phone number"),
                                     error_messages={'invalid': _('Enter the correct phone number!')},
                                     required=True)
@@ -21,6 +24,7 @@ class RegistrationForm(UserCreationForm):
     password2 = forms.CharField(label=_('Password again'),
                                 widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                 help_text=_('Re-enter the password'))
+
     class Meta:
         model = CustomerUser
         fields = ("email", "full_name", "phone_number", "password1", "password2")
