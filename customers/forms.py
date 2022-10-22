@@ -20,7 +20,9 @@ class RegistrationForm(UserCreationForm):
                                 help_text=password_validation.password_validators_help_text_html())
     password2 = forms.CharField(label=_('Password again'),
                                 widget=forms.PasswordInput(attrs={'class': 'form-control'}),
-                                help_text=_('Re-enter the password'))
+                                help_text=_('Re-enter the password'),
+                                error_messages={'invalid': _('passwords do not match')}
+                                )
     class Meta:
         model = CustomerUser
         fields = ("email", "full_name", "phone_number", "password1", "password2")
@@ -54,7 +56,8 @@ class ChangeUserData(forms.Form):
                                 help_text=password_validation.password_validators_help_text_html())
     password2 = forms.CharField(label='password2',
                                 widget=forms.PasswordInput(attrs={'class': 'form-control'}),
-                                help_text=_('Re-enter the password'))
+                                help_text=_('Re-enter the password'),
+                                error_messages={'invalid': _('passwords do not match')})
 
 
 
