@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Goods, FeatureName, Feature, GoodsInMarket
+from .models import Category, Goods, FeatureName, Feature, GoodsInMarket, DetailProductComment, Image
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -27,8 +27,18 @@ class FeatureAdmin(admin.ModelAdmin):
     list_display = ['id', 'value']
 
 
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ['name', 'product']
+
+
+class DetailProductCommentAdmin(admin.ModelAdmin):
+    list_display = ['author_name', 'email', 'goods']
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Goods, GoodsAdmin)
 admin.site.register(GoodsInMarket, GoodsInMarketAdmin)
 admin.site.register(FeatureName, FeatureNameAdmin)
 admin.site.register(Feature, FeatureAdmin)
+admin.site.register(Image, ImageAdmin)
+admin.site.register(DetailProductComment, DetailProductCommentAdmin)

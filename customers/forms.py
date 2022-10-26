@@ -47,11 +47,9 @@ class AccountAuthenticationForm(forms.ModelForm):
 
 
 class ChangeUserData(forms.Form):
-    email = forms.EmailField(max_length=64,
-                             help_text=_('Enter your email address'), label='email')
+    email = forms.EmailField(max_length=64, help_text=_('Enter your email address'), label='email')
     full_name = forms.CharField(label='full_name')
-    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,12}$',
-                                    label="phone_number",
+    phone_number = forms.RegexField(regex=r'^\+?1?\d{9,12}$', label="phone_number",
                                     error_messages={'invalid': _('Enter the correct phone number!')})
     password1 = forms.CharField(label='password1',
                                 widget=(forms.PasswordInput(attrs={'class': 'form-control'})),

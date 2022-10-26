@@ -54,8 +54,9 @@ class UserProfile(View):
     """
 
     def get(self, request):
-        user = request.user
+        user = CustomerUser.objects.get(id=request.user.id)
         form = ChangeUserData()
+
         return render(request, "customers/profile.html", context={
             'user': user,
             'form': form,
@@ -72,7 +73,7 @@ class UserProfile(View):
 
             user.save()
             return redirect("../account/")
-        return redirect('../account/')
+        return redirect('../profile/')
 
 
 class UserAccount(View):
