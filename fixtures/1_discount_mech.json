@@ -3,21 +3,21 @@
     "model": "discounts.discountmech",
     "pk": 1,
     "fields": {
-        "discount_mech": "Процент"
+        "discount_mech": "???????"
     }
 },
 {
     "model": "discounts.discountmech",
     "pk": 2,
     "fields": {
-        "discount_mech": "Сумма"
+        "discount_mech": "?????"
     }
 },
 {
     "model": "discounts.discountmech",
     "pk": 3,
     "fields": {
-        "discount_mech": "Фиксированная сумма"
+        "discount_mech": "????????????? ?????"
     }
 }
 ]

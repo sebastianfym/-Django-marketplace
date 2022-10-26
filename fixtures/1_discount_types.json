@@ -3,21 +3,21 @@
     "model": "discounts.discounttypes",
     "pk": 1,
     "fields": {
-        "discount_type": "Скидка на товар"
+        "discount_type": "РЎРєРёРґРєР° РЅР° С‚РѕРІР°СЂ"
     }
 },
 {
     "model": "discounts.discounttypes",
     "pk": 2,
     "fields": {
-        "discount_type": "Скидка на набор"
+        "discount_type": "РЎРєРёРґРєР° РЅР° РЅР°Р±РѕСЂ"
     }
 },
 {
     "model": "discounts.discounttypes",
     "pk": 3,
     "fields": {
-        "discount_type": "Скидка на корзину"
+        "discount_type": "РЎРєРёРґРєР° РЅР° РєРѕСЂР·РёРЅСѓ"
     }
 }
 ]
