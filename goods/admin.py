@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Goods, FeatureName, Feature, GoodsInMarket
+from .models import Category, Goods, FeatureName, Feature, GoodsInMarket, DetailProductComment, Image
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -11,6 +11,14 @@ class GoodsAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
+class GoodsInMarketAdmin(admin.ModelAdmin):
+    list_display = ['goods',
+                    'quantity',
+                    'price',
+                    'free_delivery',
+                    'seller']
+
+
 class FeatureNameAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
@@ -19,13 +27,18 @@ class FeatureAdmin(admin.ModelAdmin):
     list_display = ['id', 'value']
 
 
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ['name', 'product']
 
-class GoodsInMarketAdmin(admin.ModelAdmin):
-    list_display = ['price', 'seller', 'goods']
+
+class DetailProductCommentAdmin(admin.ModelAdmin):
+    list_display = ['author_name', 'email', 'goods']
 
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Goods, GoodsAdmin)
+admin.site.register(GoodsInMarket, GoodsInMarketAdmin)
 admin.site.register(FeatureName, FeatureNameAdmin)
 admin.site.register(Feature, FeatureAdmin)
-admin.site.register(GoodsInMarket, GoodsInMarketAdmin)
+admin.site.register(Image, ImageAdmin)
+admin.site.register(DetailProductComment, DetailProductCommentAdmin)
