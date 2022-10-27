@@ -37,6 +37,27 @@ class Feature(models.Model):
     def __str__(self):
         return self.value
 
+
+class DetailProductComment(models.Model):
+    """
+    Класс комментария к конкретному товару.
+    Содержит в себе:
+    author_name - имя автора;
+    text - отзыв;
+    good - связывающий товар.
+    """
+    goods = models.ForeignKey("Goods", on_delete=models.CASCADE, related_name='detail_goods_review')
+    text = models.CharField(verbose_name=_('review text'), max_length=700, blank=True, null=True)
+    author_name = models.CharField(verbose_name='review author_name', max_length=30, blank=True, null=True)
+    email = models.EmailField(max_length=54, blank=True, null=True, verbose_name='detail review author email')
+
+    class Meta:
+        verbose_name = 'detail review'
+        verbose_name_plural = 'detail reviews'
+
+    def __str__(self):
+        return f'{self.goods},{self.author_name}'
+
 class Category(models.Model):
     """
     Класс моделей категорий
@@ -91,6 +112,7 @@ class Goods(models.Model):
                                 decimal_places=2,
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))])
     describe = models.TextField(verbose_name=_('describe'),)
+    image = models.ImageField(upload_to=None, height_field=None, width_field=None, blank=True, null=True)
     release_date = models.DateField(verbose_name=_('release_date'), null=True, blank=True)
     limit_edition = models.BooleanField(verbose_name=_('limit_edition'), default=False)
     category = models.ForeignKey(Category, verbose_name=_('category'), on_delete=models.CASCADE, related_name='goods')
@@ -160,22 +182,4 @@ class Image(models.Model):
         return f'{self.name},{self.product}'
 
 
-class DetailProductComment(models.Model):
-    """
-    Класс комментария к конкретному товару.
-    Содержит в себе:
-    author_name - имя автора;
-    text - отзыв;
-    good - связывающий товар.
-    """
-    goods = models.ForeignKey("Goods", on_delete=models.CASCADE, related_name='detail_goods_review')
-    text = models.CharField(verbose_name=_('review text'), max_length=700, blank=True, null=True)
-    author_name = models.CharField(verbose_name='review author_name', max_length=30, blank=True, null=True)
-    email = models.EmailField(max_length=54, blank=True, null=True, verbose_name='detail review author email')
-
-    class Meta:
-        verbose_name = 'detail review'
-        verbose_name_plural = 'detail reviews'
-
-    def __str__(self):
-        return f'{self.goods},{self.author_name}'
+#def create_goods_relate_images(request):
