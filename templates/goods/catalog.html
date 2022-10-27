@@ -154,7 +154,7 @@
 
           <div class="Cards">
           {% for goods in catalog %}
-            <div class="Card"><a class="Card-picture" href="{{ goods.get_absolute_url }}"><img src="{{ goods.image.url }}" alt="card.jpg"/></a>
+            <div class="Card"><a class="Card-picture" href="{{ goods.get_absolute_url }}"><img src="{{ goods.goods_image.first.image.url }}" alt="card.jpg"/></a>
               <div class="Card-content">
                 <strong class="Card-title"><a href="{{ goods.get_absolute_url }}"> {{ goods.name }} </a>
                 </strong>

@@ -307,3 +307,10 @@ def cart_cost(cart: dict) -> dict:
     for goods, price in cart.items():
         res[goods] = (price, round(price * (1 - total_discount / 100)), True)
     return res
+
+
+def create_goods_related_images(request):
+    goods = Goods.objects.all()
+    for item in goods:
+        image = Image.objects.create(image=item.image, product=item)
+    return HttpResponse('<h1 Готово \h1>')
