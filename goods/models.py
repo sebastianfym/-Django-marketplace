@@ -112,7 +112,7 @@ class Goods(models.Model):
                                 decimal_places=2,
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))])
     describe = models.TextField(verbose_name=_('describe'),)
-    # image = models.ImageField(upload_to=None, height_field=None, width_field=None, blank=True, null=True)
+    image = models.ImageField(upload_to=None, height_field=None, width_field=None, blank=True, null=True)
     release_date = models.DateField(verbose_name=_('release_date'), null=True, blank=True)
     limit_edition = models.BooleanField(verbose_name=_('limit_edition'), default=False)
     category = models.ForeignKey(Category, verbose_name=_('category'), on_delete=models.CASCADE, related_name='goods')
@@ -180,3 +180,6 @@ class Image(models.Model):
 
     def __str__(self):
         return f'{self.name},{self.product}'
+
+
+#def create_goods_relate_images(request):
