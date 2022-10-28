@@ -46,23 +46,10 @@ class AccountAuthenticationForm(forms.ModelForm):
                 raise forms.ValidationError(_("Email or password entered incorrectly!"))
 
 
-# class ChangeUserData(forms.Form):
-#     email = forms.EmailField(max_length=64, help_text=_('Enter your email address'), label='email')
-#     full_name = forms.CharField(label='full_name')
-#     phone_number = forms.RegexField(regex=r'^\+?1?\d{9,12}$', label="phone_number",
-#                                     error_messages={'invalid': _('Enter the correct phone number!')})
-#     password1 = forms.CharField(label='password1',
-#                                 widget=(forms.PasswordInput(attrs={'class': 'form-control'})),
-#                                 help_text=password_validation.password_validators_help_text_html())
-#     password2 = forms.CharField(label='password2',
-#                                 widget=forms.PasswordInput(attrs={'class': 'form-control'}),
-#                                 help_text=_('Re-enter the password'))
-
-
 class ChangeUserData(forms.ModelForm):
     class Meta:
         model = CustomerUser
         exclude = ['email_ver', 'is_staff']
-        fields = '__all__'#['full_name', 'phone', 'email', 'password']
+        fields = '__all__'
 
 
