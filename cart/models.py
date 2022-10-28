@@ -36,7 +36,11 @@ def price_with_discount(goods_in_market: GoodsInMarket, category: Category) -> f
 
 class CartItems(models.Model):
     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE, related_name="user_for_cart")
-    product_in_shop = models.ForeignKey(GoodsInMarket, on_delete=models.CASCADE, verbose_name="Товар в магазине", related_name="product_in_shop_for_cart")
+    product_in_shop = models.ForeignKey(GoodsInMarket,
+                                        null=True,
+                                        on_delete=models.CASCADE,
+                                        verbose_name="Товар в магазине",
+                                        related_name="product_in_shop_for_cart")
     quantity = models.PositiveIntegerField(verbose_name='количество', default=1)
     category = models.ForeignKey(Category, verbose_name=_('category'), on_delete=models.CASCADE, related_name='category_in_cart', null=True)
 

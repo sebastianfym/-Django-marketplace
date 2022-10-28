@@ -80,7 +80,10 @@ class Category(models.Model):
 
 
 class Subcategory:
-    main_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category', verbose_name=_('subcategory'))
+    main_category = models.ForeignKey(Category,
+                                      on_delete=models.CASCADE,
+                                      related_name='category',
+                                      verbose_name=_('subcategory'))
     title = models.CharField(max_length=150, blank=True, null=True)
     imagen = models.ImageField(upload_to='images/', blank=True, null=True)
     activity = models.BooleanField(default=False, blank=True, null=True)
@@ -112,7 +115,6 @@ class Goods(models.Model):
                                 decimal_places=2,
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))])
     describe = models.TextField(verbose_name=_('describe'),)
-    # image = models.ImageField(upload_to=None, height_field=None, width_field=None, blank=True, null=True)
     release_date = models.DateField(verbose_name=_('release_date'), null=True, blank=True)
     limit_edition = models.BooleanField(verbose_name=_('limit_edition'), default=False)
     category = models.ForeignKey(Category, verbose_name=_('category'), on_delete=models.CASCADE, related_name='goods')
@@ -180,3 +182,7 @@ class Image(models.Model):
 
     def __str__(self):
         return f'{self.name},{self.product}'
+
+
+
+
