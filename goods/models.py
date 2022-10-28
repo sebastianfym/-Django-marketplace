@@ -59,7 +59,10 @@ class Category(models.Model):
 
 
 class Subcategory:
-    main_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category', verbose_name=_('subcategory'))
+    main_category = models.ForeignKey(Category,
+                                      on_delete=models.CASCADE,
+                                      related_name='category',
+                                      verbose_name=_('subcategory'))
     title = models.CharField(max_length=150, blank=True, null=True)
     imagen = models.ImageField(upload_to='images/', blank=True, null=True)
     activity = models.BooleanField(default=False, blank=True, null=True)

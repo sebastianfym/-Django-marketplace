@@ -37,7 +37,7 @@
                   </li>
                   <li class="menu-item"><a class="menu-link" href="{% url 'history_orders' %}">{% translate 'Order history' %}</a>
                   </li>
-                  <li class="menu-item"><a class="menu-link" href="historyview.html">{% translate 'Viewing history' %}</a>
+                  <li class="menu-item"><a class="menu-link" href="{% url 'historyview' %}">{% translate 'Viewing history' %}</a>
                   </li>
                 </ul>
               </div>
@@ -152,7 +152,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="Account-editLink Account-editLink_view"><a href="historyview.html">{% translate 'Go to the full list' %}</a></div>
+                <div class="Account-editLink Account-editLink_view"><a href="{% url 'historyview' %}">{% translate 'Go to the full list' %}</a></div>
               </div>
             </div>
           </div>
