@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
 
 from cart.models import CartItems
-from cart.services import get_cart, new_price_and_total_price, add_product_to_cart_by_product_id
+from cart.services import get_cart, new_price_and_total_price, add_product_to_cart_by_product_id, cart_price
 
 
 class AddProductToCartView(View):
@@ -46,10 +46,14 @@ class CartView(View):
     Представление корзины
     """
     def get(self, request, *args, **kwargs):
-        cart, total_price = get_cart(request)
-        return render(request, 'cart/cart.html', {'cart': cart,
-                                                  'total_price': total_price})
+        cart = CartItems.objects.filter(user=request.user)
+        total_price_disc, total_price = cart_price(cart)
 
+    #     cart, total_price = get_cart(request)
+        return render(request, 'cart/cart.html', {'cart': cart,
+                                                  'total_price': total_price,
+                                                  'total_price_disc': total_price_disc})
+    #
 
 class ChangePriceAjax(View):
     """
