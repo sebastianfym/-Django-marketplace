@@ -8,8 +8,9 @@ from django.views.generic import ListView, DetailView, DeleteView
 from django.views.generic import DetailView
 from app_shop.models import Seller
 from cart.models import CartItems
+from .forms import DetailProductReviewForm
 
-from .models import Category, Goods, ViewHistory, GoodsInMarket
+from .models import Category, Goods, ViewHistory, GoodsInMarket, DetailProductComment, Image
 from django.utils.translation import gettext as _
 from .models import Category, Goods, ViewHistory
 from django.views.decorators.cache import cache_page
@@ -44,27 +45,12 @@ class Catalog(CatalogMixin, ListView):
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
-
         context = super().get_context_data()
         parameters = self.normalises_values_parameters()
         context.update(parameters)
         context.update({'sellers': Seller.objects.all()})
         context.update({'category': Category.objects.all()})
-        # print(context)
         return context
-
-
-def detail_goods_page(request, pk):
-    """
-    Данная функция служит для детального представления определённого товара.
-    :param pk:
-    :param request:
-    :param slug:
-    :return:
-    """
-    cache_this = cache_page(3600 * CACHES_TIME)
-    product = get_object_or_404(Goods, pk=pk)
-    return render(request, 'goods/product.html', context={'product': product})
 
 
 class ShowDetailProduct(DetailView):
@@ -78,6 +64,13 @@ class ShowDetailProduct(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ShowDetailProduct, self).get_context_data(**kwargs)
         product_id = context['goods'].id
+        context['seller'] = GoodsInMarket.objects.filter(goods__id=product_id)
+        context['review'] = DetailProductComment.objects.filter(goods__id=product_id)
+        context['len_review'] = str(len(context['review']))
+        context['images'] = Image.objects.filter(product_id=product_id)
+        context['image_pict_right'] = context['images'][0]
+        context['form'] = DetailProductReviewForm()
+
         if self.request.user.is_authenticated:
             context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product=product_id).exists()
         else:
@@ -91,6 +84,20 @@ class ShowDetailProduct(DetailView):
                 else:
                     context['in_cart_or_not'] = False
         return context
+
+    def post(self, request, pk):
+        form = DetailProductReviewForm(request.POST)
+        if form.is_valid():
+            DetailProductComment.objects.create(
+                goods=Goods.objects.get(id=self.kwargs['pk']),
+                text=form.cleaned_data.get('text'),
+                email=form.cleaned_data.get('email'),
+                author_name=form.cleaned_data.get('author_name')
+            )
+            return redirect(f"../{self.kwargs['pk']}/")
+        else:
+            return redirect(f"../{self.kwargs['pk']}/")
+
 
 
 class AddProductToCompareView(View):
