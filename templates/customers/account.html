@@ -9,10 +9,10 @@
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">Личный кабинет
+          <h1 class="Middle-title">{% translate 'Personal account' %}
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="{% url 'index' %}">home</a>
+            <li class="breadcrumbs-item"><a href="{% url 'index' %}">{% translate 'home' %}</a>
             </li>
             <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% translate 'Personal account' %}</span>
             </li>
@@ -37,7 +37,7 @@
                   </li>
                   <li class="menu-item"><a class="menu-link" href="{% url 'history_orders' %}">{% translate 'Order history' %}</a>
                   </li>
-                  <li class="menu-item"><a class="menu-link" href="historyview.html">{% translate 'Viewing history' %}</a>
+                  <li class="menu-item"><a class="menu-link" href="{% url 'historyview' %}">{% translate 'Viewing history' %}</a>
                   </li>
                 </ul>
               </div>
@@ -52,7 +52,7 @@
                 </div>
               </div>
               <div class="Account-column">
-                <div class="Account-name">{{user.full_name}} {{user.pk}} {{user.email}}
+                <div class="Account-name">{{user.full_name}}
                 </div><a class="Account-editLink" href="../profile">{% translate 'Edit profile' %}</a>
               </div>
             </div>
@@ -61,7 +61,7 @@
                 <div class="Order Order_anons">
                   <div class="Order-personal">
                     <div class="row">
-                      <div class="row-block"><a class="Order-title" href="oneorder.html">Заказ&#32;<span class="Order-numberOrder">№200</span>&#32;от&#32;<span class="Order-dateOrder">21.07.2020</span></a>
+                      <div class="row-block"><a class="Order-title" href="oneorder.html">{% translate 'Order' %}&#32;<span class="Order-numberOrder">№200</span>&#32;от&#32;<span class="Order-dateOrder">21.07.2020</span></a>
                         <div class="Account-editLink"><a href="historyorder.html">{% translate 'Order history' %}</a>
                         </div>
                       </div>
@@ -110,7 +110,7 @@
                       <div class="Card-description">
                         <div class="Card-cost"><span class="Card-priceOld">$115.00</span><span class="Card-price">$85.00</span>
                         </div>
-                        <div class="Card-category">Games / xbox
+                        <div class="Card-category">{% translate 'Games / xbox' %}
                         </div>
                         <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/bookmark.svg" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/change.svg" alt="change.svg"/></a>
                         </div>
@@ -152,8 +152,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="Account-editLink Account-editLink_view"><a href="historyview.html">{% translate 'Перейти на полный список' %}</a>
-                </div>
+                <div class="Account-editLink Account-editLink_view"><a href="{% url 'historyview' %}">{% translate 'Go to the full list' %}</a></div>
               </div>
             </div>
           </div>

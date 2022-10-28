@@ -12,11 +12,6 @@ urlpatterns = [
         name="add",
     ),
     path(
-        "add/<int:id>",
-        AddProductToCartView.as_view(),
-        name="add",
-    ),
-    path(
         "remove/<int:id>",
         DeleteProductFromCartView.as_view(),
         name="remove",
