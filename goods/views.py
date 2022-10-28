@@ -45,84 +45,59 @@ class Catalog(CatalogMixin, ListView):
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
-
         context = super().get_context_data()
         parameters = self.normalises_values_parameters()
         context.update(parameters)
         context.update({'sellers': Seller.objects.all()})
         context.update({'category': Category.objects.all()})
-        # print(context)
         return context
 
 
-# def detail_goods_page(request, pk):
-#     """
-#     Данная функция служит для детального представления определённого товара.
-#     :param pk:
-#     :param request:
-#     :param slug:
-#     :return:
-#     """
-#     cache_this = cache_page(3600 * CACHES_TIME)
-    # product = get_object_or_404(Goods, pk=pk)
-    # return render(request, 'goods/product.html', context={'product': product})
-class ShowDetailProduct(View):
+class ShowDetailProduct(DetailView):
     """
-    Данный класс служит для детального представления определённого товара.
+    Данный класс служит для детального представления определённого товара
     """
-    def get(self, request, pk):
-        cache_this = cache_page(3600 * CACHES_TIME)
-        form = DetailProductReviewForm()
-        product = Goods.objects.get(id=pk)
-        review = DetailProductComment.objects.filter(goods__id=pk)
-        len_review = str(len(review))
-        return render(request, 'goods/product.html', context={
-            'product': product,
-            'seller': GoodsInMarket.objects.filter(goods__id=pk),
-            'review': review,
-            'len_review': len_review,
-            'images': Image.objects.filter(product__id=pk),
-            'image_pict_right': Image.objects.filter(product__id=pk)[0],
-            'form': form
-        })
+    cache_this = cache_page(3600 * CACHES_TIME)
+    model = Goods
+    template_name = 'goods/product.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ShowDetailProduct, self).get_context_data(**kwargs)
+        product_id = context['goods'].id
+        context['seller'] = GoodsInMarket.objects.filter(goods__id=product_id)
+        context['review'] = DetailProductComment.objects.filter(goods__id=product_id)
+        context['len_review'] = str(len(context['review']))
+        context['images'] = Image.objects.filter(product_id=product_id)
+        context['image_pict_right'] = context['images'][0]
+        context['form'] = DetailProductReviewForm()
+
+        if self.request.user.is_authenticated:
+            context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product=product_id).exists()
+        else:
+            cart = list()
+            if self.request.session.get("cart"):
+                cart = self.request.session.get("cart")
+            for result, dic_ in enumerate(cart):
+                if dic_.get('inplay', '') == 'False':
+                    context['in_cart_or_not'] = True
+                    break
+                else:
+                    context['in_cart_or_not'] = False
+        return context
 
     def post(self, request, pk):
         form = DetailProductReviewForm(request.POST)
         if form.is_valid():
             DetailProductComment.objects.create(
-                goods=Goods.objects.get(id=pk),
+                goods=Goods.objects.get(id=self.kwargs['pk']),
                 text=form.cleaned_data.get('text'),
                 email=form.cleaned_data.get('email'),
                 author_name=form.cleaned_data.get('author_name')
             )
-            return redirect(f"../{pk}/")
+            return redirect(f"../{self.kwargs['pk']}/")
         else:
-            return redirect(f"../{pk}/")
+            return redirect(f"../{self.kwargs['pk']}/")
 
-# class ShowDetailProduct(DetailView):
-#     """
-#     Данный класс служит для детального представления определённого товара
-#     """
-#     cache_this = cache_page(3600 * CACHES_TIME)
-#     model = Goods
-#     template_name = 'goods/product.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(ShowDetailProduct, self).get_context_data(**kwargs)
-#         product_id = context['goods'].id
-#         if self.request.user.is_authenticated:
-#             context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product=product_id).exists()
-#         else:
-#             cart = list()
-#             if self.request.session.get("cart"):
-#                 cart = self.request.session.get("cart")
-#             for result, dic_ in enumerate(cart):
-#                 if dic_.get('inplay', '') == 'False':
-#                     context['in_cart_or_not'] = True
-#                     break
-#                 else:
-#                     context['in_cart_or_not'] = False
-#         return context
 
 
 class AddProductToCompareView(View):
