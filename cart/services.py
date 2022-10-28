@@ -1,11 +1,14 @@
+import datetime
 import random
 from typing import Union, List
 
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
 from django.shortcuts import get_object_or_404
 
-from cart.models import CartItems
-from goods.models import GoodsInMarket, Goods
+from cart.models import CartItems, get_disc
+from goods.models import GoodsInMarket, Goods, Category
+
+from discounts.models import Discount
 
 
 def create_cart(cart: list, product_in_shop: GoodsInMarket, quantity: int, price: int) -> None:
@@ -100,5 +103,35 @@ def add_product_to_cart_by_product_id(request, product_id: int, quantity: int) -
             request.session.modified = True
 
 
+def cart_price(cart: QuerySet) -> float:
+    total_cost = cart.annotate(price=sum('product_in_market.price'))
+    total_amount = cart.annotate(amount=sum('quantity'))['amount']
+    today = datetime.date.today()
+    discount_for_cart = Discount.objects.filter(
+        Q(date_start__lte=today),
+        Q(date_end__gte=today),
+        Q(discount_type=3),
+        Q(min_amount__lte=total_amount),
+        Q(max_amount__gte=total_amount),
+        Q(min_cost__lte=total_cost),
+        Q(max_cost__gte=total_cost)
+    ).order_by('-weight').first()
+    discount_for_set = Discount.objects.filter(
+        Q(date_start__lte=today),
+        Q(date_end__gte=today),
+        Q(discount_type=2),
+        Q(min_amount__lte=total_amount),
+        Q(max_amount__gte=total_amount),
+        Q(min_cost__lte=total_cost),
+        Q(max_cost__gte=total_cost)
+    ).order_by('-weight').first()
 
+    if not discount_for_cart and not discount_for_set:
+        total_cart_price = cart.annotate(price=sum('discount_price'))['price']
 
+    elif discount_for_cart.weight >= discount_for_set.weight:
+        total_cart_price = get_disc(discount_for_cart, total_cost)
+    else:
+        total_cart_price = get_disc(discount_for_set, total_cost)
+
+    return total_cart_price, total_cost
