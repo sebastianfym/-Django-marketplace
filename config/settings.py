@@ -29,6 +29,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
@@ -79,8 +81,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'cart.context_processors.cart',
-                'goods.context_processors.mycompare',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -135,10 +136,11 @@ LANGUAGES = [
 
 ]
 
-LOCALE_PATH = [os.path.join(BASE_DIR, 'locale'),]
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'),]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
+
 
 STATIC_URL = 'static/'
 

@@ -6,8 +6,8 @@ from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from customers.forms import RegistrationForm, AccountAuthenticationForm, ChangeUserData
 from customers.models import CustomerUser
-from goods.models import ViewHistory, Image
-from orders.models import Order
+from django.contrib import messages
+from django.utils.translation import gettext as _
 
 
 class UserRegisterFormView(CreateView):
@@ -54,9 +54,9 @@ class UserProfile(View):
     """
     Данный класс служит для получения профиля авторизированного юзера и даёт возможность изменить данные.
     """
-
+    
     def get(self, request):
-        user = request.user #CustomerUser.objects.get(id=request.user.id)
+        user = request.user
         form = ChangeUserData(instance=user)
 
         return render(request, "customers/profile.html", context={
@@ -73,10 +73,18 @@ class UserProfile(View):
             user.email = form.cleaned_data.get('email')
             user.password = form.cleaned_data.get('password')
             user.avatar = form.cleaned_data.get('avatar')
-            # form.save()
+            form.save()
             user.save()
-            return redirect("../account/")
-        return redirect('../profile/')
+            messages.success(request, _('Profile details updated.'))
+
+            return redirect(f"../account/")
+
+        messages.error(request, _('Error updating your profile'))
+        messages.add_message(
+            request, messages.SUCCESS, _('Error updating your profile'),
+            fail_silently=True,
+        )
+        return redirect(f"../account/")
 
 
 class UserAccount(View):
@@ -85,17 +93,6 @@ class UserAccount(View):
     """
     def get(self, request):
         user = request.user
-        view_goods = ViewHistory.objects.filter(customer=self.request.user)[:3]
-        # goods = Image.objects.select_related('product').get(id=1)
-        # print(goods.image, goods.product.category)
-        try:
-            last_order = Order.objects.filter(customer=self.request.user)[:-1]
-        except ValueError:
-            last_order = None
         return render(request, "customers/account.html", context={
-            'user': user,
-            'view_goods': view_goods,
-            'last_order': last_order
+            'user': user
         })
-
-

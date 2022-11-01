@@ -16,7 +16,7 @@ from .models import Category, Goods, ViewHistory
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from config.settings import CACHES_TIME
-from goods.serviсes import CatalogMixin, create_compare, get_all_features, get_different_features
+from goods.serviсes import CatalogMixin
 from customers.models import CustomerUser
 from discounts.models import Discount
 
@@ -55,7 +55,7 @@ class Catalog(CatalogMixin, ListView):
 
 class ShowDetailProduct(DetailView):
     """
-    Данный класс служит для детального представления определённого товара
+    Данный класс служит для детального представления определённого товара.
     """
     cache_this = cache_page(3600 * CACHES_TIME)
     model = Goods
@@ -72,7 +72,7 @@ class ShowDetailProduct(DetailView):
         context['form'] = DetailProductReviewForm()
 
         if self.request.user.is_authenticated:
-            context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product_in_shop__goods_id=product_id).exists()
+            context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product_in_shop__id=product_id).exists()
         else:
             cart = list()
             if self.request.session.get("cart"):
@@ -85,7 +85,7 @@ class ShowDetailProduct(DetailView):
                     context['in_cart_or_not'] = False
         return context
 
-    def post(self, request, pk):
+    def post(self, request):
         form = DetailProductReviewForm(request.POST)
         if form.is_valid():
             DetailProductComment.objects.create(
@@ -97,7 +97,6 @@ class ShowDetailProduct(DetailView):
             return redirect(f"../{self.kwargs['pk']}/")
         else:
             return redirect(f"../{self.kwargs['pk']}/")
-
 
 
 class AddProductToCompareView(View):
@@ -132,8 +131,18 @@ class CompareView(View):
 
     def get(self, request, *args, **kwargs):
         compare_list = request.session.get("compare")
+        compare_list_products = list()
+        categories_list = list()
         if compare_list is not None:
-            compare_list_products, categories_list, product_features = create_compare(compare_list)
+            for element in compare_list:
+                product = Goods.objects.filter(
+                    id=element
+                ).select_related('category').prefetch_related('feature').first()
+                compare_list_products.append(product)
+                categories_list.append(product.category.title)
+            product_features = {
+                product.id: product.feature.all() for product in compare_list_products
+            }
             if len(set(categories_list)) > 1:
                 context = {
                     'compare_list': compare_list_products,
@@ -141,8 +150,32 @@ class CompareView(View):
                     'message': _('It is impossible to compare products from different categories')
                 }
                 return render(request, 'goods/mycompare.html', context=context)
-            all_features = get_all_features(product_features)
-            different_features = get_different_features(all_features, compare_list)
+            all_features = dict()
+            for product, features in product_features.items():
+                for feature in features:
+                    if all_features.get(feature.name, 0):
+                        all_features.get(feature.name).update(
+                            {product: feature.value}
+                        )
+                    else:
+                        all_features[feature.name] = {
+                            product: feature.value
+                        }
+
+            different_features = dict()
+            for key, values in all_features.items():
+                if len(values.values()) != len(compare_list):
+                    different_features.update({key: {'diff': values}})
+                    print(different_features[key])
+                else:
+                    value_list = list()
+                    for value in values.values():
+                        value_list.append(value)
+                    if len(set(value_list)) > 1:
+                        different_features.update({key: {'diff ': values}})
+                    else:
+                        different_features.update({key: {'same': values}})
+            print(compare_list_products)
             return render(request, 'goods/mycompare.html', {'compare_list': compare_list_products,
                                                             'different_features': different_features})
         else:
