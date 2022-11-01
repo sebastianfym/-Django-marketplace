@@ -67,7 +67,7 @@
                 </div>
                 <div class="ProductCard-cartElement">
                     {% if in_cart_or_not %}
-                        <a class="btn btn_primary" href='{% url 'cart:mycart' %}'><button class="btn btn_primary">{% translate 'Product in the cart' %}</button></a>
+                        <a class="btn btn_primary" href="{% url 'cart' %}"><button class="btn btn_primary">{% translate 'Product in the cart' %}</button></a>
                     {% else %}
                         <a class="btn btn_primary" id="redirect" ><button class="btn btn_primary" id="add_cart" value="{{ goods.id }}">{% translate 'Add To Cart' %}</button></a>
                         <input type="hidden" id="url_from" name="url_from" value="{{request.path}}">

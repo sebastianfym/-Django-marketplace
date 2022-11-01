@@ -38,7 +38,8 @@
                     <div class="row ControlPanel-rowSplit">
                         <div class="row-block">
                             {% if request.user.id %}
-                            <a class="ControlPanel-title" href="{% url 'logout' %}">{% translate 'logout' %}</a>
+                            <a class="ControlPanel-title" href="{% url 'logout' %}">{% translate 'logout' %}</a> /
+                            <a class="ControlPanel-title" href="{% url 'account' %}">{% translate 'account' %}</a>
                             {% else %}
                             <a class="ControlPanel-title" href="{% url 'login' %}">{% translate 'login' %}</a> /
                             <a class="ControlPanel-title" href="{% url 'register' %}">{% translate 'Register' %}</a>
