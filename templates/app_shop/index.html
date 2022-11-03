@@ -51,6 +51,11 @@
     </div>
 
    {% include 'banners/banner.html' %}
+    {% for goods in limit_edition %}
+    {% include 'goods/card.html' %}
+    {% endfor %}
+
+
 
 {% endblock %}
 

@@ -65,7 +65,7 @@
           <h1 class="Middle-title">{% translate 'Megano Catalog' %}
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="#">{% translate 'Home' %}</a>
+            <li class="breadcrumbs-item"><a href="{% url 'index' %}">{% translate 'Home' %}</a>
             </li>
             <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% translate 'Catalog' %}</span>
             </li>
@@ -154,22 +154,7 @@
 
           <div class="Cards">
           {% for goods in catalog %}
-            <div class="Card"><a class="Card-picture" href="{{ goods.get_absolute_url }}"><img src="{{ goods.goods_image.first.image.url }}" alt="card.jpg"/></a>
-              <div class="Card-content">
-                <strong class="Card-title"><a href="{{ goods.get_absolute_url }}"> {{ goods.name }} </a>
-                </strong>
-                <div class="Card-description">
-                  <div class="Card-cost"><span class="Card-priceOld">${{ goods.price }}</span><span class="Card-price"> {{ goods.price }} </span>
-                  </div>
-                  <div class="Card-category"> {{ goods.category.title }}
-                  </div>
-                  <div class="Card-hover"><a class="Card-btn" href="{{ goods.get_absolute_url }}"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a><a class="Compare-btn" id="cart" product_id="{{ goods.id }}" href="{% url 'cart:add' goods.id %}"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Card-btn" href="{% url 'compare_add' goods.id %}"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
-                  </div>
-                </div>
-              </div>
-              <div class="Card-sale">-60%
-              </div>
-            </div>
+            {% include 'goods/card.html' %}
           {% endfor %}
 
           <div class="Pagination">
