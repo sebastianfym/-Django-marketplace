@@ -16,18 +16,15 @@ class RegistrationForm(UserCreationForm):
                                 label=_("First/Last Name/Middle name"))
     phone_number = forms.RegexField(regex=r'^\+?7?\d{9,12}$',
                                     label=_("phone number"),
-                                    error_messages={'invalid': _('Enter the correct phone number!')},
+                                    error_messages={'invalid': _('Enter the correct phone number!'
+                                                                 ' It has start with +7 or 8 '
+                                                                 'and contains 11 or 12 numbers')},
                                     required=True)
-    password1 = forms.CharField(label=_('Password'),
-                                widget=(forms.PasswordInput(attrs={'class': 'form-control'})),
-                                help_text=password_validation.password_validators_help_text_html())
-    password2 = forms.CharField(label=_('Password again'),
-                                widget=forms.PasswordInput(attrs={'class': 'form-control'}),
-                                help_text=_('Re-enter the password'))
 
     class Meta:
         model = CustomerUser
         fields = ("email", "full_name", "phone_number", "password1", "password2")
+
 
 
 class AccountAuthenticationForm(forms.ModelForm):
