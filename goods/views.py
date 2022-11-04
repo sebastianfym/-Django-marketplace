@@ -162,7 +162,6 @@ class CompareView(View):
                         all_features[feature.name] = {
                             product: feature.value
                         }
-
             different_features = dict()
             for key, values in all_features.items():
                 if len(values.values()) != len(compare_list):
@@ -176,7 +175,6 @@ class CompareView(View):
                         different_features.update({key: {'diff ': values}})
                     else:
                         different_features.update({key: {'same': values}})
-            print(compare_list_products)
             return render(request, 'goods/mycompare.html', {'compare_list': compare_list_products,
                                                             'different_features': different_features})
         else:

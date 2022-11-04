@@ -109,7 +109,7 @@ def add_product_to_cart_by_product_id(request, product_id: int, quantity: int) -
             request.session.modified = True
 
 
-def cart_price(request):
+def get_cost(request):
     total_cost = 0
     total_cost_with_discount = 0
     total_amount = 0
@@ -155,6 +155,11 @@ def cart_price(request):
                     'discount_price': price_with_dicsount,
                     'quantity': quantity
                 })
+    return total_cost, total_cost_with_discount, total_amount, shops
+
+
+def cart_price(request):
+    total_cost, total_cost_with_discount, total_amount, shops = get_cost(request)
     today = datetime.date.today()
     discount_for_cart = Discount.objects.filter(
         Q(date_start__lte=today),
