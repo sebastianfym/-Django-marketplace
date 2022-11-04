@@ -45,6 +45,8 @@ class Order(models.Model):
                                  null=True,
                                  on_delete=models.DO_NOTHING,
                                  related_name='order')
+    order_number = models.PositiveIntegerField(blank=True, null=True, verbose_name=_('order_number'))
+    order_date = models.DateField(blank=True, null=True, auto_now_add=True)
 
 
 #class OrderHistory(models.Model):
