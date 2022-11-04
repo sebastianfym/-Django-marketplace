@@ -7,8 +7,10 @@ from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView
 from django.views.generic import DetailView
 from app_shop.models import Seller
+from cart.models import CartItems
+from .forms import DetailProductReviewForm
 
-from .models import Category, Goods, ViewHistory, GoodsInMarket
+from .models import Category, Goods, ViewHistory, GoodsInMarket, DetailProductComment, Image
 from django.utils.translation import gettext as _
 from .models import Category, Goods, ViewHistory
 from django.views.decorators.cache import cache_page
@@ -43,27 +45,12 @@ class Catalog(CatalogMixin, ListView):
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
-
         context = super().get_context_data()
         parameters = self.normalises_values_parameters()
         context.update(parameters)
         context.update({'sellers': Seller.objects.all()})
         context.update({'category': Category.objects.all()})
-        # print(context)
         return context
-
-
-def detail_goods_page(request, pk):
-    """
-    Данная функция служит для детального представления определённого товара.
-    :param pk:
-    :param request:
-    :param slug:
-    :return:
-    """
-    cache_this = cache_page(3600 * CACHES_TIME)
-    product = get_object_or_404(Goods, pk=pk)
-    return render(request, 'goods/product.html', context={'product': product})
 
 
 class ShowDetailProduct(DetailView):
@@ -74,12 +61,54 @@ class ShowDetailProduct(DetailView):
     model = Goods
     template_name = 'goods/product.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(ShowDetailProduct, self).get_context_data(**kwargs)
+        product_id = context['goods'].id
+        context['seller'] = GoodsInMarket.objects.filter(goods__id=product_id)
+        context['review'] = DetailProductComment.objects.filter(goods__id=product_id)
+        context['len_review'] = str(len(context['review']))
+        context['images'] = Image.objects.filter(product_id=product_id)
+        context['image_pict_right'] = context['images'][0]
+        context['form'] = DetailProductReviewForm()
+
+        if self.request.user.is_authenticated:
+            try:
+                context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product=product_id).exists()
+            except Exception:
+                context['in_cart_or_not'] = None
+
+        else:
+            cart = list()
+            if self.request.session.get("cart"):
+                cart = self.request.session.get("cart")
+            for result, dic_ in enumerate(cart):
+                if dic_.get('inplay', '') == 'False':
+                    context['in_cart_or_not'] = True
+                    break
+                else:
+                    context['in_cart_or_not'] = False
+        return context
+
+    def post(self, request, pk):
+        form = DetailProductReviewForm(request.POST)
+        if form.is_valid():
+            DetailProductComment.objects.create(
+                goods=Goods.objects.get(id=self.kwargs['pk']),
+                text=form.cleaned_data.get('text'),
+                email=form.cleaned_data.get('email'),
+                author_name=form.cleaned_data.get('author_name')
+            )
+            return redirect(f"../{self.kwargs['pk']}/")
+        else:
+            return redirect(f"../{self.kwargs['pk']}/")
+
+
 
 class AddProductToCompareView(View):
     """
     Добавление товара в сравнение
     """
-    def post(self, request, id, *args, **kwargs):
+    def get(self, request, id, *args, **kwargs):
         if not request.session.get("compare"):
             request.session["compare"] = list()
         if id not in request.session['compare']:
@@ -88,30 +117,19 @@ class AddProductToCompareView(View):
         else:
             request.session['compare'].remove(id)
             request.session.modified = True
-        return redirect(request.POST.get("url_from"))
+        return redirect(request.META['HTTP_REFERER'])
 
 
 class DeleteProductFromCompareView(View):
     """
     Удаление товара из списка сравнений
     """
-    def post(self, request, *args, **kwargs):
-        id_product = int(request.POST.get("id"))
+    def get(self, request, id,  *args, **kwargs):
+        id_product = int(id)
         if id_product in request.session["compare"]:
             request.session["compare"].remove(id_product)
             request.session.modified = True
-        return redirect(request.POST.get("url_from"))
-
-
-class DeleteAllProductsFromCompareView(View):
-    """
-    Удаление всех товаров из сравнения
-    """
-    def post(self, request, *args, **kwargs):
-        if request.session.get("compare"):
-            del request.session["compare"]
-            request.session.modified = True
-        return redirect(request.POST.get("url_from"))
+        return redirect('compare')
 
 
 class CompareView(View):
@@ -132,7 +150,8 @@ class CompareView(View):
             }
             if len(set(categories_list)) > 1:
                 context = {
-                    'compare_list_products': compare_list_products,
+                    'compare_list': compare_list_products,
+                    'different_features': 0,
                     'message': _('It is impossible to compare products from different categories')
                 }
                 return render(request, 'goods/mycompare.html', context=context)
@@ -149,15 +168,6 @@ class CompareView(View):
                         }
 
             different_features = dict()
-            # for key, values in all_features.items():
-            #     if len(values.values()) != len(compare_list):
-            #         different_features.update({key: values})
-            #     else:
-            #         value_list = list()
-            #         for value in values.values():
-            #             value_list.append(value)
-            #         if len(set(value_list)) > 1:
-            #             different_features.update({key: values})
             for key, values in all_features.items():
                 if len(values.values()) != len(compare_list):
                     different_features.update({key: {'diff': values}})
@@ -170,12 +180,11 @@ class CompareView(View):
                         different_features.update({key: {'diff ': values}})
                     else:
                         different_features.update({key: {'same': values}})
+            print(compare_list_products)
             return render(request, 'goods/mycompare.html', {'compare_list': compare_list_products,
                                                             'different_features': different_features})
         else:
             return render(request, 'goods/mycompare.html')
-
-
 
 
 def add_to_view_history(customer, goods: Goods) -> None:
@@ -279,8 +288,7 @@ def cart_cost(cart: dict) -> dict:
     return res
 
 
-def create_goods_related_images(request):
-    goods = Goods.objects.all()
-    for item in goods:
-        image = Image.objects.create(image=item.image, product=item)
-    return HttpResponse('<h1 Готово \h1>')
+# class TestView(View):
+#     def get(self, request, pk):
+#
+#         return render(request, 'goods/test.html')
