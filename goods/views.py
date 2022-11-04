@@ -72,7 +72,11 @@ class ShowDetailProduct(DetailView):
         context['form'] = DetailProductReviewForm()
 
         if self.request.user.is_authenticated:
-            context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product=product_id).exists()
+            try:
+                context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product=product_id).exists()
+            except Exception:
+                context['in_cart_or_not'] = None
+
         else:
             cart = list()
             if self.request.session.get("cart"):
@@ -282,3 +286,9 @@ def cart_cost(cart: dict) -> dict:
     for goods, price in cart.items():
         res[goods] = (price, round(price * (1 - total_discount / 100)), True)
     return res
+
+
+# class TestView(View):
+#     def get(self, request, pk):
+#
+#         return render(request, 'goods/test.html')

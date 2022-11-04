@@ -6,6 +6,8 @@ from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from customers.forms import RegistrationForm, AccountAuthenticationForm, ChangeUserData
 from customers.models import CustomerUser
+from goods.models import ViewHistory, Image
+from orders.models import Order
 
 
 class UserRegisterFormView(CreateView):
@@ -83,6 +85,17 @@ class UserAccount(View):
     """
     def get(self, request):
         user = request.user
+        view_goods = ViewHistory.objects.filter(customer=self.request.user)[:3]
+        # goods = Image.objects.select_related('product').get(id=1)
+        # print(goods.image, goods.product.category)
+        try:
+            last_order = Order.objects.filter(customer=self.request.user)[:-1]
+        except ValueError:
+            last_order = None
         return render(request, "customers/account.html", context={
-            'user': user
+            'user': user,
+            'view_goods': view_goods,
+            'last_order': last_order
         })
+
+
