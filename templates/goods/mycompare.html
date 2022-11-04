@@ -76,7 +76,11 @@
                             {% for key_product_id, feature_value in value.items %}
                             <div class="Compare-product">
                             <div class="Compare-nameProduct"> {{ key_product_id }}</div>
-                            <div class="Compare-feature"> {{ feature_value }}</div>
+                            {% if feature_value %}
+                                <div class="Compare-feature"> {{ feature_value }}</div>
+                            {% else %}
+                                <div class="Compare-feature"> </div>
+                            {%  endif %}
                             </div>
                             {% endfor %}
                         </div>
