@@ -1,7 +1,7 @@
+
 from django.db.models import QuerySet
-from goods.models import Goods
+from .models import Goods
 from django.db.models import Sum
-from customers.models import CustomerUser
 
 
 def final_price(price_discount):
@@ -196,3 +196,4 @@ class GoodsInMarketMixin:
         :return:
         """
         pass
+

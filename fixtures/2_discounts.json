@@ -46,7 +46,7 @@
         "discount_value": "1000.00",
         "weight": 1,
         "date_start": "2022-09-25",
-        "date_end": "2022-10-30",
+        "date_end": "2022-12-30",
         "is_active": true,
         "goods_1": [],
         "category_1": [
@@ -74,7 +74,7 @@
         "discount_value": "100.00",
         "weight": 1,
         "date_start": "2022-09-25",
-        "date_end": "2022-10-15",
+        "date_end": "2022-12-15",
         "is_active": true,
         "goods_1": [],
         "category_1": [],
@@ -98,7 +98,7 @@
         "discount_value": "20.00",
         "weight": 2,
         "date_start": "2022-10-01",
-        "date_end": "2022-10-30",
+        "date_end": "2022-12-30",
         "is_active": true,
         "goods_1": [
             1,
@@ -133,7 +133,7 @@
         "discount_value": "10.00",
         "weight": 1,
         "date_start": "2022-10-05",
-        "date_end": "2022-10-30",
+        "date_end": "2022-12-30",
         "is_active": true,
         "goods_1": [
             87,
