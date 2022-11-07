@@ -72,7 +72,8 @@ class ShowDetailProduct(DetailView):
         context['form'] = DetailProductReviewForm()
 
         if self.request.user.is_authenticated:
-            context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product_in_shop__id=product_id).exists()
+            context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user,
+                                                                 product_in_shop__goods_id=product_id).exists()
         else:
             cart = list()
             if self.request.session.get("cart"):

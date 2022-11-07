@@ -6,7 +6,6 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from app_shop.models import Seller
 from customers.models import CustomerUser
-# import discounts.services
 
 
 class FeatureName(models.Model):
@@ -106,7 +105,6 @@ class Goods(models.Model):
                                      blank=True)
 
     rating = models.PositiveIntegerField(verbose_name=_('rating'), default=0)
-
 
 
     def __str__(self):
