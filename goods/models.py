@@ -1,9 +1,12 @@
+
+
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from app_shop.models import Seller
 from customers.models import CustomerUser
+# import discounts.services
 
 
 class FeatureName(models.Model):
@@ -97,18 +100,21 @@ class Goods(models.Model):
     release_date = models.DateField(verbose_name=_('release_date'), null=True, blank=True)
     limit_edition = models.BooleanField(verbose_name=_('limit_edition'), default=False)
     category = models.ForeignKey(Category, verbose_name=_('category'), on_delete=models.CASCADE, related_name='goods')
-    feature = models.ManyToManyField(Feature
+    feature = models.ManyToManyField(Feature,
                                      verbose_name=_('feature'),
                                      related_name='goods',
                                      blank=True)
 
     rating = models.PositiveIntegerField(verbose_name=_('rating'), default=0)
 
+
+
     def __str__(self):
         return f'{self.name}'
 
     def get_absolute_url(self):
         return reverse('post', kwargs={'pk': self.pk})
+
 
 
 class GoodsInMarket(models.Model):
@@ -136,7 +142,7 @@ class GoodsInMarket(models.Model):
                                )
 
     def __str__(self):
-        return f'{self.goods.name} {self.seller.title}'
+        return f'{self.goods.name} {self.seller.title} {self.price}'
 
 
 class ViewHistory(models.Model):
