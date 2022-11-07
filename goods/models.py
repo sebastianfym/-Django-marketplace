@@ -97,7 +97,7 @@ class Goods(models.Model):
     release_date = models.DateField(verbose_name=_('release_date'), null=True, blank=True)
     limit_edition = models.BooleanField(verbose_name=_('limit_edition'), default=False)
     category = models.ForeignKey(Category, verbose_name=_('category'), on_delete=models.CASCADE, related_name='goods')
-    feature = models.ManyToManyField(Feature,
+    feature = models.ManyToManyField(Feature
                                      verbose_name=_('feature'),
                                      related_name='goods',
                                      blank=True)
