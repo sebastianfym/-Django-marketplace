@@ -90,10 +90,10 @@
                     <img class="CartBlock-img" src="{% static 'assets/img/icons/exchange.svg' %}" alt="exchange.svg"><span
                         class="CartBlock-amount">{{ compare }}</span>
                     </a>
-                    <a class="CartBlock-block" href="#">
+                    <a class="CartBlock-block" href="{% url 'cart:mycart' %}">
                         <img class="CartBlock-img" src="{% static 'assets/img/icons/cart.svg' %}"
                         alt="cart.svg"><span
-                        class="CartBlock-amount">{{ cart }}</span>
+                        class="CartBlock-amount">{{ cart_lens }}</span>
                     </a>
                     <div class="CartBlock-block"><span class="CartBlock-price">{{ total_cost_with_discount }}руб</span>
                     </div>
