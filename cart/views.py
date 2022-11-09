@@ -47,11 +47,12 @@ class CartView(View):
     """
     def get(self, request, *args, **kwargs):
         total_price_disc, total_price, shops, cart = cart_price(request)
+
         return render(request, 'cart/cart.html', {'cart': cart,
                                                   'shops': shops,
                                                   'total_price': total_price,
                                                   'total_price_disc': total_price_disc})
-    #
+
 
 class ChangePriceAjax(View):
     """

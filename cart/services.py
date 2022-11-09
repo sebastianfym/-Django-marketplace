@@ -155,11 +155,11 @@ def get_cost(request):
                     'discount_price': price_with_dicsount,
                     'quantity': quantity
                 })
-    return total_cost, total_cost_with_discount, total_amount, shops
+    return total_cost, total_cost_with_discount, total_amount, shops, cart
 
 
 def cart_price(request):
-    total_cost, total_cost_with_discount, total_amount, shops = get_cost(request)
+    total_cost, total_cost_with_discount, total_amount, shops, created_cart = get_cost(request)
     today = datetime.date.today()
     discount_for_cart = Discount.objects.filter(
         Q(date_start__lte=today),
@@ -189,6 +189,4 @@ def cart_price(request):
                 total_cart_price = get_disc(discount_for_cart, total_cost)
         else:
             total_cart_price = get_disc(discount_for_set, total_cost)
-
-    return total_cart_price, total_cost, shops, cart
-
+    return total_cart_price, total_cost, shops, created_cart
