@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView
 from config.settings import CACHES_TIME
-from .services import PaymentGoods
+from orders.services import PaymentGoods
 from django.views.decorators.cache import cache_page
 from .models import Order
 from customers.models import CustomerUser
