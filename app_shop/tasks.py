@@ -8,5 +8,5 @@ def update_offer_day():
     limit_edition_goods.append(get_limited_edition_goods())
 
 
-@app.task
-    def test():
+#@app.task
+#    def test():
