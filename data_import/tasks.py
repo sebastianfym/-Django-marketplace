@@ -1,4 +1,4 @@
-from config.app_celery import app
+from config.celery import app
 
 
 @app.task
