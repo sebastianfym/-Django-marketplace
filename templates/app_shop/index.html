@@ -35,8 +35,8 @@
                     </div>
                 </div>
             </div>
-            <div class="Header-searchLink"><img src="{% static 'assets/img/icons/search.svg' %}"
-                                                alt="search.svg">
+            <div class="Header-searchLink"><img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg">
+
             </div>
             <div class="Header-search">
                 <div class="search">
@@ -50,15 +50,190 @@
         </div>
     </div>
 
-   {% include 'banners/banner.html' %}
-    {% for goods in limit_edition %}
-    {% include 'goods/card.html' %}
-    {% endfor %}
+<div class="Middle">
+    <div class="Section">
+      <div class="wrap">
+        <div class="BannersHome"><a class="BannersHomeBlock" href="#">
+            <div class="BannersHomeBlock-row">
+              <div class="BannersHomeBlock-block">
+                <strong class="BannersHomeBlock-title">Video Cards
+                </strong>
+                <div class="BannersHomeBlock-content">from&#32;<span class="BannersHomeBlock-price">$199.00</span>
+                </div>
+              </div>
+              <div class="BannersHomeBlock-block">
+                <div class="BannersHomeBlock-img"><img src="assets/img/content/home/videoca.png" alt="videoca.png"/>
+                </div>
+              </div>
+            </div></a><a class="BannersHomeBlock" href="#">
+            <div class="BannersHomeBlock-row">
+              <div class="BannersHomeBlock-block">
+                <strong class="BannersHomeBlock-title">Head Phones
+                </strong>
+                <div class="BannersHomeBlock-content">from&#32;<span class="BannersHomeBlock-price">$210.00</span>
+                </div>
+              </div>
+              <div class="BannersHomeBlock-block">
+                <div class="BannersHomeBlock-img"><img src="assets/img/content/home/videoca.png" alt="videoca.png"/>
+                </div>
+              </div>
+            </div></a><a class="BannersHomeBlock" href="#">
+            <div class="BannersHomeBlock-row">
+              <div class="BannersHomeBlock-block">
+                <strong class="BannersHomeBlock-title">Bass Speakers
+                </strong>
+                <div class="BannersHomeBlock-content">from&#32;<span class="BannersHomeBlock-price">$159.00</span>
+                </div>
+              </div>
+              <div class="BannersHomeBlock-block">
+                <div class="BannersHomeBlock-img"><img src="{% static 'assets/img/content/home/videoca.png' %}" alt="videoca.png"/>
+                </div>
+              </div>
+            </div></a>
+        </div>
+      </div>
+    </div>
+    <div class="Section Section_column Section_columnLeft Section_columnDesktop">
+      <div class="wrap">
+        <div class="Section-column">
+          <div class="Section-columnSection Section-columnSection_mark">
+            <header class="Section-columnHeader">
+              <strong class="Section-columnTitle">Limited Deals
+              </strong>
+            </header>
 
+            {% include 'app_shop/card_with_count.html' only with goods=offer_day %}
 
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="Section-content">
+          <header class="Section-header">
+            <h2 class="Section-title">Popular Products
+            </h2>
+          </header>
+          <div class="Cards">
+              {% for goods in popular_goods %}
+                  {% include 'goods/card.html' %}
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="Section Section_dark">
+      <div class="wrap">
+        <div class="Section-content">
+          <div class="Slider Slider_carousel">
+            <header class="Section-header">
+              <h2 class="Section-title"> {% translate "Hot Offers" %}
+              </h2>
+              <div class="Section-control">
+                <div class="Slider-navigate">
+                </div>
+              </div>
+            </header>
+            <div class="Slider-box Cards Cards_hz">
+              {% for goods in hot_offer %}
+              <div class="Slider-item">
+                <div class="Slider-content">
+                    {% include 'goods/card.html' %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="Section Section_column Section_columnRight">
+      <div class="wrap">
+        <div class="Section-column">
+          <div class="Section-columnSection Section-columnSection_mark">
+            <div class="media media_advantage">
+              <div class="media-image"><img src="{% static 'assets/img/icons/advantages/shipping.svg' %}" alt="shipping.svg"/>
+              </div>
+              <div class="media-content">
+                <strong class="media-title"> {% translate "Shipping & Returns" %}
+                </strong>
+                <p class="media-text">{% translate "World wide shipping" %}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="Section-columnSection Section-columnSection_mark">
+            <div class="media media_advantage">
+              <div class="media-image"><img src=" {% static "assets/img/icons/advantages/moneyBack.svg" alt="moneyBack.svg"/>
+              </div>
+              <div class="media-content">
+                <strong class="media-title">Money Back
+                </strong>
+                <p class="media-text">Guaranted payments
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="Section-columnSection Section-columnSection_mark">
+            <div class="media media_advantage">
+              <div class="media-image"><img src="{% static 'assets/img/icons/advantages/support.svg' %}" alt="support.svg"/>
+              </div>
+              <div class="media-content">
+                <strong class="media-title">{% translate "Support Policy" %}
+                </strong>
+                <p class="media-text"> {% translate "Fast support team" %}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="Section-columnSection Section-columnSection_mark">
+            <div class="media media_advantage">
+              <div class="media-image"><img src="{% static 'assets/img/icons/advantages/quality.svg' %}" alt="quality.svg"/>
+              </div>
+              <div class="media-content">
+                <strong class="media-title">{% translate 'Quality Guarantee' %}
+                </strong>
+                <p class="media-text">{% translate 'Best guaranted items' %}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="Section-content">
+          <div class="Slider Slider_carousel">
+            <header class="Section-header Section-header_close">
+              <h2 class="Section-title">{% translate 'Limited edition' %}
+              </h2>
+              <div class="Section-control">
+                <div class="Slider-navigate">
+                </div>
+              </div>
+            </header>
+            <div class="Slider-box Cards">
+              {% for goods in limit_edition %}
+              <div class="Slider-item">
+                <div class="Slider-content">
+                    {% include 'goods/card.html' %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
 
-{% endblock %}
+{% endblock content %}
 
 {% block footer %}
     {% include 'elements/footer.html' %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+  <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
+  <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
+  <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+  <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
+  <script src="{% static 'assets/js/scripts.js' %}"></script>
 {% endblock %}
