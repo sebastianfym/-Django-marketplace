@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'discounts',
     'goods',
     'orders',
+    'data_import',
 ]
 
 MIDDLEWARE = [
@@ -85,6 +86,25 @@ TEMPLATES = [
         },
     },
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'data_import': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'data_import/data_import.log'
+        },
+    },
+    'loggers': {
+        'data_import': {
+            'handlers': ['data_import'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -135,11 +155,10 @@ LANGUAGES = [
 
 ]
 
-LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'), ]
+LOCALE_PATH = [os.path.join(BASE_DIR, 'locale'),]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 
 STATIC_URL = 'static/'
 
