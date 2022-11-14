@@ -83,10 +83,11 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'goods.context_processors.category_context.all_categories_context'
+                'goods.context_processors.category_context.all_categories_context',
+                'goods.context_processors.my_compare.mycompare',
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart_lens',
-                'goods.context_processors.mycompare',
+
             ],
         },
     },
