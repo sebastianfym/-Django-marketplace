@@ -8,6 +8,7 @@
 
 {% block content %}
     {% include 'elements/search_bar.html' %}
+    {% include 'banners/banner.html' %}
 
 <div class="Middle">
     <div class="Section">
@@ -21,7 +22,7 @@
                 </div>
               </div>
               <div class="BannersHomeBlock-block">
-                <div class="BannersHomeBlock-img"><img src="assets/img/content/home/videoca.png" alt="videoca.png"/>
+                <div class="BannersHomeBlock-img"><img src="{% static 'assets/img/content/home/videoca.png"' %} alt="videoca.png"/>
                 </div>
               </div>
             </div></a><a class="BannersHomeBlock" href="#">
@@ -33,7 +34,7 @@
                 </div>
               </div>
               <div class="BannersHomeBlock-block">
-                <div class="BannersHomeBlock-img"><img src="assets/img/content/home/videoca.png" alt="videoca.png"/>
+                <div class="BannersHomeBlock-img"><img src="{% static 'assets/img/content/home/videoca.png' %}" alt="videoca.png"/>
                 </div>
               </div>
             </div></a><a class="BannersHomeBlock" href="#">

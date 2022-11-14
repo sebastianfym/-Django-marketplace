@@ -16,8 +16,7 @@ class Index(TemplateView):
         banners = get_banners()
         if not cache.get('limit_edition'):
             get_limited_edition_goods()
-        print(cache.get('limit_edition'))
-        print(cache.get('offer_day'))
+        context.update({'banners': banners})
         context.update({'limit_edition': cache.get('limit_edition')})
         context.update({'offer_day': cache.get('offer_day')})
         context.update(popular_goods)

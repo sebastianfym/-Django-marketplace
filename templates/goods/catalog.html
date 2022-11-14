@@ -147,7 +147,8 @@
                 <a class="Sort-sortBy Sort-sortBy_dec" href="{% url 'catalog' %}?sort=quantity">{% translate 'Popularity' %}</a>
                 <a class="Sort-sortBy" href="{% url 'catalog' %}?sort=price">{% translate 'Price' %}</a>
                 <a class="Sort-sortBy" href="{% url 'catalog' %}?sort=rating">{% translate 'Reviews' %}</a>
-                <a class="Sort-sortBy Sort-sortBy_inc" href="{% url 'catalog' %}?sort=release_date">{% translate 'Novelty' %}</a>
+                <a class="Sort-sortBy " href="{% url 'catalog' %}?sort=release_date">{% translate 'Novelty' %}</a>
+                <a class="Sort-sortBy Sort-arrow" href="#"><img src="{% static 'assets/img/icons/upArrow.svg' %}" alt=""></a>
             </div>
           </div>
 
