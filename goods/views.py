@@ -26,6 +26,7 @@ class CategoryView(View):
     """
     Представление для категорий товаров у которых activity = True.
     """
+
     def get(self, request):
         cache_this = cache_page(3600 * CACHES_TIME)
         categories = Category.objects.filter(activity=True)
@@ -57,7 +58,7 @@ class ShowDetailProduct(DetailView):
     """
     Данный класс служит для детального представления определённого товара.
     """
-    cache_this = cache_page(3600 * CACHES_TIME)
+
     model = Goods
     template_name = 'goods/product.html'
 

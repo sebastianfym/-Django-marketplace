@@ -2,8 +2,11 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView, LogoutView
+from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
+
+from config.settings import CACHES_TIME
 from customers.forms import RegistrationForm, AccountAuthenticationForm, ChangeUserData
 from customers.models import CustomerUser
 from django.contrib import messages
@@ -38,6 +41,7 @@ class UserProfile(View):
     Данный класс служит для получения профиля авторизированного юзера и даёт возможность изменить данные.
     """
 
+    @cache_page(3600 * CACHES_TIME)
     def get(self, request):
         user = request.user
         form = ChangeUserData(instance=user)
@@ -75,8 +79,16 @@ class UserAccount(View):
     Данный класс является представлением аккаунта пользователя со всеми его данными
     """
 
+    @cache_page(3600 * CACHES_TIME)
     def get(self, request):
         user = request.user
+        view_goods = ViewHistory.objects.filter(customer=self.request.user)[:3]
+        try:
+            last_order = Order.objects.filter(customer=self.request.user)[:-1]
+        except ValueError:
+            last_order = None
         return render(request, "customers/account.html", context={
-            'user': user
+            'user': user,
+            'view_goods': view_goods,
+            'last_order': last_order
         })
