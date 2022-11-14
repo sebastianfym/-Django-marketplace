@@ -29,6 +29,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
@@ -42,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'debug_toolbar',
+    'debug_toolbar',
     'customers',
     'celery',
     'app_shop',
@@ -63,7 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -82,6 +84,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'goods.context_processors.category_context.all_categories_context'
+                'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart_lens',
+                'goods.context_processors.mycompare',
             ],
         },
     },
@@ -104,6 +109,14 @@ LOGGING = {
             'propagate': True,
         },
     },
+}
+
+CACHES_TIME = 60
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        # 'LOCATION': '127.0.0.1:8000',
+    }
 }
 
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -155,7 +168,7 @@ LANGUAGES = [
 
 ]
 
-LOCALE_PATH = [os.path.join(BASE_DIR, 'locale'),]
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'),]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -173,12 +186,6 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CACHES_TIME = 60
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    }
-}
 
 AUTH_USER_MODEL = 'customers.CustomerUser'
 

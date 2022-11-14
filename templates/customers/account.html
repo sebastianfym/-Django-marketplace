@@ -48,8 +48,13 @@
           <div class="Account">
             <div class="Account-group">
               <div class="Account-column">
-                <div class="Account-avatar"><img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
-                </div>
+                {% if user.avatar  %}
+                  <div class="Account-avatar"><img src="{{ user.avatar.url }}" alt="{{user.avatar.verbose_name}}png"/>
+                  </div>
+                {% else %}
+                  <div class="Account-avatar"><img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
+                  </div>
+                {% endif %}
               </div>
               <div class="Account-column">
                 <div class="Account-name">{{user.full_name}}
@@ -61,34 +66,29 @@
                 <div class="Order Order_anons">
                   <div class="Order-personal">
                     <div class="row">
-                      <div class="row-block"><a class="Order-title" href="oneorder.html">{% translate 'Order' %}&#32;<span class="Order-numberOrder">№200</span>&#32;от&#32;<span class="Order-dateOrder">21.07.2020</span></a>
-                        <div class="Account-editLink"><a href="historyorder.html">{% translate 'Order history' %}</a>
-                        </div>
+                      <div class="row-block"><a class="Order-title" href="oneorder.html">{% translate 'Order' %}&#32;<span class="Order-numberOrder">№{{last_order.order_number}}</span>&#32;от&#32;
+                        <span class="Order-dateOrder">{{last_order.order_date}}</span></a>
                       </div>
                       <div class="row-block">
                         <div class="Order-info Order-info_delivery">
                           <div class="Order-infoType">{% translate 'Type of delivery' %}:
                           </div>
-                          <div class="Order-infoContent">{% translate 'Regular delivery' %}
+                          <div class="Order-infoContent">{{last_order.delivery_method}}
                           </div>
                         </div>
                         <div class="Order-info Order-info_pay">
                           <div class="Order-infoType">{% translate 'Payment' %}:
                           </div>
-                          <div class="Order-infoContent">{% translate 'Online Card' %}
-                          </div>
-                        </div>
+                          <div class="Order-infoContent">{{last_order.payment_method}} </div>
                         <div class="Order-info">
                           <div class="Order-infoType">{% translate 'Total cost' %}:
                           </div>
-                          <div class="Order-infoContent">200.99$
-                          </div>
+                          <div class="Order-infoContent">{{last_order.goods_in_market.price}} </div>
                         </div>
                         <div class="Order-info Order-info_status">
                           <div class="Order-infoType">{% translate 'Status' %}:
                           </div>
-                          <div class="Order-infoContent">{% translate 'Not paid' %}
-                          </div>
+                          <div class="Order-infoContent">{{last_order.status}} </div>
                         </div>
                       </div>
                     </div>
@@ -103,54 +103,25 @@
                   </h2>
                 </header>
                 <div class="Cards Cards_account">
-                  <div class="Card"><a class="Card-picture" href="#"><img src="../static/assets/img/content/home/card.jpg" alt="card.jpg"/></a>
-                    <div class="Card-content">
-                      <strong class="Card-title"><a href="#">Corsair Carbide Series Arctic White Steel</a>
-                      </strong>
-                      <div class="Card-description">
-                        <div class="Card-cost"><span class="Card-priceOld">$115.00</span><span class="Card-price">$85.00</span>
+                  {%  for product in view_goods %}
+                    <div class="Cards Cards_account">
+                      <div class="Card"><a class="Card-picture" href="#"><img src="{{ product.goods.goods_image.url }}" alt="{{ product.goods.goods_image.name }}.jpg"/></a>
+                        <div class="Card-content">
+                          <strong class="Card-title"><a href="#">{{product.goods.name}}</a>
+                          </strong>
+                          <div class="Card-description">
+                            <div class="Card-cost"><span class="Card-priceOld">${{product.goods.price}}</span><span class="Card-price">${{product.goods.price}}</span>
+                            </div>
+                            <div class="Card-category">{{product.goods.category}}
+                            </div>
+                            <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/bookmark.svg" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/change.svg" alt="change.svg"/></a>
+                            </div>
+                            <div class="Card-sale">-60%
+                            </div>
+                          </div>
                         </div>
-                        <div class="Card-category">{% translate 'Games / xbox' %}
-                        </div>
-                        <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/bookmark.svg" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/change.svg" alt="change.svg"/></a>
-                        </div>
-                      </div>
                     </div>
-                    <div class="Card-sale">-60%
-                    </div>
-                  </div>
-                  <div class="Card hide_700"><a class="Card-picture" href="#"><img src="../static/assets/img/content/home/card.jpg" alt="card.jpg"/></a>
-                    <div class="Card-content">
-                      <strong class="Card-title"><a href="#">Barand New Phone Smart Business</a>
-                      </strong>
-                      <div class="Card-description">
-                        <div class="Card-cost"><span class="Card-priceOld">$115.00</span><span class="Card-price">$85.00</span>
-                        </div>
-                        <div class="Card-category">Games / xbox
-                        </div>
-                        <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/bookmark.svg" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/change.svg" alt="change.svg"/></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="Card-sale">-60%
-                    </div>
-                  </div>
-                  <div class="Card hide_md"><a class="Card-picture" href="#"><img src="../static/assets/img/content/home/card.jpg" alt="card.jpg"/></a>
-                    <div class="Card-content">
-                      <strong class="Card-title"><a href="#">Mavic PRO Mini Drones Hobby RC Quadcopter</a>
-                      </strong>
-                      <div class="Card-description">
-                        <div class="Card-cost"><span class="Card-priceOld">$115.00</span><span class="Card-price">$185.00</span>
-                        </div>
-                        <div class="Card-category">Digital / xbox
-                        </div>
-                        <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/bookmark.svg" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/change.svg" alt="change.svg"/></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="Card-sale">-60%
-                    </div>
-                  </div>
+                  {%  endfor  %}
                 </div>
                 <div class="Account-editLink Account-editLink_view"><a href="{% url 'historyview' %}">{% translate 'Go to the full list' %}</a></div>
               </div>

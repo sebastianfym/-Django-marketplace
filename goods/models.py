@@ -1,3 +1,5 @@
+
+
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -104,11 +106,13 @@ class Goods(models.Model):
 
     rating = models.PositiveIntegerField(verbose_name=_('rating'), default=0)
 
+
     def __str__(self):
         return f'{self.name}'
 
     def get_absolute_url(self):
         return reverse('post', kwargs={'pk': self.pk})
+
 
 
 class GoodsInMarket(models.Model):
@@ -136,7 +140,7 @@ class GoodsInMarket(models.Model):
                                )
 
     def __str__(self):
-        return f'{self.goods.name} {self.seller.title}'
+        return f'{self.goods.name} {self.seller.title} {self.price}'
 
 
 class ViewHistory(models.Model):

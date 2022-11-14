@@ -76,7 +76,11 @@
                             {% for key_product_id, feature_value in value.items %}
                             <div class="Compare-product">
                             <div class="Compare-nameProduct"> {{ key_product_id }}</div>
-                            <div class="Compare-feature"> {{ feature_value }}</div>
+                            {% if feature_value %}
+                                <div class="Compare-feature"> {{ feature_value }}</div>
+                            {% else %}
+                                <div class="Compare-feature"> </div>
+                            {%  endif %}
                             </div>
                             {% endfor %}
                         </div>
@@ -93,10 +97,15 @@
                     <div class="Compare-nameProduct">  {{ product.name }}
                     </div>
                     <div class="Compare-feature">
-                      <strong class="Compare-priceOld">{{ product.price }}
-                      </strong>
-                      <strong class="Compare-price"> $115.00
-                      </strong>
+                      {% if product.discount_price < product.price %}
+                          <strong class="Compare-priceOld">{{ product.price }}
+                          </strong>
+                          <strong class="Compare-price"> {{ product.discount_price }}
+                          </strong>
+                      {% else %}
+                          <strong class="Compare-price"> {{ product.price }}
+                          </strong>
+                      {% endif %}
                     </div>
                   </div>
               {% endfor %}
@@ -106,7 +115,7 @@
               </div>
     {% else %}
         <div class="wrap">
-            Вы ничего не добавли в сравненте
+            Вы ничего не добавили в сравнение
         </div>
     {% endif %}
     </div>

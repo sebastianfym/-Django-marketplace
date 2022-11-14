@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.db import models
-
 from goods.models import GoodsInMarket, Category
 from discounts.models import Discount
 User = get_user_model()
@@ -17,7 +16,7 @@ def get_disc(disc: Discount, price: float) -> float:
         return price - disc.discount_value
     else:
         # если скидка - фиксированная сумма
-        return disc.value
+        return disc.discount_value
 
 
 def price_with_discount(goods_in_market: GoodsInMarket, category: Category) -> float:

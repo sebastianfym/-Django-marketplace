@@ -1,11 +1,79 @@
+
 from django.db.models import QuerySet
-from goods.models import Goods
+from .models import Goods
 from django.db.models import Sum
-from customers.models import CustomerUser
 
 
 def final_price(price_discount):
     pass
+
+
+def create_compare(compare_list: list) -> [list, list, dict]:
+    """
+    Функция получния категорий, отдельно характеристик по товарову и параметры товаров от всех товаров в сравнении
+    :param compare_list: список id товаров в сравнении
+    :return:
+    compare_list_products,
+    categories_list,
+    product_features
+    """
+    compare_list_products = list()
+    categories_list = list()
+    for element in compare_list:
+        product = Goods.objects.filter(
+            id=element
+        ).select_related('category').prefetch_related('feature').first()
+        compare_list_products.append(product)
+        categories_list.append(product.category.title)
+    product_features = {
+        product.id: product.feature.all() for product in compare_list_products
+    }
+    return compare_list_products, categories_list, product_features
+
+
+def get_all_features(product_features: dict) -> dict:
+    """
+    Функция получния всех характеристик от всех товаров в сравнении
+    :param product_features:
+    :return: all_features
+    """
+    all_features = dict()
+    for product, features in product_features.items():
+        for feature in features:
+            if all_features.get(feature.name, 0):
+                all_features.get(feature.name).update(
+                    {product: feature.value}
+                )
+            else:
+                all_features[feature.name] = {
+                    product: feature.value
+                }
+    return all_features
+
+
+def get_different_features(all_features: dict, compare_list: list) -> dict:
+    """
+    Функция получния различных характеристик от всех товаров в сравнении
+    :param all_features: словарь из всех характеристик
+    :param compare_list: список id товаров
+    :return: different_features
+    """
+    different_features = dict()
+    for key, values in all_features.items():
+        if len(values.values()) != len(compare_list):
+            different_features.update({key: {'diff': values}})
+            for product_id in compare_list:
+                if product_id not in values.keys():
+                    values.update({product_id: 0})
+        else:
+            value_list = list()
+            for prod_id, value in values.items():
+                value_list.append(value)
+            if len(set(value_list)) > 1:
+                different_features.update({key: {'diff ': values}})
+            else:
+                different_features.update({key: {'same': values}})
+    return different_features
 
 
 class CatalogMixin:
@@ -196,3 +264,7 @@ class GoodsInMarketMixin:
         :return:
         """
         pass
+
+
+
+

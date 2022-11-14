@@ -38,7 +38,8 @@
                     <div class="row ControlPanel-rowSplit">
                         <div class="row-block">
                             {% if request.user.id %}
-                            <a class="ControlPanel-title" href="{% url 'logout' %}">{% translate 'logout' %}</a>
+                            <a class="ControlPanel-title" href="{% url 'logout' %}">{% translate 'logout' %}</a> /
+                            <a class="ControlPanel-title" href="{% url 'account' %}">{% translate 'account' %}</a>
                             {% else %}
                             <a class="ControlPanel-title" href="{% url 'login' %}">{% translate 'login' %}</a> /
                             <a class="ControlPanel-title" href="{% url 'register' %}">{% translate 'Register' %}</a>
@@ -87,14 +88,14 @@
                 <div class="CartBlock">
                     <a class="CartBlock-block" href="{% url 'compare' %}">
                     <img class="CartBlock-img" src="{% static 'assets/img/icons/exchange.svg' %}" alt="exchange.svg"><span
-                        class="CartBlock-amount">4</span>
+                        class="CartBlock-amount">{{ compare }}</span>
                     </a>
-                    <a class="CartBlock-block" href="#">
+                    <a class="CartBlock-block" href="{% url 'cart:mycart' %}">
                         <img class="CartBlock-img" src="{% static 'assets/img/icons/cart.svg' %}"
                         alt="cart.svg"><span
-                        class="CartBlock-amount">0</span>
+                        class="CartBlock-amount">{{ cart_lens }}</span>
                     </a>
-                    <div class="CartBlock-block"><span class="CartBlock-price">0.00$</span>
+                    <div class="CartBlock-block"><span class="CartBlock-price">{{ total_cost_with_discount }}руб</span>
                     </div>
                 </div>
             </div>
