@@ -20,11 +20,18 @@ class RegistrationForm(UserCreationForm):
                                                                  ' It has start with +7 or 8 '
                                                                  'and contains 11 or 12 numbers')},
                                     required=True)
+    password1 = forms.CharField(label=_('Password'),
+                                widget=(forms.PasswordInput(attrs={'class': 'form-control'})),
+                                help_text=password_validation.password_validators_help_text_html())
+    password2 = forms.CharField(label=_('Password again'),
+                                widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+                                help_text=_('Re-enter the password'),
+                                error_messages={'invalid': _('passwords do not match')}
+                                )
 
     class Meta:
         model = CustomerUser
         fields = ("email", "full_name", "phone_number", "password1", "password2")
-
 
 
 class AccountAuthenticationForm(forms.ModelForm):

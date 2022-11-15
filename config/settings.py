@@ -46,12 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'customers',
+    'celery',
     'app_shop',
     'cart',
     'banners',
     'discounts',
     'goods',
     'orders',
+    'data_import',
 ]
 
 MIDDLEWARE = [
@@ -81,13 +83,34 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'goods.context_processors.category_context.all_categories_context',
+                'goods.context_processors.my_compare.mycompare',
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart_lens',
-                'goods.context_processors.mycompare',
+
             ],
         },
     },
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'data_import': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'data_import/data_import.log'
+        },
+    },
+    'loggers': {
+        'data_import': {
+            'handlers': ['data_import'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 CACHES_TIME = 60
 CACHES = {
@@ -151,7 +174,6 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'),]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -170,4 +192,12 @@ AUTH_USER_MODEL = 'customers.CustomerUser'
 
 LOGIN_REDIRECT_URL = 'index'
 
-#FIXTURE_DIRS = os.path.join(BASE_DIR, 'fixtures')
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = '6379'
+# CELERY settings
+CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_TRANSPORT_OPTION = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

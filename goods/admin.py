@@ -1,9 +1,13 @@
 from django.contrib import admin
-from .models import Category, Goods, FeatureName, Feature, GoodsInMarket, DetailProductComment, Image
+from .models import Category, Goods, FeatureName, Feature, GoodsInMarket, DetailProductComment, Image, SuperCategory
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['title']
+    list_display = ['title', 'imagen', 'activity', 'supercat']
+
+
+class SuperCategoryAdmin(admin.ModelAdmin):
+    list_display = ['title', 'imagen', 'activity']
 
 
 class GoodsInMarketAdmin(admin.ModelAdmin):
@@ -39,8 +43,8 @@ class GoodsAdmin(admin.ModelAdmin):
     ]
 
 
-
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(SuperCategory, SuperCategoryAdmin)
 admin.site.register(Goods, GoodsAdmin)
 admin.site.register(GoodsInMarket, GoodsInMarketAdmin)
 admin.site.register(FeatureName, FeatureNameAdmin)
