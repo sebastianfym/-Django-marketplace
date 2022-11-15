@@ -17,7 +17,8 @@ def card_validator(message: str):
 class Order(models.Model):
     STATUS_VALUE = (
         (0, _('not_pay')),
-        (1, _('goods_shipped')),
+        (1, _('payed')),
+        (2, _('goods_shipped')),
         (3, _('delivered'))
     )
     DELIVERY_METHOD = (

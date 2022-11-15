@@ -19,14 +19,23 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/clearcache/', include('banners.urls')),
     path('admin/', admin.site.urls),
     path('', include('customers.urls')),
-    # path('__debug__/', include('debug_toolbar.urls')),
-    path('goods/', include(('goods.urls', 'goods'), namespace='goods')),
+    path('__debug__/', include('debug_toolbar.urls')),
+    path('goods/', include('goods.urls')),
     path('banners/', include('banners.urls')),
     path('customers/', include('customers.urls')),
+    path('', include('app_shop.urls')),
+    path('orders/', include('orders.urls')),
+    path('sale/', include('discounts.urls')),
+    path('i18n', include('django.conf.urls.i18n')),
     path('cart/', include(('cart.urls', 'cart'), namespace='cart'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
