@@ -39,6 +39,20 @@ class Feature(models.Model):
     def __str__(self):
         return self.value
 
+
+class SuperCategory(models.Model):
+    title = models.CharField(max_length=150, blank=True, null=True)
+    imagen = models.ImageField(upload_to='images/', blank=True, null=True)
+    activity = models.BooleanField(default=False, blank=True, null=True)
+
+    class Meta:
+        verbose_name = _('supercategory')
+        verbose_name_plural = _('supercategories')
+
+    def __str__(self):
+        return f'{self.title},{self.activity}'
+
+
 class Category(models.Model):
     """
     Класс моделей категорий
@@ -51,27 +65,17 @@ class Category(models.Model):
     title = models.CharField(max_length=50, blank=True, null=True)
     imagen = models.ImageField(upload_to='images/', blank=True, null=True)
     activity = models.BooleanField(default=False, blank=True, null=True)
+    supercat = models.ForeignKey(
+        SuperCategory,
+        blank=True, null=True,
+        verbose_name=_('supercategory'),
+        on_delete=models.CASCADE,
+        related_name='category',)
+
 
     class Meta:
         verbose_name = _('category')
         verbose_name_plural = _('categories')
-
-    def __str__(self):
-        return f'{self.title},{self.activity}'
-
-
-class Subcategory:
-    main_category = models.ForeignKey(Category,
-                                      on_delete=models.CASCADE,
-                                      related_name='category',
-                                      verbose_name=_('subcategory'))
-    title = models.CharField(max_length=150, blank=True, null=True)
-    imagen = models.ImageField(upload_to='images/', blank=True, null=True)
-    activity = models.BooleanField(default=False, blank=True, null=True)
-
-    class Meta:
-        verbose_name = _('subcategory')
-        verbose_name_plural = _('subcategories')
 
     def __str__(self):
         return f'{self.title},{self.activity}'

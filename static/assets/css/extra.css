@@ -5188,10 +5188,11 @@ a.Cart-title {
   -webkit-transform: rotate(180deg);
           transform: rotate(180deg);
 }
-
 .Sort-arrow {
   top: 0;
   width: 30px;
   height: 30px;
-  background: #3cb878;
+}
+.ArrowRotate {
+  transform: rotate(180deg);
 }

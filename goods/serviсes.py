@@ -89,7 +89,7 @@ class CatalogMixin:
             value_param = query_params.get(param)
             if value_param:
                 params[param] = value_param
-                if params.get('trend') == '+':
+                if params.get('trend') == 'asc':
                     params['trend'] = ''
         return params
 
@@ -186,11 +186,16 @@ class CatalogMixin:
                 delivery=Sum('goods_in_market__free_delivery'),
                 in_stock=Sum('goods_in_market__quantity'),
                 quantity=Sum('goods_in_market__order__quantity')
-            ).filter(**filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}")
+            ).filter(**filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}").defer(
+                'feature', 'describe', 'goods_in_market', 'brand'
+            )
             return queryset
 
         queryset = Goods.objects.select_related('category').filter(
-            **filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}")
+            **filter_params).order_by(f"{sort_params['trend']}{sort_params['sort']}").defer(
+            'feature', 'describe', 'goods_in_market', 'brand'
+        )
+
         return queryset
 
     def normalises_values_parameters(self) -> dict:
