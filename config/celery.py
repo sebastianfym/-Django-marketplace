@@ -13,7 +13,7 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'update_limit_deal': {
         'task': 'app_shop.tasks.update_offer_day',
-        'schedule': crontab()
+        'schedule': crontab(hour='0', minute='0')
     }
 }
 
