@@ -5172,19 +5172,27 @@ a.Cart-title {
   color: #0063d1;
   border-bottom: 1px dotted #0063d1;
 }
-.Sort-sortBy_dec:after,
-.Sort-sortBy_inc:after {
+.Sort-sortBy_dec,
+.Sort-sortBy_inc {
   content: '';
   display: block;
   position: absolute;
   right: -30px;
   top: 0;
-  width: 30px;
-  height: 30px;
+  width: 10px;
+  height: 10px;
   background: url("../img/icons/upArrow.svg") center center no-repeat;
   background-size: contain;
 }
 .Sort-sortBy_inc:after {
   -webkit-transform: rotate(180deg);
           transform: rotate(180deg);
+}
+.Sort-arrow {
+  top: 0;
+  width: 30px;
+  height: 30px;
+}
+.ArrowRotate {
+  transform: rotate(180deg);
 }
