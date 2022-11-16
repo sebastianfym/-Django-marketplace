@@ -56,7 +56,7 @@ class Catalog(CatalogMixin, ListView):
 
 class ShowDetailProduct(DetailView):
     """
-    Данный класс служит для детального представления определённого товара.
+    Данный класс служит для детального представления определённого товара
     """
 
     model = Goods
@@ -73,8 +73,7 @@ class ShowDetailProduct(DetailView):
         context['form'] = DetailProductReviewForm()
 
         if self.request.user.is_authenticated:
-            context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user,
-                                                                 product_in_shop__goods_id=product_id).exists()
+            context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product_in_shop__goods_id=product_id).exists()
         else:
             cart = list()
             if self.request.session.get("cart"):
@@ -87,7 +86,7 @@ class ShowDetailProduct(DetailView):
                     context['in_cart_or_not'] = False
         return context
 
-    def post(self, request):
+    def post(self, request, pk):
         form = DetailProductReviewForm(request.POST)
         if form.is_valid():
             DetailProductComment.objects.create(
@@ -99,6 +98,7 @@ class ShowDetailProduct(DetailView):
             return redirect(f"../{self.kwargs['pk']}/")
         else:
             return redirect(f"../{self.kwargs['pk']}/")
+
 
 
 class AddProductToCompareView(View):

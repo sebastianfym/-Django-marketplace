@@ -1,28 +1,41 @@
+import queue
+from random import randint
+from orders.models import Order
+
+
+PAY_ERRORS = (
+    'Insuficient fonds.',
+    'Incorrect authorization code',
+    'No response from server',
+)
+
+
+def pay_for_order(order_id, card_num, total_cost):
+    if card_num % 10 == 0 or card_num % 2 == 1:
+        err = randint(0, 2)
+        raise Exception(PAY_ERRORS[err])
+    return True
+
+
 class PaymentGoods:
     """
     Класс содержащий в себе методы интеграции сервиса оплаты.
-    Он содержит в себе 2 метода:
-    -payment_for_goods - метод для оплаты товара;
-    -product_status - метод для получения статуса оплаченного товара;
+    Он содержит в себе методы:
+    - add_order_to_queue - метод помещает заказ на оплату в очередь;
     """
+    q = queue.Queue
 
-    def payment_for_goods(self, user_cart, profile):
+    def add_order_to_queue(self, order_number):
         """
-        Метод оплаты товара. Сюда интегрируется сам сервис оплаты.
-        В параметрах этого метода стоят атрибуты: user_cart, profile.
-        user_cart - это корзина конкретного пользователя с товарами, которые он готов оплачивать.
-        profile - атрибут необходимый, для записи в него заказанных товаров, что бы в дальнейшем пользователь мог
-        смотреть статут доставки своих товаров.
+        В качестве параметра принимает заказ. И добавляет его на оплату в очередь.
         """
-        pass
+        self.q.put(item=order_number, timeout=5)
 
-    def product_status(self, profile):
-        """
-        Метод служит для получения пользователем данных о состоянии заказанных товаров.
-        В профиль пользователя добавляются оплаченные товары.
-        Всего, у заказанного товара будет 3 состояния:
-        -сборка - магазин собирает товар и передаёт его в курьерскую службу;
-        -доставка - с момента передачи продавцом курьеру и от курьера покупателю;
-        -доставлен - с момента передачи товара пользователю
-        """
-        pass
+    def job(self):
+        self.q.join()
+        while self.q.not_empty:
+            order_id = self.q.get()
+            order = Order.filter(id=order_id)
+            card_num = order.payment_card
+            total_cost = order.total_cost
+            pay_for_order(order_id, card_num, total_cost)

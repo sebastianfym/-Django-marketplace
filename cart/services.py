@@ -126,7 +126,7 @@ def get_cost(request):
         total_amount = cart.aggregate(amount=Sum('quantity'))['amount']
     else:
         if not request.session.get("cart"):
-            return 0, 0, 0, 0
+            return 0, 0, 0, 0, 0
         else:
             cart = []
             for item in request.session["cart"]:

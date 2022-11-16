@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from app_shop.models import Seller
 from customers.models import CustomerUser
+# import discounts.services
 
 
 class FeatureName(models.Model):
@@ -105,6 +106,11 @@ class Goods(models.Model):
                                      blank=True)
 
     rating = models.PositiveIntegerField(verbose_name=_('rating'), default=0)
+
+    # @property
+    # def discount_price(self):
+    #     new_price = price_with_discount(self.price, self.name, self.category)
+    #     return new_price
 
 
     def __str__(self):

@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% block header %}
+    {% include 'elements/header.html' %}
+{% endblock %}
+{% block content %}
+{%  csrf_token %}
+<div class="Middle Middle_top">
+    <div class="Middle-top">
+      <div class="wrap">
+        <div class="Middle-header">
+          <h1 class="Middle-title">Корзина
+          </h1>
+          <ul class="breadcrumbs Middle-breadcrumbs">
+            <li class="breadcrumbs-item"><a href="index.html">home{{ object.old_cost }}</a>
+            </li>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{{ cart.old_cost }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="Section">
+        <div class="wrap">
+            <form class="form Cart" action="#" method="post" name="cart_order">
+                {% for item in cart_list.cart %}
+                        <div class="Cart-product">
+                            <div class="Cart-block Cart-block_row">
+                                <div class="Cart-block Cart-block_pict">
+                                    <a class="Cart-pict" href="{{ item.goods.get_absolute_url }}">
+                                        <img class="Cart-img" src="{{ item.goods.image.url }}" alt="card.jpg">
+                                    </a>
+                                </div>
+                                <div class="Cart-block Cart-block_info">
+                                    <a class="Cart-title" href="{{ item.goods.get_absolute_url }}"> {{ item }}</a>
+                                    <div class="Cart-desc"> item
+                                    </div>
+                                </div>
+                                <div class="Cart-block Cart-block_price">
+                                    {% if item.3 %}
+                                        <div class="Cart-price Cart-price_old" id="{{ key.id }}">
+                                            {{ item.0 }}руб
+                                        </div>
+                                    {% endif %}
+                                    <div class="Cart-price">
+                                        {{ item.1 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="Cart-block Cart-block_row">
+                                <div class="Cart-block Cart-block_seller">
+                                    <div class="form-selectWrap">
+                                        <select id="select" class="form-select" name="seller">
+                                            {% for shop in value %}
+                                                <option value="{{ key.id }}"> {{ shop.title }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="Cart-block Cart-block_amount">
+                                    <div class="Cart-amount">
+                                        <div class="Amount">
+                                            <button class="Amount-remove" value="{{ key.id }}amount" type="button">
+                                            </button>
+                                            <input id="{{ key.id }}amount" class="Amount-input form-input" name="amount{{ key.id }}" type="text" value="{{ value.2 }}">
+                                            <button class="Amount-add" value="{{ key.id }}amount" type="button">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="Cart-block Cart-block_delete">
+                                    <a class="Cart-delete" href="{% url 'cart:remove' key.id %}">
+                                        <img src="/static/assets/img/icons/card/delete.svg" alt="change.svg">
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                {% endfor %}
+
+
+                <div class="Cart-total">
+                    <div class="Cart-block Cart-block_total">
+                        <strong class="Cart-title">Итого:
+                        </strong><span class="Cart-price">{{ total_price }}руб</span><span class="Cart-price_old" id="prev_price">{{ old_total_price }}руб</span>
+                    </div>
+                    <div class="Cart-block"><a class="btn btn_success btn_lg" href="order.html">Оформить заказ</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+
+<script>
+$(document).ready(function (){
+    var csrf = $("input[name=csrfmiddlewaretoken]").val();
+    $(".form-select").change(function(){
+        var product=$(this).val();
+        $.ajax({
+            url: '{% url "cart:change_price" %}',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                product_id: $(this).val(),
+                shop: $(this).find('option:selected').text(),
+                csrfmiddlewaretoken: csrf
+            },
+            success: function (response) {
+                document.getElementById(product).textContent = response.data
+                var total_price = 0
+                $(".Cart-price_old").each(function(){
+                    var price = parseInt(this.textContent.replace('руб', ''))
+                    var price_id = parseInt($(this).attr('id'))
+                    $(".Amount-input").each(function(){
+                        var id_from_input = parseInt($(this).attr('id'))
+                        var count = parseInt($(this).val())
+                        if (id_from_input === price_id) {
+                            total_price += (price * count)
+                        }
+                    })
+                })
+                document.getElementById('prev_price').textContent = total_price
+            }
+        })
+    });
+})
+</script>
+<script>
+$(document).ready(function (){
+
+    $(".Amount-add").click(function(){
+        var id_of_product=$(this).val()
+        var price = document.getElementById(parseInt(id_of_product)).textContent.replace('руб', '')
+        var total_price = parseInt(document.getElementById('prev_price').textContent)
+        total_price += parseInt(price)
+        document.getElementById('prev_price').textContent = total_price
+    });
+
+
+    $(".Amount-remove").click(function(){
+        var id_of_product=$(this).val()
+        var price = document.getElementById(parseInt(id_of_product)).textContent.replace('руб', '')
+        var total_price = parseInt(document.getElementById('prev_price').textContent)
+        total_price -= parseInt(price)
+        document.getElementById('prev_price').textContent = total_price
+    });
+})
+</script>
+{% endblock %}
+{% block footer %}
+     {% include 'elements/footer.html' %}
+{% endblock %}
