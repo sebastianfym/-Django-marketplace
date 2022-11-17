@@ -22,7 +22,7 @@
     <div class="Section">
         <div class="wrap">
             <form class="form Cart" action="#" method="post" name="cart_order">
-                {% if cart %}
+                {% if cart%}
                     {% for item in cart %}
                         <div class="Cart-product">
                             <div class="Cart-block Cart-block_row">
@@ -106,6 +106,7 @@ $(document).ready(function (){
     var csrf = $("input[name=csrfmiddlewaretoken]").val();
     $(".form-select").change(function(){
         var product=$(this).val();
+        console.log(product)
         $.ajax({
             url: '{% url "cart:change_price" %}',
             method: 'post',

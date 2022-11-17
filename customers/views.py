@@ -1,3 +1,4 @@
+from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import authenticate, login
@@ -21,7 +22,7 @@ class UserRegisterFormView(CreateView):
     template_name = 'customers/register.html'
     success_url = reverse_lazy('index')
 
-    def form_valid(self, form):
+    def form_valid(self, form: RegistrationForm):
         user = form.save()
         login(self.request, user)
         return redirect(self.success_url)
@@ -42,16 +43,19 @@ class UserProfile(View):
     """
 
     @cache_page(3600 * CACHES_TIME)
-    def get(self, request):
-        user = request.user
-        form = ChangeUserData(instance=user)
+    def get(self, request: WSGIRequest):
+        if request.user.is_authenticated:
+            user = request.user
+            form = ChangeUserData(instance=user)
 
-        return render(request, "customers/profile.html", context={
-            'user': user,
-            'form': form,
-        })
+            return render(request, "customers/profile.html", context={
+                'user': user,
+                'form': form,
+            })
+        else:
+            return redirect('register')
 
-    def post(self, request):
+    def post(self, request: WSGIRequest):
         user = request.user
         form = ChangeUserData(request.POST, instance=user)
         if form.is_valid():
@@ -80,7 +84,7 @@ class UserAccount(View):
     """
 
     @cache_page(3600 * CACHES_TIME)
-    def get(self, request):
+    def get(self, request: WSGIRequest):
         user = request.user
         view_goods = ViewHistory.objects.filter(customer=self.request.user)[:3]
         try:
