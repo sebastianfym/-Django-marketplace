@@ -40,9 +40,9 @@ class CartViewTest(TestCase):
 
     def test_cart_add(self):
         self.client.login(email='testuser1', password='TestPass12')
-        response = self.client.get(reverse(viewname='cart:add', args=[self.id]))
+        response = self.client.get(reverse(viewname='cart:add', args=[self.id]), HTTP_REFERER='http://login')
         self.assertEqual(response.status_code, 302)
-        #KeyError: 'HTTP_REFERER'
+
 
     def test_delete_cart(self):
         self.client.login(email='testuser1', password='TestPass12')
