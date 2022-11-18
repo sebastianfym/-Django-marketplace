@@ -1,0 +1,1 @@
+[{"model": "goods.supercategory", "pk": 1, "fields": {"title": "Computers and accessories", "imagen": "", "activity": true}}, {"model": "goods.supercategory", "pk": 2, "fields": {"title": "Smartphones", "imagen": "", "activity": true}}]

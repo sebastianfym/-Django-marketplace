@@ -27,21 +27,23 @@
 
                         {% for supercat in supercategory %}
                         <div class="CategoriesButton-link">
-                            <div class="CategoriesButton-icon"><img
-                                    src="{% static 'assets/img/icons/departments/1.svg' %}"
-                                    alt="1.svg">
-                            </div>
-                            <span class="CategoriesButton-text">{{ supercat.title }}</span>
-
-                            <div class="CategoriesButton-submenu"><a class="CategoriesButton-link" href="#">
+                            <a href="#">
+                                <div class="CategoriesButton-icon">
+                                        <img src="{% static 'assets/img/icons/departments/1.svg' %}" alt="1.svg">
+                                </div>
+                                <span class="CategoriesButton-text">{{ supercat.title }}</span>
+                            </a>
+                            <a class="CategoriesButton-arrow" href="#"></a>
+                            <div class="CategoriesButton-submenu" style="display: none;">
                             {% for cat in supercat.category.all %}
-                                <a href="{% url 'catalog' %}?category__title={{ cat.title }}">
-                                    <div
-                                        class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/1.svg' %}" alt="1.svg"/>
+                                <a class="CategoriesButton-link" href="{% url 'catalog' %}?category__title={{ cat.title }}">
+                                    <div class="CategoriesButton-icon">
+                                        <img src="{% static 'assets/img/icons/departments/1.svg' %}" alt="1.svg"/>
                                     </div>
+                                    <span class="CategoriesButton-text"> {{ cat.title }} </span>
                                 </a>
-                                <span class="CategoriesButton-text">{{ cat.title }}</span></a><a class="CategoriesButton-link" href="#">
                             {% endfor %}
+                            </div>
                         </div>
                         {% endfor %}
                     </div>
