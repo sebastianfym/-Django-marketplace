@@ -1,7 +1,6 @@
 import datetime
 import decimal
 from django.db.models import Q
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView
@@ -10,7 +9,7 @@ from app_shop.models import Seller
 from cart.models import CartItems
 from .forms import DetailProductReviewForm
 
-from .models import Category, Goods, ViewHistory, GoodsInMarket, DetailProductComment, Image
+from .models import Category, Goods, ViewHistory, GoodsInMarket, DetailProductComment, Image, SuperCategory
 from django.utils.translation import gettext as _
 from .models import Category, Goods, ViewHistory
 from django.views.decorators.cache import cache_page
@@ -21,7 +20,6 @@ from customers.models import CustomerUser
 from discounts.models import Discount
 
 
-
 class CategoryView(View):
     """
     Представление для категорий товаров у которых activity = True.
@@ -29,7 +27,7 @@ class CategoryView(View):
 
     def get(self, request):
         cache_this = cache_page(3600 * CACHES_TIME)
-        categories = Category.objects.filter(activity=True)
+        categories = SuperCategory.objects.filter(activity=True)
         if categories.update():
             cache.delete(cache_this)
         return render(request, 'category/category.html', context={'categories': categories})
@@ -50,7 +48,7 @@ class Catalog(CatalogMixin, ListView):
         parameters = self.normalises_values_parameters()
         context.update(parameters)
         context.update({'sellers': Seller.objects.all()})
-        context.update({'category': Category.objects.all()})
+        context.update({'supercategory': SuperCategory.objects.all()})
         return context
 
 
@@ -105,6 +103,7 @@ class AddProductToCompareView(View):
     """
     Добавление товара в сравнение
     """
+
     def get(self, request, id, *args, **kwargs):
         if not request.session.get("compare"):
             request.session["compare"] = list()
@@ -121,7 +120,8 @@ class DeleteProductFromCompareView(View):
     """
     Удаление товара из списка сравнений
     """
-    def get(self, request, id,  *args, **kwargs):
+
+    def get(self, request, id, *args, **kwargs):
         id_product = int(id)
         if id_product in request.session["compare"]:
             request.session["compare"].remove(id_product)

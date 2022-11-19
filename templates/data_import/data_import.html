@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block header %}
+    {% include 'elements/header.html' %}
+{% endblock %}
+{% load i18n %}
+{% block content %}
+    <form method="post">
+    {% csrf_token %}
+    <div class="wrap" style="margin-top: 15px">
+        {% for field in form %}
+        <div class="form-group">
+            <div class="form-label">
+                {{ field.label_tag }}
+            </div>
+            <div class="form-input">
+                {{ field.as_text }}
+            </div>
+            <div class="form-textarea">
+                {{ field.help_text }}
+            </div>
+        </div>
+    {% endfor %}
+    <div class="btn_outline" style="margin-top: 15px">
+        <button class="btn btn_success" type="submit">{% translate 'Register' %}</button>
+    </div>
+    </div>
+    </form>
+{% endblock %}
+{% block footer %}
+     {% include 'elements/footer.html' %}
+{% endblock %}

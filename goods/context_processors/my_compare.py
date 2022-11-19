@@ -1,5 +1,3 @@
-
-
 def mycompare(request):
     if not request.session.get("compare"):
         return {'compare': 0}

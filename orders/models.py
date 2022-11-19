@@ -17,7 +17,8 @@ def card_validator(message: str):
 class Order(models.Model):
     STATUS_VALUE = (
         (0, _('not_pay')),
-        (1, _('goods_shipped')),
+        (1, _('payed')),
+        (2, _('goods_shipped')),
         (3, _('delivered'))
     )
     DELIVERY_METHOD = (
@@ -31,6 +32,8 @@ class Order(models.Model):
     quantity = models.PositiveIntegerField(verbose_name=_('quantity'), null=True)
     status = models.PositiveIntegerField(verbose_name=_('status'), choices=STATUS_VALUE, default=0)
     delivery_method = models.PositiveIntegerField(verbose_name=_('delivery_type'), choices=DELIVERY_METHOD, default=0)
+    delivery_city = models.CharField(verbose_name='city', max_length=100, null=True, blank=True)
+    delivery_address = models.CharField(verbose_name='address', max_length=200, null=True, blank=True)
     payment_method = models.PositiveIntegerField(verbose_name=_('payment_method'), choices=PAYMENT_METHOD, default=0)
     payment_card = models.PositiveIntegerField(verbose_name=_('payment_card'),
                                                blank=True,
