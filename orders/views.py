@@ -1,3 +1,4 @@
+from celery.result import AsyncResult
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -107,7 +108,13 @@ class AddSomeoneCard(UpdateView):
 
 
 def add_order_for_payment(request, order_id):
-    card_num = request.POST['payment_card']
-    result = add_for_payment.delay(order_id, card_num)
-    task_id = result.id
+    card_num = int(request.POST['payment_card'].replace(' ', ''))
+    result = add_for_payment(order_id, card_num)
+    if result:
+        order = Order.objects.get(id=order_id)
+        if order.status == 0:
+            order.status = 1
+            order.payment_card = str(card_num)
+            order.save()
+
     return render(request, 'orders/progress_payment.html')

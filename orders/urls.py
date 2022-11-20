@@ -8,4 +8,5 @@ urlpatterns = [
     path('add_card/<int:pk>/', AddCard.as_view(), name='add_card'),
     path('add_someone_card/<int:pk>/', AddSomeoneCard.as_view(), name='add_someone_card'),
     path('add_card/<int:order_id>/pay/', add_order_for_payment, name='payment'),
+    path('add_someone_card/<int:order_id>/pay/', add_order_for_payment, name='payment'),
 ]

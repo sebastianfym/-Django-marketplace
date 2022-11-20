@@ -23,7 +23,8 @@
     </div>
     <div class="Section">
       <div class="wrap">
-        <form class="form Payment" action="#" method="post">
+        <form class="form Payment" action="pay/{{ order_id }}" method="post">
+          {% csrf_token %}
           <div class="Payment-card">
             <div class="form-group">
               <label class="form-label">Номер счета
@@ -33,7 +34,8 @@
             <div class="form-group"><a class="btn btn_success Payment-generate" href="#">Сгенирировать случайный счет</a>
             </div>
           </div>
-          <div class="Payment-pay"><a class="btn btn_primary" href="progressPayment.html">Оплатить</a>
+          <div class="Payment-pay">
+            <button class="btn btn_primary" type="submit">Оплатить</button>
           </div>
         </form>
       </div>
