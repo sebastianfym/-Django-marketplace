@@ -6,7 +6,8 @@ from config.settings import CACHES_TIME
 from orders.services import PaymentGoods
 from django.views.decorators.cache import cache_page
 from orders.models import Order
-from orders.forms import OrderForm
+from orders.forms import OrderForm, CardNum
+from orders.tasks import add_for_payment
 from customers.models import CustomerUser
 from customers.views import UserAccount
 
@@ -86,9 +87,9 @@ class CreateOrder(CreateView):
             for i in cart:
                 order.goods_in_market.add(i['product_in_shop__id'])
         if int(order.payment_method) == 0:
-            return redirect(f'./add_card/{order.id}')
+            return redirect(f'./add_card/{order.id}', order_id=order.id)
         elif int(order.payment_method) == 1:
-            return redirect(f'./add_someone_card/{order.id}')
+            return redirect(f'./add_someone_card/{order.id}', order_id=order.id)
         else:
             return redirect(self.success_url)
 
@@ -103,3 +104,10 @@ class AddSomeoneCard(UpdateView):
     model = Order
     form_class = OrderForm
     template_name = 'orders/paymentsomeone.html'
+
+
+def add_order_for_payment(request, order_id):
+    card_num = request.POST['payment_card']
+    result = add_for_payment.delay(order_id, card_num)
+    task_id = result.id
+    return render(request, 'orders/progress_payment.html')
