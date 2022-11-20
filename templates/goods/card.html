@@ -17,6 +17,9 @@
             </div>
         </div>
     </div>
-    <div class="Card-sale">-60%
-    </div>
+    {% if goods.goods_discount %}
+      <div class="Card-sale">
+        {{ goods.goods_discount }}
+      </div>
+    {% endif %}
 </div>

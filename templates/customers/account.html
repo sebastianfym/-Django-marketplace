@@ -57,7 +57,7 @@
                 {% endif %}
               </div>
               <div class="Account-column">
-                <div class="Account-name">{{user.full_name}}
+                <div class="Account-name">{{ user.full_name }}
                 </div><a class="Account-editLink" href="../profile">{% translate 'Edit profile' %}</a>
               </div>
             </div>
@@ -66,29 +66,29 @@
                 <div class="Order Order_anons">
                   <div class="Order-personal">
                     <div class="row">
-                      <div class="row-block"><a class="Order-title" href="oneorder.html">{% translate 'Order' %}&#32;<span class="Order-numberOrder">№{{last_order.order_number}}</span>&#32;от&#32;
-                        <span class="Order-dateOrder">{{last_order.order_date}}</span></a>
+                      <div class="row-block"><a class="Order-title" href="oneorder.html">{% translate 'Order' %}&#32;<span class="Order-numberOrder">№{{ last_order.order_number }}</span>&#32;от&#32;
+                        <span class="Order-dateOrder">{{ last_order.order_date }}</span></a>
                       </div>
                       <div class="row-block">
                         <div class="Order-info Order-info_delivery">
                           <div class="Order-infoType">{% translate 'Type of delivery' %}:
                           </div>
-                          <div class="Order-infoContent">{{last_order.delivery_method}}
+                          <div class="Order-infoContent">{{ last_order.delivery_method }}
                           </div>
                         </div>
                         <div class="Order-info Order-info_pay">
                           <div class="Order-infoType">{% translate 'Payment' %}:
                           </div>
-                          <div class="Order-infoContent">{{last_order.payment_method}} </div>
+                          <div class="Order-infoContent">{{ last_order.payment_method }} </div>
                         <div class="Order-info">
                           <div class="Order-infoType">{% translate 'Total cost' %}:
                           </div>
-                          <div class="Order-infoContent">{{last_order.goods_in_market.price}} </div>
+                          <div class="Order-infoContent">{{ last_order.goods_in_market.price }} </div>
                         </div>
                         <div class="Order-info Order-info_status">
                           <div class="Order-infoType">{% translate 'Status' %}:
                           </div>
-                          <div class="Order-infoContent">{{last_order.status}} </div>
+                          <div class="Order-infoContent">{{ last_order.status }} </div>
                         </div>
                       </div>
                     </div>

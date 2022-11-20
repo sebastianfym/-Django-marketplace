@@ -1,6 +1,6 @@
 
-from django.db.models import QuerySet
-from .models import Goods
+from django.db.models import QuerySet, Q
+from goods.models import Goods
 from django.db.models import Sum
 
 
