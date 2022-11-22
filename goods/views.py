@@ -1,16 +1,20 @@
 import datetime
 import decimal
+
+from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import ListView, DetailView, DeleteView
+from django.views.generic import ListView
 from django.views.generic import DetailView
 from app_shop.models import Seller
+from banners.utils import clear_cache
 from cart.models import CartItems
 from .forms import DetailProductReviewForm
 
-from .models import Category, Goods, ViewHistory, GoodsInMarket, DetailProductComment, Image
+from .models import GoodsInMarket, DetailProductComment, Image
 from django.utils.translation import gettext as _
 from .models import Category, Goods, ViewHistory
 from django.views.decorators.cache import cache_page
@@ -58,9 +62,11 @@ class ShowDetailProduct(DetailView):
     """
     Данный класс служит для детального представления определённого товара.
     """
-
     model = Goods
     template_name = 'goods/product.html'
+    key = 'goods:{}'.format(model.pk)
+    if key not in cache:
+        cache.set(key, model)
 
     def get_context_data(self, **kwargs):
         context = super(ShowDetailProduct, self).get_context_data(**kwargs)
@@ -249,3 +255,14 @@ def cart_cost(cart: dict) -> dict:
     for goods, price in cart.items():
         res[goods] = (price, round(price * (1 - total_discount / 100)), True)
     return res
+
+
+class GoodsClearCacheAdminView(View):
+    @user_passes_test(lambda u: u.is_superuser)
+    def get(self, request):
+        try:
+            clear_cache('goods')
+            messages.success(self.request, _(f"Successfully cleared  cache)"))
+        except Exception as err:
+            messages.error(self.request, _(f"Couldn't clear cache, something went wrong. Received error: {err}"))
+        return HttpResponseRedirect('../../admin/')

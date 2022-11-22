@@ -26,7 +26,7 @@ class ClearCacheAdminView(FormView):
             messages.error(self.request, _(f"Couldn't clear cache, something went wrong. Received error: {err}"))
         return HttpResponseRedirect(self.success_url)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = _('Clear cache')
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['title'] = _('Clear cache')
+    #     return context

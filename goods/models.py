@@ -1,11 +1,12 @@
-
-
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from app_shop.models import Seller
 from customers.models import CustomerUser
+
+
+# import discounts.services
 
 
 class FeatureName(models.Model):
@@ -39,6 +40,20 @@ class Feature(models.Model):
     def __str__(self):
         return self.value
 
+
+class SuperCategory(models.Model):
+    title = models.CharField(max_length=150, blank=True, null=True)
+    imagen = models.ImageField(upload_to='images/', blank=True, null=True)
+    activity = models.BooleanField(default=False, blank=True, null=True)
+
+    class Meta:
+        verbose_name = _('supercategory')
+        verbose_name_plural = _('supercategories')
+
+    def __str__(self):
+        return f'{self.title},{self.activity}'
+
+
 class Category(models.Model):
     """
     Класс моделей категорий
@@ -51,27 +66,16 @@ class Category(models.Model):
     title = models.CharField(max_length=50, blank=True, null=True)
     imagen = models.ImageField(upload_to='images/', blank=True, null=True)
     activity = models.BooleanField(default=False, blank=True, null=True)
+    supercat = models.ForeignKey(
+        SuperCategory,
+        blank=True, null=True,
+        verbose_name=_('supercategory'),
+        on_delete=models.CASCADE,
+        related_name='category', )
 
     class Meta:
         verbose_name = _('category')
         verbose_name_plural = _('categories')
-
-    def __str__(self):
-        return f'{self.title},{self.activity}'
-
-
-class Subcategory:
-    main_category = models.ForeignKey(Category,
-                                      on_delete=models.CASCADE,
-                                      related_name='category',
-                                      verbose_name=_('subcategory'))
-    title = models.CharField(max_length=150, blank=True, null=True)
-    imagen = models.ImageField(upload_to='images/', blank=True, null=True)
-    activity = models.BooleanField(default=False, blank=True, null=True)
-
-    class Meta:
-        verbose_name = _('subcategory')
-        verbose_name_plural = _('subcategories')
 
     def __str__(self):
         return f'{self.title},{self.activity}'
@@ -95,7 +99,7 @@ class Goods(models.Model):
                                 null=True,
                                 decimal_places=2,
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))])
-    describe = models.TextField(verbose_name=_('describe'),)
+    describe = models.TextField(verbose_name=_('describe'), )
     release_date = models.DateField(verbose_name=_('release_date'), null=True, blank=True)
     limit_edition = models.BooleanField(verbose_name=_('limit_edition'), default=False)
     category = models.ForeignKey(Category, verbose_name=_('category'), on_delete=models.CASCADE, related_name='goods')
@@ -106,13 +110,11 @@ class Goods(models.Model):
 
     rating = models.PositiveIntegerField(verbose_name=_('rating'), default=0)
 
-
     def __str__(self):
         return f'{self.name}'
 
     def get_absolute_url(self):
         return reverse('post', kwargs={'pk': self.pk})
-
 
 
 class GoodsInMarket(models.Model):
@@ -144,8 +146,10 @@ class GoodsInMarket(models.Model):
 
 
 class ViewHistory(models.Model):
-    customer = models.ForeignKey(CustomerUser, on_delete=models.CASCADE, related_name='viewshistorys', verbose_name=_('customer'))
-    goods = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='viewshistorys', verbose_name=_('viewed_goods'))
+    customer = models.ForeignKey(CustomerUser, on_delete=models.CASCADE, related_name='viewshistorys',
+                                 verbose_name=_('customer'))
+    goods = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='viewshistorys',
+                              verbose_name=_('viewed_goods'))
     last_view = models.DateTimeField(auto_now=True, verbose_name=_('last_view'))
 
     class Meta:
@@ -156,7 +160,8 @@ class ViewHistory(models.Model):
 
 class Image(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
-    product = models.ForeignKey("Goods", verbose_name=_('product'), on_delete=models.CASCADE, related_name='goods_image')
+    product = models.ForeignKey("Goods", verbose_name=_('product'), on_delete=models.CASCADE,
+                                related_name='goods_image')
     image = models.ImageField(upload_to=None, height_field=None, width_field=None, blank=True, null=True)
 
     class Meta:
@@ -186,3 +191,7 @@ class DetailProductComment(models.Model):
 
     def __str__(self):
         return f'{self.goods},{self.author_name}'
+
+
+class GoodsCache(models.Model):
+    ...

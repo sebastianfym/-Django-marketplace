@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Goods, FeatureName, Feature, GoodsInMarket, DetailProductComment, Image
+from .models import Category, Goods, FeatureName, Feature, GoodsInMarket, DetailProductComment, Image, GoodsCache
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -39,6 +39,9 @@ class GoodsAdmin(admin.ModelAdmin):
     ]
 
 
+class GoodsCacheAdmin(admin.ModelAdmin):
+    change_list_template = "admin/goods_module_cache.html"
+
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Goods, GoodsAdmin)
@@ -46,3 +49,4 @@ admin.site.register(GoodsInMarket, GoodsInMarketAdmin)
 admin.site.register(FeatureName, FeatureNameAdmin)
 admin.site.register(Feature, FeatureAdmin)
 admin.site.register(DetailProductComment, DetailProductCommentAdmin)
+admin.site.register(GoodsCache, GoodsCacheAdmin)

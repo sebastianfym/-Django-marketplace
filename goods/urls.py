@@ -2,7 +2,7 @@ from django.urls import path
 
 from config.settings import CACHES_TIME
 from .views import CategoryView, ShowDetailProduct, CompareView, AddProductToCompareView, Catalog, \
-    HistoryList, DeleteProductFromCompareView
+    HistoryList, DeleteProductFromCompareView, GoodsClearCacheAdminView
 
 from django.views.decorators.cache import cache_page
 
@@ -12,8 +12,6 @@ urlpatterns = [
     path('compare/', CompareView.as_view(), name='compare'),
     path("compare_add/<int:id>", AddProductToCompareView.as_view(), name="compare_add"),
     path("compare_delete/<int:id>", DeleteProductFromCompareView.as_view(), name="compare_delete"),
-    # path("<int:pk>/", detail_goods_page, name='post'),
-    # path('detail/<int:pk>/', ShowDetailProduct.as_view(), name='post'),
-    path('detail/<int:pk>/', cache_page(3600 * CACHES_TIME)(ShowDetailProduct.as_view()), name='post')
-        
+    path('detail/<int:pk>/', cache_page(3600 * CACHES_TIME)(ShowDetailProduct.as_view()), name='post'),
+    path('goods_clear_cache/', GoodsClearCacheAdminView.as_view(), name="goodsclearcache"),
 ]
