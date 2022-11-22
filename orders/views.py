@@ -1,3 +1,4 @@
+from celery.result import AsyncResult
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -6,7 +7,8 @@ from config.settings import CACHES_TIME
 from orders.services import PaymentGoods
 from django.views.decorators.cache import cache_page
 from orders.models import Order
-from orders.forms import OrderForm
+from orders.forms import OrderForm, CardNum
+from orders.tasks import add_for_payment
 from customers.models import CustomerUser
 from customers.views import UserAccount
 
@@ -86,9 +88,9 @@ class CreateOrder(CreateView):
             for i in cart:
                 order.goods_in_market.add(i['product_in_shop__id'])
         if int(order.payment_method) == 0:
-            return redirect(f'./add_card/{order.id}')
+            return redirect(f'./add_card/{order.id}', order_id=order.id)
         elif int(order.payment_method) == 1:
-            return redirect(f'./add_someone_card/{order.id}')
+            return redirect(f'./add_someone_card/{order.id}', order_id=order.id)
         else:
             return redirect(self.success_url)
 
@@ -103,3 +105,16 @@ class AddSomeoneCard(UpdateView):
     model = Order
     form_class = OrderForm
     template_name = 'orders/paymentsomeone.html'
+
+
+def add_order_for_payment(request, order_id):
+    card_num = int(request.POST['payment_card'].replace(' ', ''))
+    result = add_for_payment(order_id, card_num)
+    if result:
+        order = Order.objects.get(id=order_id)
+        if order.status == 0:
+            order.status = 1
+            order.payment_card = str(card_num)
+            order.save()
+
+    return render(request, 'orders/progress_payment.html')

@@ -7,3 +7,7 @@ class OrderForm(forms.ModelForm):
         model = Order
         fields = ['delivery_method', 'delivery_city', 'delivery_address', 'payment_method',
                   'payment_card', 'goods_in_market', 'customer', ]
+
+
+class CardNum(forms.Form):
+    payment_card = forms.IntegerField()
