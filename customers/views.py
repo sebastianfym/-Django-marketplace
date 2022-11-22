@@ -1,9 +1,13 @@
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import user_passes_test
+from django.core.cache import cache
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.decorators.cache import cache_page
-from django.views.generic import CreateView
+from django.views.generic import CreateView, FormView
 from django.urls import reverse_lazy
 
 from config.settings import CACHES_TIME
@@ -11,6 +15,8 @@ from customers.forms import RegistrationForm, AccountAuthenticationForm, ChangeU
 from customers.models import CustomerUser
 from django.contrib import messages
 from django.utils.translation import gettext as _
+
+from customers.utils import clear_cache
 from goods.models import ViewHistory, Image
 from orders.models import Order
 
@@ -41,9 +47,12 @@ class UserProfile(View):
     Данный класс служит для получения профиля авторизированного юзера и даёт возможность изменить данные.
     """
 
-    @cache_page(3600 * CACHES_TIME)
     def get(self, request):
         user = request.user
+        key = 'customers:{}'.format(user)
+        if key not in cache:
+            cache.set(key, UserProfile)
+
         form = ChangeUserData(instance=user)
 
         return render(request, "customers/profile.html", context={
@@ -79,9 +88,12 @@ class UserAccount(View):
     Данный класс является представлением аккаунта пользователя со всеми его данными
     """
 
-    @cache_page(3600 * CACHES_TIME)
     def get(self, request):
         user = request.user
+        key = 'customers:{}'.format(user)
+        if key not in cache:
+            cache.set(key, UserAccount)
+
         view_goods = ViewHistory.objects.filter(customer=self.request.user)[:3]
         try:
             last_order = Order.objects.filter(customer=self.request.user)[:-1]
@@ -92,3 +104,14 @@ class UserAccount(View):
             'view_goods': view_goods,
             'last_order': last_order
         })
+
+
+class CustomersClearCacheAdminView(View):
+    @user_passes_test(lambda u: u.is_superuser)
+    def get(self, request):
+        try:
+            clear_cache('customers')
+            messages.success(self.request, _(f"Successfully cleared  cache)"))
+        except Exception as err:
+            messages.error(self.request, _(f"Couldn't clear cache, something went wrong. Received error: {err}"))
+        return HttpResponseRedirect('../../admin/')

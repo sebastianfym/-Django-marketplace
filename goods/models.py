@@ -9,6 +9,9 @@ from customers.models import CustomerUser
 # import discounts.services
 
 
+# import discounts.services
+
+
 class FeatureName(models.Model):
     """
     Модель наименований характеристик, отдельная модель, для того, чтобы избежать дублирования наименований
@@ -195,3 +198,7 @@ class DetailProductComment(models.Model):
 
     def __str__(self):
         return f'{self.goods},{self.author_name}'
+
+
+class GoodsCache(models.Model):
+    ...

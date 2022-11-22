@@ -1,8 +1,6 @@
 from django.contrib import admin
-
-from .models import Category, Goods, FeatureName, Feature, GoodsInMarket, DetailProductComment, Image, SuperCategory, \
-    ViewHistory
-
+from .models import Category, Goods, FeatureName, Feature, GoodsInMarket, SuperCategory, \
+    ViewHistory, GoodsCache
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['title', 'imagen', 'activity', 'supercat']
@@ -32,6 +30,9 @@ class GoodsInMarketAdmin(admin.ModelAdmin):
 class ViewHistoryAdmin(admin.ModelAdmin):
     list_display = ['customer', 'goods', 'last_view']
 
+class GoodsCacheAdmin(admin.ModelAdmin):
+    change_list_template = "admin/goods_module_cache.html"
+
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(SuperCategory, SuperCategoryAdmin)
@@ -40,3 +41,4 @@ admin.site.register(FeatureName, FeatureNameAdmin)
 admin.site.register(Feature, FeatureAdmin)
 admin.site.register(GoodsInMarket, GoodsInMarketAdmin)
 admin.site.register(ViewHistory, ViewHistoryAdmin)
+admin.site.register(GoodsCache, GoodsCacheAdmin)
