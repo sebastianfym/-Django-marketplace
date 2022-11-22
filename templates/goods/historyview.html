@@ -54,8 +54,8 @@
       <div class="Section-content">
         <div class="Cards">
           {% if history_list %}
-            {% for card in history_list %}
-              <div class="Card"><a class="Card-picture" href="{{ card.goods.get_absolute_url }}"><img src="{{ card.goods.image.url }}" alt="card.jpg"/></a>
+            {% for goods in history_list %}
+              <div class="Card"><a class="Card-picture" href="{{ card.goods.get_absolute_url }}"><img src="{{ card.goods.goods_image.first.image.url }}" alt="card.jpg"/></a>
                 <div class="Card-content">
                   <strong class="Card-title"><a href="{{ card.goods.get_absolute_url }}">{{ card.goods.name }}</a></strong>
                 </div>
@@ -74,7 +74,8 @@
                     -60%
                   </div>
                 </div>
-              {% endfor %}
+              {% include 'goods/card.html' %}
+            {% endfor %}
             {% endif %}
           </div>
           <div class="Pagination">

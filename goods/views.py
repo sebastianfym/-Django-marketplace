@@ -63,6 +63,7 @@ class ShowDetailProduct(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ShowDetailProduct, self).get_context_data(**kwargs)
         product_id = context['goods'].id
+
         context['seller'] = GoodsInMarket.objects.filter(goods__id=product_id)
         context['review'] = DetailProductComment.objects.filter(goods__id=product_id)
         context['len_review'] = str(len(context['review']))
@@ -72,6 +73,7 @@ class ShowDetailProduct(DetailView):
 
         if self.request.user.is_authenticated:
             context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product_in_shop__goods_id=product_id).exists()
+            add_to_view_history(self.request.user, context['goods'])
         else:
             cart = list()
             if self.request.session.get("cart"):
@@ -174,7 +176,8 @@ class HistoryList(ListView):
     paginate_by = 8
 
     def get_queryset(self):
-        return ViewHistory.objects.filter(customer=self.request.user)[:20]
+        res = Goods.objects.filter(id__in=ViewHistory.objects.filter(customer=self.request.user)[:20].values_list('goods'))
+        return res
 
 
 def price_with_discount(goods: Goods, old_price=0.00) -> decimal:

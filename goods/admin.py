@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Category, Goods, FeatureName, Feature, GoodsInMarket, DetailProductComment, Image, SuperCategory
+from .models import Category, Goods, FeatureName, Feature, GoodsInMarket, DetailProductComment, Image, SuperCategory, \
+    ViewHistory
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -28,9 +29,14 @@ class GoodsInMarketAdmin(admin.ModelAdmin):
     list_display = ['price', 'seller', 'goods']
 
 
+class ViewHistoryAdmin(admin.ModelAdmin):
+    list_display = ['customer', 'goods', 'last_view']
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(SuperCategory, SuperCategoryAdmin)
 admin.site.register(Goods, GoodsAdmin)
 admin.site.register(FeatureName, FeatureNameAdmin)
 admin.site.register(Feature, FeatureAdmin)
 admin.site.register(GoodsInMarket, GoodsInMarketAdmin)
+admin.site.register(ViewHistory, ViewHistoryAdmin)

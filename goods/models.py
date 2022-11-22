@@ -1,11 +1,11 @@
 from django.db import models
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from app_shop.models import Seller
 from customers.models import CustomerUser
-
-
+# from discounts.services import discount_for_good
 # import discounts.services
 
 
@@ -109,6 +109,10 @@ class Goods(models.Model):
                                      blank=True)
 
     rating = models.PositiveIntegerField(verbose_name=_('rating'), default=0)
+
+    # @property
+    # def goods_discount(self) -> str:
+    #     return discount_for_good(self)
 
     def __str__(self):
         return f'{self.name}'
