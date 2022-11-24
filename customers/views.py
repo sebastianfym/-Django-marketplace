@@ -17,7 +17,7 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 
 from customers.utils import clear_cache
-from goods.models import ViewHistory, Image
+from goods.models import ViewHistory, Image, Goods
 from orders.models import Order
 
 
@@ -94,11 +94,9 @@ class UserAccount(View):
         if key not in cache:
             cache.set(key, UserAccount)
 
-        view_goods = ViewHistory.objects.filter(customer=self.request.user)[:3]
-        try:
-            last_order = Order.objects.filter(customer=self.request.user)[:-1]
-        except ValueError:
-            last_order = None
+        view_goods = Goods.objects.filter(
+            id__in=ViewHistory.objects.filter(customer=self.request.user)[:3].values_list('goods'))
+        last_order = Order.objects.filter(customer=self.request.user)[:1]
         return render(request, "customers/account.html", context={
             'user': user,
             'view_goods': view_goods,

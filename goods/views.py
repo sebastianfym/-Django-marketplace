@@ -179,7 +179,7 @@ def is_in_view_history(customer, goods: Goods) -> bool:
 class HistoryList(ListView):
     model = ViewHistory
     template_name = 'goods/historyview.html'
-    context_object_name = 'history_list'
+    context_object_name = 'goods_list'
     paginate_by = 8
 
     def get_queryset(self):
