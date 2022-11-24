@@ -38,7 +38,6 @@ class Order(models.Model):
     payment_card = models.PositiveIntegerField(verbose_name=_('payment_card'),
                                                blank=True,
                                                null=True,
-                                               # validators=[card_validator(message=_('Card number should contain 8 digits and be even'))]
                                                )
     total_cost = models.DecimalField(verbose_name='total_cost',
                                      max_digits=10,
@@ -47,14 +46,10 @@ class Order(models.Model):
                                      validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))])
     goods_in_market = models.ManyToManyField(GoodsInMarket,
                                              verbose_name=_('goods_in_market'),
-                                             blank=True,
-                                             null=True,
                                              # on_delete=models.DO_NOTHING,
                                              related_name='order')
     customer = models.ManyToManyField(CustomerUser,
                                       verbose_name=_('customer'),
-                                      blank=True,
-                                      null=True,
                                       # on_delete=models.DO_NOTHING,
                                       related_name='order')
     order_date = models.DateField(blank=True, null=True, auto_now_add=True)
