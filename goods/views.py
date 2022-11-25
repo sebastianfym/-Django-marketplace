@@ -148,8 +148,6 @@ class CompareView(View):
                 return render(request, 'goods/mycompare.html', context=context)
             all_features = get_all_features(product_features)
             different_features = get_different_features(all_features, compare_list)
-            print(type(render(request, 'goods/mycompare.html', {'compare_list': compare_list_products,
-                                                            'different_features': different_features})))
             return render(request, 'goods/mycompare.html', {'compare_list': compare_list_products,
                                                             'different_features': different_features})
         else:

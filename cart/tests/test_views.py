@@ -40,9 +40,9 @@ class CartViewTest(TestCase):
 
     def test_cart_add(self):
         self.client.login(email='testuser1', password='TestPass12')
-        response = self.client.get(reverse(viewname='cart:add', args=[self.id]))
+        response = self.client.get(reverse(viewname='cart:add', args=[self.id]), HTTP_REFERER='http://login')
         self.assertEqual(response.status_code, 302)
-        #KeyError: 'HTTP_REFERER'
+
 
     def test_delete_cart(self):
         self.client.login(email='testuser1', password='TestPass12')
@@ -61,11 +61,3 @@ class CartViewTest(TestCase):
     def test_view_use_correct_template(self):
         self.assertEqual(self.get_response.status_code, 200)
         self.assertTemplateUsed(self.get_response, 'cart/cart.html')
-
-    def test_change_price_in_cart(self):
-        CartItems.objects.create(user=self.user, product_in_shop=self.goodinmarket, quantity=4, category=self.category)
-        items = CartItems.objects.filter(user=self.user).all()
-        self.assertEqual(items[0].product_in_shop.price, 15)
-        response = self.client.post('cart:change_price', {'shop': 'test2', 'product_id': 1}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        items = CartItems.objects.filter(user=self.user).all()
-        self.assertEqual(items[0].product_in_shop.price, 22)
