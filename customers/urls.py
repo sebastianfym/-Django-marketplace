@@ -13,3 +13,6 @@ urlpatterns = [
     path('account/', cache_page(3600 * CACHES_TIME)(UserAccount.as_view()), name='account'),
     path('customers_clear_cache/', CustomersClearCacheAdminView.as_view(), name="customersclearcache"),
 ]
+
+#
+#

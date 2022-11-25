@@ -14,7 +14,7 @@ from banners.utils import clear_cache
 from cart.models import CartItems
 from .forms import DetailProductReviewForm
 
-from .models import SuperCategory
+from .models import SuperCategory, Feature
 from .models import GoodsInMarket, DetailProductComment, Image
 from django.utils.translation import gettext as _
 from .models import Goods, ViewHistory
@@ -77,6 +77,7 @@ class ShowDetailProduct(DetailView):
         context['images'] = Image.objects.filter(product_id=product_id)
         context['image_pict_right'] = context['images'][0]
         context['form'] = DetailProductReviewForm()
+        context['feature'] = Goods.objects.get(id=product_id).feature.all()#Feature.objects.filter(goods__id=product_id)
 
         if self.request.user.is_authenticated:
             context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product_in_shop__goods_id=product_id).exists()

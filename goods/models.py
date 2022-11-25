@@ -39,6 +39,9 @@ class Feature(models.Model):
                              blank=True,
                              null=True
                              )
+    # goods = models.ForeignKey("Goods", on_delete=models.CASCADE, related_name='feature_goods',verbose_name=_('feature_goods'),
+    #                          blank=True,
+    #                          null=True)
 
     def __str__(self):
         return self.value
@@ -198,6 +201,9 @@ class DetailProductComment(models.Model):
 
     def __str__(self):
         return f'{self.goods},{self.author_name}'
+
+
+
 
 
 class GoodsCache(models.Model):

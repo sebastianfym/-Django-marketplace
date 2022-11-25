@@ -204,7 +204,7 @@ msgstr "вес"
 
 #: .\discounts\models.py:73
 msgid "date_start"
-msgstr "дата начала"
+msgstr "дата создания"
 
 #: .\discounts\models.py:74
 msgid "date_end"
@@ -810,12 +810,12 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\core\validators.py:22
 msgid "Enter a valid value."
-msgstr ""
+msgstr "Введите корректное значение"
 
 #: .\venv\python\Lib\site-packages\django\core\validators.py:104
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:751
 msgid "Enter a valid URL."
-msgstr ""
+msgstr "Введите корректный URL"
 
 #: .\venv\python\Lib\site-packages\django\core\validators.py:164
 msgid "Enter a valid integer."
@@ -823,7 +823,7 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\core\validators.py:175
 msgid "Enter a valid email address."
-msgstr ""
+msgstr "Введите корректный email"
 
 #. Translators: "letters" means latin letters: a-z and A-Z.
 #: .\venv\python\Lib\site-packages\django\core\validators.py:256
@@ -903,7 +903,7 @@ msgstr[1] ""
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:347
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:386
 msgid "Enter a number."
-msgstr ""
+msgstr "Введите номер"
 
 #: .\venv\python\Lib\site-packages\django\core\validators.py:460
 #, python-format
@@ -942,7 +942,7 @@ msgstr ""
 #: .\venv\python\Lib\site-packages\django\db\models\base.py:1420
 #: .\venv\python\Lib\site-packages\django\forms\models.py:899
 msgid "and"
-msgstr ""
+msgstr "и"
 
 #: .\venv\python\Lib\site-packages\django\db\models\base.py:1422
 #, python-format
@@ -961,11 +961,11 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:130
 msgid "This field cannot be null."
-msgstr ""
+msgstr "Это поле не может быть нулевым"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:131
 msgid "This field cannot be blank."
-msgstr ""
+msgstr "Это поле не может быть пустым"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:132
 #, python-format
@@ -1006,7 +1006,7 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:1222
 msgid "Comma-separated integers"
-msgstr ""
+msgstr "Целые числа, разделенные запятыми"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:1323
 #, python-format
@@ -1039,7 +1039,7 @@ msgstr ""
 msgid ""
 "“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
 "[TZ]) but it is an invalid date/time."
-msgstr ""
+msgstr "но это неверная дата/время"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:1471
 msgid "Date (with time)"
@@ -1052,7 +1052,7 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:1597
 msgid "Decimal number"
-msgstr ""
+msgstr "Десятичное число"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:1754
 #, python-format
@@ -1063,15 +1063,15 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:1758
 msgid "Duration"
-msgstr ""
+msgstr "Продолжительность"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:1810
 msgid "Email address"
-msgstr ""
+msgstr "Адрес электронной почты"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:1835
 msgid "File path"
-msgstr ""
+msgstr "Путь к файлу"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:1913
 #, python-format
@@ -1080,7 +1080,7 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:1915
 msgid "Floating point number"
-msgstr ""
+msgstr "Число с плавающей запятой"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:1955
 #, python-format
@@ -1089,15 +1089,15 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:1957
 msgid "Integer"
-msgstr ""
+msgstr "Целое число"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2049
 msgid "Big (8 byte) integer"
-msgstr ""
+msgstr "Большое (8 байт) целое число"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2066
 msgid "Small integer"
-msgstr ""
+msgstr "Маленькое целое число"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2074
 msgid "IPv4 address"
@@ -1115,19 +1115,19 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2201
 msgid "Boolean (Either True, False or None)"
-msgstr ""
+msgstr "Логическое значение (либо True, либо False, либо None)"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2252
 msgid "Positive big integer"
-msgstr ""
+msgstr "Положительное большое целое число"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2267
 msgid "Positive integer"
-msgstr ""
+msgstr "Положительное целое число"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2282
 msgid "Positive small integer"
-msgstr ""
+msgstr "Положительное малое целое число"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2298
 #, python-format
@@ -1136,7 +1136,7 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2334
 msgid "Text"
-msgstr ""
+msgstr "Текст"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2409
 #, python-format
@@ -1154,7 +1154,7 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2417
 msgid "Time"
-msgstr ""
+msgstr "Время"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2525
 msgid "URL"
@@ -1162,7 +1162,7 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2549
 msgid "Raw binary data"
-msgstr ""
+msgstr "Необработанные двоичные данные"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2614
 #, python-format
@@ -1171,23 +1171,23 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\__init__.py:2616
 msgid "Universally unique identifier"
-msgstr ""
+msgstr "Универсально уникальный идентификатор"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\files.py:232
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\files.py:392
 msgid "Image"
-msgstr ""
+msgstr "Изображение"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\json.py:18
 msgid "A JSON object"
-msgstr ""
+msgstr "Объект JSON"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\json.py:20
 msgid "Value must be valid JSON."
-msgstr ""
+msgstr "Значение должно быть допустимым JSON"
 
 #: .\venv\python\Lib\site-packages\django\db\models\fields\related.py:920
 #, python-format
@@ -1224,29 +1224,29 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:91
 msgid "This field is required."
-msgstr ""
+msgstr "Это поле является обязательным."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:298
 msgid "Enter a whole number."
-msgstr ""
+msgstr "Введите целое число."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:467
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:1240
 msgid "Enter a valid date."
-msgstr ""
+msgstr "Введите действительную дату."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:490
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:1241
 msgid "Enter a valid time."
-msgstr ""
+msgstr "Введите действительное время."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:517
 msgid "Enter a valid date/time."
-msgstr ""
+msgstr "Введите действительную дату/время."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:551
 msgid "Enter a valid duration."
-msgstr ""
+msgstr "Введите допустимую продолжительность."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:552
 #, python-brace-format
@@ -1255,15 +1255,15 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:618
 msgid "No file was submitted. Check the encoding type on the form."
-msgstr ""
+msgstr "Ни один файл не был отправлен. Проверьте тип кодировки в форме."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:619
 msgid "No file was submitted."
-msgstr ""
+msgstr "Ни один файл не был отправлен."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:620
 msgid "The submitted file is empty."
-msgstr ""
+msgstr "Отправленный файл пуст."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:622
 #, python-format
@@ -1288,25 +1288,25 @@ msgstr ""
 #: .\venv\python\Lib\site-packages\django\forms\models.py:1572
 #, python-format
 msgid "Select a valid choice. %(value)s is not one of the available choices."
-msgstr ""
+msgstr "Выберите правильный выбор. %(значение)s не является одним из доступных вариантов."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:950
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:1069
 #: .\venv\python\Lib\site-packages\django\forms\models.py:1570
 msgid "Enter a list of values."
-msgstr ""
+msgstr "Введите список значений."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:1070
 msgid "Enter a complete value."
-msgstr ""
+msgstr "Введите полное значение."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:1309
 msgid "Enter a valid UUID."
-msgstr ""
+msgstr "Введите действительный UUID."
 
 #: .\venv\python\Lib\site-packages\django\forms\fields.py:1339
 msgid "Enter a valid JSON."
-msgstr ""
+msgstr "Введите действительный JSON."
 
 #. Translators: This is the default suffix added to form field labels
 #: .\venv\python\Lib\site-packages\django\forms\forms.py:98
@@ -1342,7 +1342,7 @@ msgstr[1] ""
 
 #: .\venv\python\Lib\site-packages\django\forms\formsets.py:496
 msgid "Delete"
-msgstr ""
+msgstr "Удалить"
 
 #: .\venv\python\Lib\site-packages\django\forms\models.py:892
 #, python-format
@@ -1363,15 +1363,15 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\forms\models.py:913
 msgid "Please correct the duplicate values below."
-msgstr ""
+msgstr "Пожалуйста, исправьте повторяющиеся значения ниже."
 
 #: .\venv\python\Lib\site-packages\django\forms\models.py:1344
 msgid "The inline value did not match the parent instance."
-msgstr ""
+msgstr "Встроенное значение не соответствовало родительскому экземпляру."
 
 #: .\venv\python\Lib\site-packages\django\forms\models.py:1435
 msgid "Select a valid choice. That choice is not one of the available choices."
-msgstr ""
+msgstr "Выберите правильный выбор. Этот выбор не является одним из доступных вариантов."
 
 #: .\venv\python\Lib\site-packages\django\forms\models.py:1574
 #, python-format
@@ -1387,32 +1387,32 @@ msgstr ""
 
 #: .\venv\python\Lib\site-packages\django\forms\widgets.py:439
 msgid "Clear"
-msgstr ""
+msgstr "Очищать"
 
 #: .\venv\python\Lib\site-packages\django\forms\widgets.py:440
 msgid "Currently"
-msgstr ""
+msgstr "В настоящий момент"
 
 #: .\venv\python\Lib\site-packages\django\forms\widgets.py:441
 msgid "Change"
-msgstr ""
+msgstr "Изменить"
 
 #: .\venv\python\Lib\site-packages\django\forms\widgets.py:770
 msgid "Unknown"
-msgstr ""
+msgstr "Неизвестный"
 
 #: .\venv\python\Lib\site-packages\django\forms\widgets.py:771
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: .\venv\python\Lib\site-packages\django\forms\widgets.py:772
 msgid "No"
-msgstr ""
+msgstr "Нет"
 
 #. Translators: Please do not add spaces around commas.
 #: .\venv\python\Lib\site-packages\django\template\defaultfilters.py:853
 msgid "yes,no,maybe"
-msgstr ""
+msgstr "да, нет, может быть"
 
 #: .\venv\python\Lib\site-packages\django\template\defaultfilters.py:883
 #: .\venv\python\Lib\site-packages\django\template\defaultfilters.py:900
@@ -1973,7 +1973,7 @@ msgid "Connect, get help, or contribute"
 msgstr ""
 
 #~ msgid "Premium"
-#~ msgstr "Premium"
+#~ msgstr "Премиум"
 
 #~ msgid "Shops"
 #~ msgstr "Магазины"
