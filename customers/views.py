@@ -10,7 +10,6 @@ from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, FormView
 from django.urls import reverse_lazy
 
-from config.settings import CACHES_TIME
 from customers.forms import RegistrationForm, AccountAuthenticationForm, ChangeUserData
 from customers.models import CustomerUser
 from django.contrib import messages
@@ -52,8 +51,10 @@ class UserProfile(View):
         key = 'customers:{}'.format(user)
         if key not in cache:
             cache.set(key, UserProfile)
-
-        form = ChangeUserData(instance=user)
+        if user.is_authenticated:
+            form = ChangeUserData(instance=user)
+        else:
+            form = ChangeUserData()
 
         return render(request, "customers/profile.html", context={
             'user': user,
@@ -62,25 +63,22 @@ class UserProfile(View):
 
     def post(self, request):
         user = request.user
-        form = ChangeUserData(request.POST, instance=user)
-        if form.is_valid():
-            user.full_name = form.cleaned_data.get('full_name')
-            user.phone = form.cleaned_data.get('phone')
-            user.email = form.cleaned_data.get('email')
-            user.password = form.cleaned_data.get('password')
-            user.avatar = form.cleaned_data.get('avatar')
-            form.save()
-            user.save()
-            messages.success(request, _('Profile details updated.'))
-
+        if user.is_authenticated:
+            form = ChangeUserData(request.POST, instance=user)
+            if form.is_valid():
+                messages.success(request, _('Profile details updated.'))
+                form.full_name = form.cleaned_data.get('full_name')
+                form.phone = form.cleaned_data.get('phone')
+                form.email = form.cleaned_data.get('email')
+                form.password = form.cleaned_data.get('password')
+                form.avatar = form.cleaned_data.get('avatar')
+                form.save()
+                return redirect(f"../account/")
+            else:
+                messages.error(request, _('Error updating your profile'))
             return redirect(f"../account/")
-
-        messages.error(request, _('Error updating your profile'))
-        messages.add_message(
-            request, messages.SUCCESS, _('Error updating your profile'),
-            fail_silently=True,
-        )
-        return redirect(f"../account/")
+        else:
+            return redirect(f"../account/")
 
 
 class UserAccount(View):
@@ -93,12 +91,16 @@ class UserAccount(View):
         key = 'customers:{}'.format(user)
         if key not in cache:
             cache.set(key, UserAccount)
-
-        view_goods = ViewHistory.objects.filter(customer=self.request.user)[:3]
-        try:
-            last_order = Order.objects.filter(customer=self.request.user)[:-1]
-        except ValueError:
+        if user.is_authenticated:
+            view_goods = ViewHistory.objects.filter(customer=self.request.user)[:3]
+            try:
+                last_order = Order.objects.filter(customer=self.request.user)[:-1]
+            except ValueError:
+                last_order = None
+        else:
+            view_goods = None
             last_order = None
+            messages.info(self.request, _(f"You must be logged in"))
         return render(request, "customers/account.html", context={
             'user': user,
             'view_goods': view_goods,

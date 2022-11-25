@@ -111,12 +111,14 @@
                       <th>{% trans 'value' %}
                       </th>
                     </tr>
-                    <tr>
-                      <td>ываыв
-                      </td>
-                      <td>llslssl
-                      </td>
-                    </tr>
+                    {%  for characteristic in feature  %}
+                      <tr>
+                        <td>{{characteristic.name.name}}
+                        </td>
+                        <td> {{characteristic}}
+                        </td>
+                      </tr>
+                    {%  endfor  %}
                   </table>
                 </div>
               </div>
