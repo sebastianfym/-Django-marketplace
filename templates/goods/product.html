@@ -100,7 +100,7 @@
                 <p>
                   <strong>{{ goods.describe }}
                   </strong>
-                </p><img class="pict pict_right" src="{{ image_pict_right.image.url }}" alt="{{image.name.}}png"/>
+                </p><img class="pict pict_right" src="{{ image_pict_right.image.url }}" alt="{{image.name}}.png"/>
                 <div class="clearfix">
                 </div>
                 <div class="table">
@@ -136,7 +136,7 @@
                         <strong>€&#32;{{shop.price}}
                         </strong>
                       </div>
-                      <div class="Categories-block Categories-button"><a class="btn btn_primary" href="#"><img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/><span class="btn-content">{% translate 'Buy' %}</span></a></div>
+                      <div class="Categories-block Categories-button"><a class="btn btn_primary" href="{% url 'cart:addbysellerid' goods.id shop.seller.id %}"><img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/><span class="btn-content">{% translate 'Buy' %}</span></a></div>
                     </div>
                   {%  endfor  %}
                 </div>
@@ -229,9 +229,11 @@
                     count: $(".Amount-input").val(),
                     csrfmiddlewaretoken: csrf
                 },
-                success: function () {
+                success: function (response) {
                     document.getElementById('add_cart').textContent = 'В корзинe'
                     document.getElementById('redirect').setAttribute('href', '{% url 'cart:mycart' %}')
+                    document.getElementById('CartBlock-price').textContent = response.total_price_disc
+                    document.getElementById('CartBlock-price').textContent += 'руб'
                 }
             })
         });
