@@ -118,7 +118,12 @@ def get_cost(request: WSGIRequest) -> [float, float, int, [dict, int], [list, in
                         'price': product_in_shop.price,
                         'goods': {
                             'name': product_in_shop.goods.name,
-                            'id': product_in_shop.goods.id
+                            'id': product_in_shop.goods.id,
+                            'goods_image': {
+                                'first': {
+                                    'image': product_in_shop.goods.goods_image.first().image
+                                }
+                            }
                         },
                         'seller': {
                             'title': product_in_shop.seller.title
