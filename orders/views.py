@@ -1,3 +1,5 @@
+import time
+
 from celery.result import AsyncResult
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -80,20 +82,19 @@ class CreateOrder(CreateView):
         order_form = OrderForm(request.POST)
         order = Order()
 
-        if order_form.is_valid():
-            order.quantity = 1
-            order.status = 0
-            order.delivery_method = order_form.data.get('delivery_method')
-            order.delivery_city = order_form.data.get('delivery_city')
-            order.delivery_address = order_form.data.get('delivery_address')
-            order.payment_method = order_form.data.get('payment_method')
-            order.payment_card = order_form.data.get('payment_card')
-            order.total_cost = 1
-            # order.total_cost = request.total_cost
-            order.save()
-            cart = CartItems.objects.filter(user=request.user).values('product_in_shop__id')
-            for i in cart:
-                order.goods_in_market.add(i['product_in_shop__id'])
+        order.quantity = 1
+        order.status = 0
+        order.delivery_method = order_form.data.get('delivery_method')
+        order.delivery_city = order_form.data.get('delivery_city')
+        order.delivery_address = order_form.data.get('delivery_address')
+        order.payment_method = order_form.data.get('payment_method')
+        order.payment_card = order_form.data.get('payment_card')
+        order.total_cost = 1
+        # order.total_cost = request.total_cost
+        order.save()
+        cart = CartItems.objects.filter(user=request.user).values('product_in_shop__id')
+        for i in cart:
+            order.goods_in_market.add(i['product_in_shop__id'])
         if int(order.payment_method) == 0:
             return redirect(f'./add_card/{order.id}', order_id=order.id)
         elif int(order.payment_method) == 1:
@@ -115,6 +116,8 @@ class AddSomeoneCard(UpdateView):
 
 
 def add_order_for_payment(request, order_id):
+    HttpResponse(request, 'orders/progress_payment.html')
+    time.sleep(2)
     card_num = int(request.POST['payment_card'].replace(' ', ''))
     result = add_for_payment(order_id, card_num)
     if result:
@@ -124,4 +127,4 @@ def add_order_for_payment(request, order_id):
             order.payment_card = str(card_num)
             order.save()
 
-    return render(request, 'orders/progress_payment.html')
+    return redirect('catalog')
