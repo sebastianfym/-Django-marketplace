@@ -4,15 +4,15 @@ from django.shortcuts import redirect, render
 from django.views.generic import View
 
 from cart.models import CartItems
-from cart.services import new_price_and_total_price, add_product_to_cart_by_product_id, cart_price, change_count
+from cart.services import new_price_and_total_price, add_product_to_cart_by_product_id, cart_price, change_count, \
+    add_product_to_cart_by_seller_id, from_session_todb
 
-
-class AddProductToCartView(View):
+class AddProductToCartByProductIdView(View):
     """
     Добавление продукта в корзину
     """
     def get(self, request: WSGIRequest, id: int, *args, **kwargs):
-        product_id = int(id)
+        product_id = id
         add_product_to_cart_by_product_id(request, product_id, 1)
         return redirect(request.META['HTTP_REFERER'])
 
@@ -20,7 +20,20 @@ class AddProductToCartView(View):
         product_id = request.POST.get('product_id')
         quantity = request.POST.get('count')
         add_product_to_cart_by_product_id(request, product_id, quantity)
-        return JsonResponse({}, status=200)
+        total_price_disc, total_price, shops, cart = cart_price(request)
+        return JsonResponse({'total_price_disc': total_price_disc}, status=200)
+
+
+class AddProductToCartBySellerIdView(View):
+    """
+    Добавление продукта в корзину
+    """
+    def get(self, request: WSGIRequest, pid: int, id: int, *args, **kwargs):
+        seller_id = id
+        product_id = pid
+        add_product_to_cart_by_seller_id(request, product_id, seller_id, 1)
+        return redirect(request.META['HTTP_REFERER'])
+
 
 
 class DeleteProductFromCartView(View):
@@ -47,8 +60,8 @@ class CartView(View):
     Представление корзины
     """
     def get(self, request: WSGIRequest, *args, **kwargs):
+        from_session_todb(request)
         total_price_disc, total_price, shops, cart = cart_price(request)
-
         return render(request, 'cart/cart.html', {'cart': cart,
                                                   'shops': shops,
                                                   'total_price': total_price,
@@ -74,7 +87,7 @@ class ChangeCountAjax(View):
     def post(self, request: WSGIRequest, *args, **kwargs):
         product_id = request.POST.get('product_id')
         count_of_product = request.POST.get('count_of_product')
-        change_count(request, product_id, count_of_product)
+        change_count(request, int(product_id), int(count_of_product))
         total_price_disc, total_price, shops, cart = cart_price(request)
         return JsonResponse({'total_price': total_price,
                              'total_price_disc': total_price_disc}, status=200)

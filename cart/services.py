@@ -33,11 +33,27 @@ def new_price_and_total_price(request: WSGIRequest) -> float:
 
 def add_product_to_cart_by_product_id(request: WSGIRequest, product_id: int, quantity: int) -> None:
     """
-    Фкнцкия обновления количеста продукта в корзине
+    Фкнцкия добавления  продукта в корзину по Id продукта
     """
     product = Goods.objects.get(id=product_id)
     queryset = GoodsInMarket.objects.filter(goods_id=product_id)
     seller = random.choice(queryset)
+    create_cart(request, seller, product, quantity, product_id)
+
+
+def add_product_to_cart_by_seller_id(request: WSGIRequest, product_id: int, seller_id: int, quantity: int) -> None:
+    """
+    Фкнцкия добавления  продукта в корзину по Id магазина
+    """
+    product = Goods.objects.get(id=product_id)
+    seller = GoodsInMarket.objects.get(seller_id=seller_id, goods_id=product_id)
+    create_cart(request, seller, product, quantity, product_id)
+
+
+def create_cart(request: WSGIRequest, seller: GoodsInMarket, product: Goods, quantity: int,  product_id: int) -> None:
+    """
+    Функция создания корзины
+    """
     if request.user.is_authenticated:
         CartItems.objects.update_or_create(product_in_shop=seller,
                                            user=request.user,
@@ -62,7 +78,7 @@ def add_product_to_cart_by_product_id(request: WSGIRequest, product_id: int, qua
 
 def get_cost(request: WSGIRequest) -> [float, float, int, [dict, int], [list, int]]:
     """
-    Функция получения посной  стоимости корзины без скидки, со скидкой, кол-во товаров в корзине, магазинов и цены
+    Функция получения полной  стоимости корзины без скидки, кол-во товаров в корзине, магазинов и цены
     товара в этих магазинах, формирование корзины для передачи нанных на frontend
     """
     total_cost = 0
@@ -115,6 +131,9 @@ def get_cost(request: WSGIRequest) -> [float, float, int, [dict, int], [list, in
 
 
 def cart_price(request: WSGIRequest) -> [float, float, [dict, int], [list, int]]:
+    """
+    Функция получения полной стоимости корзины со скидкой
+    """
     total_cost, total_cost_with_discount, total_amount, shops, created_cart = get_cost(request)
     today = datetime.date.today()
     discount_for_cart = Discount.objects.filter(
@@ -157,3 +176,23 @@ def change_count(request: WSGIRequest, product_id: int, count_of_product: int) -
             if item['product_id'] == product_id:
                 item['quantity'] = count_of_product
                 request.session.modified = True
+
+
+def from_session_todb(request:WSGIRequest) -> None:
+    """
+    Функция переноса товаров корзины из сессии в базу данных
+    """
+    if request.user.is_authenticated:
+        cart = request.session.get('cart')
+        if cart:
+            for item in cart:
+                product_in_shop_id = item['product_in_shop']
+                quantity = item['quantity']
+                product_id = item['product_id']
+                product = Goods.objects.get(id=product_id)
+                seller = GoodsInMarket.objects.get(id=product_in_shop_id, goods_id=product_id)
+                CartItems.objects.update_or_create(product_in_shop=seller,
+                                                   user=request.user,
+                                                   quantity=quantity,
+                                                   category=product.category)
+            del request.session['cart']

@@ -85,9 +85,9 @@
                     <div class="Cart-total">
                         <div class="Cart-block Cart-block_total">
                             <strong class="Cart-title">Итого:</strong>
-                            <span class="Cart-price" id="prev_price_with_discount">{{ total_price_disc }}руб</span>
+                            <span class="Cart-price" id="prev_price_with_discount">{{ total_price_disc }} руб</span>
                             {% if total_price_disc < total_price %}
-                                <span class="Cart-price_old" id="prev_price">{{ total_price }}руб</span>
+                                <span class="Cart-price_old" id="prev_price">{{ total_price }} руб</span>
                             {% endif %}
                         </div>
                         <div class="Cart-block"><a class="btn btn_success btn_lg" href="../orders/add_order">Оформить заказ</a>
@@ -118,14 +118,16 @@ $(document).ready(function (){
             },
             success: function (response) {
                 document.getElementById(product).textContent = response.data
-                document.getElementById(product).textContent += 'руб'
+                document.getElementById(product).textContent += ' руб'
                 var discount_price = document.getElementById('prev_price')
                 if (discount_price !== null) {
                     discount_price.textContent = response.total_price
-                    discount_price.textContent += 'руб'
+                    discount_price.textContent += ' руб'
                 }
                 document.getElementById('prev_price_with_discount').textContent = response.total_price_disc
-                document.getElementById('prev_price_with_discount').textContent += 'руб'
+                document.getElementById('prev_price_with_discount').textContent += ' руб'
+                document.getElementById('CartBlock-price').textContent = response.total_price_disc
+                document.getElementById('CartBlock-price').textContent += ' руб'
             }
         })
     });
@@ -137,6 +139,8 @@ $(document).ready(function (){
     $(".Amount-add").click(function(){
         var id_of_product=$(this).val()
         var count = $('#'+id_of_product).val()
+        console.log(parseInt(id_of_product))
+        console.log(parseInt(count)+1)
         $.ajax({
             url: '{% url "cart:change_count" %}',
             method: 'post',
@@ -150,10 +154,12 @@ $(document).ready(function (){
                 var discount_price = document.getElementById('prev_price')
                 if (discount_price !== null) {
                     discount_price.textContent = response.total_price
-                    discount_price.textContent += 'руб'
+                    discount_price.textContent += ' руб'
                 }
                 document.getElementById('prev_price_with_discount').textContent = response.total_price_disc
-                document.getElementById('prev_price_with_discount').textContent += 'руб'
+                document.getElementById('prev_price_with_discount').textContent += ' руб'
+                document.getElementById('CartBlock-price').textContent = response.total_price_disc
+                document.getElementById('CartBlock-price').textContent += ' руб'
             }
         })
     });
@@ -178,7 +184,9 @@ $(document).ready(function (){
                     discount_price.textContent += 'руб'
                 }
                 document.getElementById('prev_price_with_discount').textContent = response.total_price_disc
-                document.getElementById('prev_price_with_discount').textContent += 'руб'
+                document.getElementById('prev_price_with_discount').textContent += ' руб'
+                document.getElementById('CartBlock-price').textContent = response.total_price_disc
+                document.getElementById('CartBlock-price').textContent += ' руб'
             }
         })
     });
