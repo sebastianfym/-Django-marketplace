@@ -17,20 +17,23 @@
             line-height: 1.3em;
             margin: 0 auto ;
         }
+        input[type="password"] {
+            padding: 5px 25px;
+            min-height: 56px;
+            border: 1px solid #e0e0e0;
+            background-color: #fff;
+            display: block;
+            font-size: 18px;
+            box-sizing: border-box;
+            min-width: 250px;
+            line-height: 1.3em;
+            margin: 0 auto ;
+        }
     </style>
     <form method="post">
     {% csrf_token %}
         <div class="wrap" style="margin-top: 15px; text-align: center">
-            {% for field in form %}
-                <div class="form-group">
-                    <div class="form-label">
-                        {{ field.label_tag }}
-                    </div>
-                    <div class="form-input">
-                        {{ field.as_text }}
-                    </div>
-                </div>
-            {% endfor %}
+                {{ form.as_p }}
             <div class="btn_outline" style="margin-top: 15px">
                 <button class="btn btn_success" type="submit">{% translate 'Enter' %}</button>
             </div>

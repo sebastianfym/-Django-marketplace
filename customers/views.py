@@ -1,7 +1,9 @@
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import user_passes_test
 from django.core.cache import cache
 from django.http import HttpResponseRedirect
+from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import authenticate, login
@@ -26,7 +28,7 @@ class UserRegisterFormView(CreateView):
     template_name = 'customers/register.html'
     success_url = reverse_lazy('index')
 
-    def form_valid(self, form):
+    def form_valid(self, form: RegistrationForm):
         user = form.save()
         login(self.request, user)
         return redirect(self.success_url)
@@ -46,7 +48,7 @@ class UserProfile(View):
     Данный класс служит для получения профиля авторизированного юзера и даёт возможность изменить данные.
     """
 
-    def get(self, request):
+    def get(self, request: WSGIRequest):
         user = request.user
         key = 'customers:{}'.format(user)
         if key not in cache:
@@ -61,7 +63,7 @@ class UserProfile(View):
             'form': form,
         })
 
-    def post(self, request):
+    def post(self, request: WSGIRequest):
         user = request.user
         if user.is_authenticated:
             form = ChangeUserData(request.POST, instance=user)
@@ -86,7 +88,7 @@ class UserAccount(View):
     Данный класс является представлением аккаунта пользователя со всеми его данными
     """
 
-    def get(self, request):
+    def get(self, request: WSGIRequest):
         user = request.user
         key = 'customers:{}'.format(user)
         if key not in cache:

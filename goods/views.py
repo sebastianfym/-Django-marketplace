@@ -6,6 +6,10 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.core.handlers.wsgi import WSGIRequest
+from django.db.models import Q, QuerySet
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic import DetailView
@@ -30,7 +34,7 @@ class CategoryView(View):
     Представление для категорий товаров у которых activity = True.
     """
 
-    def get(self, request):
+    def get(self, request: WSGIRequest) -> HttpResponse:
         cache_this = cache_page(3600 * CACHES_TIME)
         categories = SuperCategory.objects.filter(activity=True)
         if categories.update():
@@ -44,11 +48,11 @@ class Catalog(CatalogMixin, ListView):
     paginate_by = 8
     context_object_name = 'catalog'
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = self.select_orm_statement()
         return queryset
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super().get_context_data()
         parameters = self.normalises_values_parameters()
         context.update(parameters)
@@ -67,7 +71,7 @@ class ShowDetailProduct(DetailView):
     if key not in cache:
         cache.set(key, model)
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super(ShowDetailProduct, self).get_context_data(**kwargs)
         product_id = context['goods'].id
 
@@ -94,7 +98,7 @@ class ShowDetailProduct(DetailView):
                     context['in_cart_or_not'] = False
         return context
 
-    def post(self, request, pk):
+    def post(self, request: WSGIRequest) -> HttpResponseRedirect:
         form = DetailProductReviewForm(request.POST)
         if form.is_valid():
             DetailProductComment.objects.create(
@@ -113,8 +117,7 @@ class AddProductToCompareView(View):
     """
     Добавление товара в сравнение
     """
-
-    def get(self, request, id, *args, **kwargs):
+    def get(self, request: WSGIRequest, id: int, *args, **kwargs) -> HttpResponseRedirect:
         if not request.session.get("compare"):
             request.session["compare"] = list()
         if id not in request.session['compare']:
@@ -131,7 +134,7 @@ class DeleteProductFromCompareView(View):
     Удаление товара из списка сравнений
     """
 
-    def get(self, request, id, *args, **kwargs):
+    def get(self, request: WSGIRequest, id: int, *args, **kwargs) -> HttpResponseRedirect:
         id_product = int(id)
         if id_product in request.session["compare"]:
             request.session["compare"].remove(id_product)
@@ -140,8 +143,10 @@ class DeleteProductFromCompareView(View):
 
 
 class CompareView(View):
-
-    def get(self, request, *args, **kwargs):
+    """
+    Функция получения всех характеристик товаров и проверка категорий сравниваемых товаров
+    """
+    def get(self, request: WSGIRequest, *args, **kwargs) -> HttpResponse:
         compare_list = request.session.get("compare")
         if compare_list is not None:
             compare_list_products, categories_list, product_features = create_compare(compare_list)
@@ -183,7 +188,7 @@ class HistoryList(ListView):
     context_object_name = 'goods_list'
     paginate_by = 8
 
-    def get_queryset(self):
+    def get_queryset(self)->QuerySet:
         res = Goods.objects.filter(id__in=ViewHistory.objects.filter(customer=self.request.user)[:20].values_list('goods'))
         return res
 

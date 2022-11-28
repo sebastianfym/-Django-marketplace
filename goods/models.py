@@ -9,9 +9,6 @@ from customers.models import CustomerUser
 # import discounts.services
 
 
-# import discounts.services
-
-
 class FeatureName(models.Model):
     """
     Модель наименований характеристик, отдельная модель, для того, чтобы избежать дублирования наименований
