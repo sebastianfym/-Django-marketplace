@@ -200,9 +200,3 @@ class DetailProductComment(models.Model):
     def __str__(self):
         return f'{self.goods},{self.author_name}'
 
-
-
-
-
-class GoodsCache(models.Model):
-    ...

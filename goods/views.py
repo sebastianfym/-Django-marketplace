@@ -98,18 +98,18 @@ class ShowDetailProduct(DetailView):
                     context['in_cart_or_not'] = False
         return context
 
-    def post(self, request: WSGIRequest) -> HttpResponseRedirect:
+    def post(self, request: WSGIRequest, pk) -> HttpResponseRedirect:
         form = DetailProductReviewForm(request.POST)
         if form.is_valid():
             DetailProductComment.objects.create(
-                goods=Goods.objects.get(id=self.kwargs['pk']),
+                goods=Goods.objects.get(id=pk),
                 text=form.cleaned_data.get('text'),
                 email=form.cleaned_data.get('email'),
                 author_name=form.cleaned_data.get('author_name')
             )
-            return redirect(f"../{self.kwargs['pk']}/")
+            return redirect(f"../{pk}/")
         else:
-            return redirect(f"../{self.kwargs['pk']}/")
+            return redirect(f"../{pk}/")
 
 
 class AddProductToCompareView(View):
@@ -282,10 +282,10 @@ def cart_cost(cart: dict) -> dict:
 
 
 class GoodsClearCacheAdminView(View):
-    @user_passes_test(lambda u: u.is_superuser)
+    # @user_passes_test(lambda u: u.is_superuser)
     def get(self, request):
         try:
-            clear_cache('goods')
+            clear_cache(ShowDetailProduct)
             messages.success(self.request, _(f"Successfully cleared  cache)"))
         except Exception as err:
             messages.error(self.request, _(f"Couldn't clear cache, something went wrong. Received error: {err}"))

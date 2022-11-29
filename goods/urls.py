@@ -18,6 +18,3 @@ urlpatterns = [
     # path('related', create_goods_related_images)
     path('goods_clear_cache/', GoodsClearCacheAdminView.as_view(), name="goodsclearcache"),
 ]
-
-#cache_page(3600 * CACHES_TIME)(ShowDetailProduct.as_view())
-#

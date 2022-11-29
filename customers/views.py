@@ -112,7 +112,7 @@ class UserAccount(View):
 
 
 class CustomersClearCacheAdminView(View):
-    @user_passes_test(lambda u: u.is_superuser)
+    # @user_passes_test(lambda u: u.is_superuser)
     def get(self, request):
         try:
             clear_cache('customers')
