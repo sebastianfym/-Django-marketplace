@@ -77,7 +77,7 @@ class ShowDetailProduct(DetailView):
         context['images'] = Image.objects.filter(product_id=product_id)
         context['image_pict_right'] = context['images'][0]
         context['form'] = DetailProductReviewForm()
-        context['feature'] = Goods.objects.get(id=product_id).feature.all()#Feature.objects.filter(goods__id=product_id)
+        context['feature'] = Goods.objects.get(id=product_id).feature.all()
 
         if self.request.user.is_authenticated:
             context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product_in_shop__goods_id=product_id).exists()
@@ -106,7 +106,6 @@ class ShowDetailProduct(DetailView):
             return redirect(f"../{self.kwargs['pk']}/")
         else:
             return redirect(f"../{self.kwargs['pk']}/")
-
 
 
 class AddProductToCompareView(View):

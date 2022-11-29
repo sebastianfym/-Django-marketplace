@@ -2,6 +2,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import user_passes_test
 from django.core.cache import cache
 from django.http import HttpResponseRedirect
+from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import authenticate, login
@@ -16,7 +17,7 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 
 from customers.utils import clear_cache
-from goods.models import ViewHistory, Image
+from goods.models import ViewHistory, Image, Goods
 from orders.models import Order
 
 
@@ -26,7 +27,7 @@ class UserRegisterFormView(CreateView):
     template_name = 'customers/register.html'
     success_url = reverse_lazy('index')
 
-    def form_valid(self, form):
+    def form_valid(self, form: RegistrationForm):
         user = form.save()
         login(self.request, user)
         return redirect(self.success_url)
@@ -46,7 +47,7 @@ class UserProfile(View):
     Данный класс служит для получения профиля авторизированного юзера и даёт возможность изменить данные.
     """
 
-    def get(self, request):
+    def get(self, request: WSGIRequest):
         user = request.user
         key = 'customers:{}'.format(user)
         if key not in cache:
@@ -61,21 +62,21 @@ class UserProfile(View):
             'form': form,
         })
 
-    def post(self, request):
+    def post(self, request: WSGIRequest):
         user = request.user
         if user.is_authenticated:
             form = ChangeUserData(request.POST, instance=user)
             if form.is_valid():
                 messages.success(request, _('Profile details updated.'))
-                form.full_name = form.cleaned_data.get('full_name')
-                form.phone = form.cleaned_data.get('phone')
-                form.email = form.cleaned_data.get('email')
-                form.password = form.cleaned_data.get('password')
-                form.avatar = form.cleaned_data.get('avatar')
-                form.save()
+                user = form.save()
+                user.set_password(form.cleaned_data.get('password'))
+                user.full_name = form.cleaned_data.get('full_name')
+                user.phone = form.cleaned_data.get('phone')
+                user.email = form.cleaned_data.get('email')
+                user.avatar = form.cleaned_data.get('avatar')
+                user.save()
                 return redirect(f"../account/")
-            else:
-                messages.error(request, _('Error updating your profile'))
+            messages.error(request, _('Error updating your profile'))
             return redirect(f"../account/")
         else:
             return redirect(f"../account/")
@@ -86,13 +87,14 @@ class UserAccount(View):
     Данный класс является представлением аккаунта пользователя со всеми его данными
     """
 
-    def get(self, request):
+    def get(self, request: WSGIRequest):
         user = request.user
         key = 'customers:{}'.format(user)
         if key not in cache:
             cache.set(key, UserAccount)
         if user.is_authenticated:
-            view_goods = ViewHistory.objects.filter(customer=self.request.user)[:3]
+            view_goods = Goods.objects.filter(
+                id__in=ViewHistory.objects.filter(customer=self.request.user)[:3].values_list('goods'))
             try:
                 last_order = Order.objects.filter(customer=self.request.user)[:-1]
             except ValueError:

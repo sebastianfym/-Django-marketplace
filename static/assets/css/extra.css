@@ -9,6 +9,9 @@
     display: block;
   }
 }
+.Additional-account-group {
+    flex-flow: column;
+}
 .Account-group + .Account-group {
   margin-top: 40px;
 }

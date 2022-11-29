@@ -194,6 +194,7 @@ class DetailProductComment(models.Model):
     text = models.CharField(verbose_name=_('review text'), max_length=700, blank=True, null=True)
     author_name = models.CharField(verbose_name='review author_name', max_length=30, blank=True, null=True)
     email = models.EmailField(max_length=54, blank=True, null=True, verbose_name='detail review author email')
+    date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     class Meta:
         verbose_name = 'detail review'
