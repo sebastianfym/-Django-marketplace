@@ -1,6 +1,12 @@
 from django.contrib import admin
+from django.core.cache import caches, cache
+from django.http import HttpResponseRedirect
+
+from django.urls import path
+from django.utils.translation import gettext as _
+from banners.utils import clear_cache
 from .models import Category, Goods, FeatureName, Feature, GoodsInMarket, SuperCategory, \
-    ViewHistory, GoodsCache, DetailProductComment
+    ViewHistory,  DetailProductComment
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -14,6 +20,7 @@ class SuperCategoryAdmin(admin.ModelAdmin):
 class GoodsAdmin(admin.ModelAdmin):
     list_display = ['id', "name"]
     prepopulated_fields = {"slug": ("name",)}
+    change_list_template = "admin/goods_cache_clear.html"
 
 
 class FeatureNameAdmin(admin.ModelAdmin):
@@ -32,10 +39,6 @@ class ViewHistoryAdmin(admin.ModelAdmin):
     list_display = ['customer', 'goods', 'last_view']
 
 
-class GoodsCacheAdmin(admin.ModelAdmin):
-    change_list_template = "admin/goods_module_cache.html"
-
-
 class DetailProductCommentAdmin(admin.ModelAdmin):
     list_display = ["date", "text", "author_name", "goods"]
 
@@ -47,5 +50,4 @@ admin.site.register(FeatureName, FeatureNameAdmin)
 admin.site.register(Feature, FeatureAdmin)
 admin.site.register(GoodsInMarket, GoodsInMarketAdmin)
 admin.site.register(ViewHistory, ViewHistoryAdmin)
-admin.site.register(GoodsCache, GoodsCacheAdmin)
 admin.site.register(DetailProductComment, DetailProductCommentAdmin)

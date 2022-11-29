@@ -36,7 +36,3 @@ class CustomerUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
-
-
-class CustomersCache(models.Model):
-    ...
