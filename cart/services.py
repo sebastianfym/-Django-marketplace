@@ -1,6 +1,7 @@
 import datetime
 import random
 
+from django.core.cache import cache
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import Q
 
@@ -169,6 +170,11 @@ def cart_price(request: WSGIRequest) -> [float, float, [dict, int], [list, int]]
                 total_cart_price = get_disc(discount_for_cart, total_cost)
         else:
             total_cart_price = get_disc(discount_for_set, total_cost)
+    cache.set('total_price_disc', total_cart_price)
+    cache.set('total_cost', total_cost)
+    cache.set('shops', shops)
+    cache.set('created_cart', created_cart)
+
     return total_cart_price, total_cost, shops, created_cart
 
 
