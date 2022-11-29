@@ -165,12 +165,24 @@ class CompareView(View):
 
 
 def add_to_view_history(customer, goods: Goods) -> None:
+    """
+    Метод добавления товара в список просмотренных
+    :param customer: покупатель
+    :param goods: просмотренный товар
+    :return: None
+    """
     ViewHistory.objects.update_or_create(customer=customer,
                                          goods=goods,
                                          defaults={'last_view': datetime.datetime.now()})
 
 
 def remove_from_view_history(customer, goods: Goods) -> None:
+    """
+    Удаление из истории просмотров
+    :param customer: покупатель
+    :param goods: товар
+    :return: None
+    """
     ViewHistory.objects.delete(customer=customer, goods=goods)
 
 
@@ -182,6 +194,9 @@ def is_in_view_history(customer, goods: Goods) -> bool:
 
 
 class HistoryList(ListView):
+    """
+    Страница просмотра истории просмотра товаров. Для просмотра выбирается последние 20 товаров.
+    """
     model = ViewHistory
     template_name = 'goods/historyview.html'
     context_object_name = 'goods_list'
