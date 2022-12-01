@@ -67,9 +67,6 @@ class ShowDetailProduct(DetailView):
     """
     model = Goods
     template_name = 'goods/product.html'
-    key = 'goods:{}'.format(model.pk)
-    if key not in cache:
-        cache.set(key, model)
 
     def get_context_data(self, **kwargs) -> dict:
         context = super(ShowDetailProduct, self).get_context_data(**kwargs)
@@ -82,6 +79,12 @@ class ShowDetailProduct(DetailView):
         context['image_pict_right'] = context['images'][0]
         context['form'] = DetailProductReviewForm()
         context['feature'] = Goods.objects.get(id=product_id).feature.all()
+
+        cache.set('feature', context['feature'], timeout=None)
+        cache.set('form', context['form'], timeout=None)
+        cache.set('image_pict_right', context['image_pict_right'], timeout=None)
+        cache.set('images', context['images'], timeout=None)
+        cache.set('seller', context['seller'], timeout=None)
 
         if self.request.user.is_authenticated:
             context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product_in_shop__goods_id=product_id).exists()
@@ -285,7 +288,11 @@ class GoodsClearCacheAdminView(View):
     # @user_passes_test(lambda u: u.is_superuser)
     def get(self, request):
         try:
-            clear_cache(ShowDetailProduct)
+            cache.delete('feature')
+            cache.delete('form')
+            cache.delete('image_pict_right')
+            cache.delete('images')
+            cache.delete('seller')
             messages.success(self.request, _(f"Successfully cleared  cache)"))
         except Exception as err:
             messages.error(self.request, _(f"Couldn't clear cache, something went wrong. Received error: {err}"))

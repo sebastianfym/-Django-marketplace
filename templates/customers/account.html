@@ -28,6 +28,13 @@
               <strong class="Section-title">{% translate 'Navigation' %}
               </strong>
             </header>
+            {% if messages %}
+              <ul class="messages">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+            {% endif %}
             <div class="Section-columnContent">
               <div class="NavigateProfile">
                 <ul class="menu menu_vt">
@@ -67,31 +74,31 @@
                   <div class="Order-personal">
                     {% for order in last_order %}
                     <div class="row">
-                      <div class="row-block"><a class="Order-title" href="{% url 'history_orders' %}">Заказ <span class="Order-numberOrder">{{ order.id }}</span> от <span class="Order-dateOrder">{{ order.order_date }}</span></a>
-                        <div class="Account-editLink"><a href="historyorder.html">История заказов</a>
+                      <div class="row-block"><a class="Order-title" href="{% url 'history_orders' %}">{% translate 'Order' %} <span class="Order-numberOrder">{{ order.id }}</span> от <span class="Order-dateOrder">{{ order.order_date }}</span></a>
+                        <div class="Account-editLink"><a href="historyorder.html">{% translate 'Order history' %}</a>
                         </div>
                       </div>
                       <div class="row-block">
                         <div class="Order-info Order-info_delivery">
-                          <div class="Order-infoType">Тип доставки:
+                          <div class="Order-infoType">{% translate 'Type of delivery' %}:
                           </div>
                           <div class="Order-infoContent">{{ order.delivery_method }}
                           </div>
                         </div>
                         <div class="Order-info Order-info_pay">
-                          <div class="Order-infoType">Оплата:
+                          <div class="Order-infoType">{% translate 'Payment' %}:
                           </div>
                           <div class="Order-infoContent">{{ order.payment_method }}
                           </div>
                         </div>
                         <div class="Order-info">
-                          <div class="Order-infoType">Общая стоимость:
+                          <div class="Order-infoType">{% translate 'Total cost' %}:
                           </div>
                           <div class="Order-infoContent">{{ order.total_cost }}
                           </div>
                         </div>
                         <div class="Order-info Order-info_status">
-                          <div class="Order-infoType">Статус:
+                          <div class="Order-infoType">{% translate 'Order status' %}:
                           </div>
                           <div class="Order-infoContent">{{ order.status }}
                           </div>
@@ -109,7 +116,7 @@
             <div class="Account-group">
               <div class="Account-column Account-column_full">
                 <header class="Section-header">
-                  <h2 class="Section-title">История просмотров
+                  <h2 class="Section-title">{% translate 'Browsing history' %}
                   </h2>
                 </header>
                 <div class="Cards Cards_account">
@@ -117,7 +124,7 @@
                   {% include 'goods/card.html' %}
                 {% endfor %}
                 </div>
-                <div class="Account-editLink Account-editLink_view"><a href="{% url 'historyview' %}">Перейти на полный список</a>
+                <div class="Account-editLink Account-editLink_view"><a href="{% url 'historyview' %}">{% translate 'Go to the full list' %}</a>
                 </div>
               </div>
             </div>
