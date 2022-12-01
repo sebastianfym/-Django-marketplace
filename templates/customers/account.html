@@ -68,7 +68,7 @@
                     {% for order in last_order %}
                     <div class="row">
                       <div class="row-block"><a class="Order-title" href="{% url 'history_orders' %}">Заказ <span class="Order-numberOrder">{{ order.id }}</span> от <span class="Order-dateOrder">{{ order.order_date }}</span></a>
-                        <div class="Account-editLink"><a href="historyorder.html">История заказов</a>
+                        <div class="Account-editLink"><a href="{% url 'history_orders' %}">История заказов</a>
                         </div>
                       </div>
                       <div class="row-block">
