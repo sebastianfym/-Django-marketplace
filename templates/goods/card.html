@@ -9,7 +9,7 @@
         <strong class="Card-title"><a href="{{ goods.get_absolute_url }}"> {{ goods.name }} </a>
         </strong>
         <div class="Card-description">
-            <div class="Card-cost"><span class="Card-priceOld">${{ goods.price }}</span><span class="Card-price"> {{ goods.price }} </span>
+            <div class="Card-cost"><span class="Card-price"> {{ goods.price }} {% translate "руб." %}</span>
             </div>
             <div class="Card-category"> {{ goods.category.title }}
             </div>
