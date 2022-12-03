@@ -54,8 +54,8 @@
             </div>
             <div class="Header-search">
                 <div class="search">
-                    <form class="form form_search" action="#" method="post">
-                        <input class="search-input" id="query" name="query" type="text" placeholder="{% translate 'What are you looking for' %}">
+                    <form class="form form_search" action="{% url 'catalog' %}" method="get">
+                        <input class="search-input" id="query" name="name__icontains" type="text" placeholder="{% translate 'What are you looking for' %}">
                         <button class="search-button" type="submit" name="search" id="search"><img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg">{% translate 'Search' %}
                         </button>
                     </form>

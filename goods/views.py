@@ -3,13 +3,10 @@ import decimal
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.db.models import Q
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import Q, QuerySet
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic import DetailView
@@ -18,7 +15,7 @@ from banners.utils import clear_cache
 from cart.models import CartItems
 from .forms import DetailProductReviewForm
 
-from .models import SuperCategory, Feature
+from .models import SuperCategory
 from .models import GoodsInMarket, DetailProductComment, Image
 from django.utils.translation import gettext as _
 from .models import Goods, ViewHistory
@@ -87,7 +84,8 @@ class ShowDetailProduct(DetailView):
         cache.set('seller', context['seller'], timeout=None)
 
         if self.request.user.is_authenticated:
-            context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user, product_in_shop__goods_id=product_id).exists()
+            context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user,
+                                                                 product_in_shop__goods_id=product_id).exists()
             add_to_view_history(self.request.user, context['goods'])
         else:
             cart = list()

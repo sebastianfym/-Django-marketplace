@@ -1,5 +1,4 @@
-
-from django.db.models import QuerySet, Q
+from django.db.models import QuerySet
 from goods.models import Goods
 from django.db.models import Sum
 
@@ -116,6 +115,11 @@ class CatalogMixin:
             filter_params.update({'price__gte': min_price, 'price__lte': max_price})
             filter_params.pop('filter')
             self.request.session.update({'filter_params': filter_params})
+        elif self.request.GET.get('name__icontains'):
+            filter_query_params = self.request.GET.dict()
+            list_filter_params = list(filter_query_params.keys())
+            filter_params = self.get_params_from_request(list_filter_params, filter_query_params)
+            self.request.session.update({'filter_params': filter_params})
         return self.request.session.get('filter_params')
 
     def get_category_filter(self) -> dict:
@@ -134,10 +138,8 @@ class CatalogMixin:
             category_filter.clear()
         current_category = self.get_params_from_request(['category__title'], self.request.GET)
         if current_category.get('category__title') == 'all':
-            print(current_category.get('category__title'))
             current_category.clear()
             category_filter.clear()
-            print(current_category)
         category_filter.update(current_category)
         self.request.session['category_filter_parameter'] = category_filter
         return category_filter
