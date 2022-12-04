@@ -78,7 +78,6 @@ class ShowDetailProduct(DetailView):
         context['feature'] = Goods.objects.get(id=product_id).feature.all()
 
         cache.set('feature', context['feature'], timeout=None)
-        cache.set('form', context['form'], timeout=None)
         cache.set('image_pict_right', context['image_pict_right'], timeout=None)
         cache.set('images', context['images'], timeout=None)
         cache.set('seller', context['seller'], timeout=None)

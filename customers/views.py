@@ -67,18 +67,15 @@ class UserProfile(View):
         if user.is_authenticated:
             form = ChangeUserData(request.POST, instance=user)
             if form.is_valid():
-                if form.cleaned_data.get('password1') == form.cleaned_data.get('password'):
-                    messages.success(request, _('Profile details updated.'))
-                    user = form.save()
-                    user.set_password(form.cleaned_data.get('password'))
-                    user.full_name = form.cleaned_data.get('full_name')
-                    user.phone = form.cleaned_data.get('phone')
-                    user.email = form.cleaned_data.get('email')
-                    user.avatar = form.cleaned_data.get('avatar')
-                    user.save()
-                    return redirect(f"../account/")
-                else:
-                    return redirect(f"../profile/")
+                messages.success(request, _('Profile details updated.'))
+                user = form.save()
+                user.set_password(form.cleaned_data.get('password'))
+                user.full_name = form.cleaned_data.get('full_name')
+                user.phone = form.cleaned_data.get('phone')
+                user.email = form.cleaned_data.get('email')
+                user.avatar = form.cleaned_data.get('avatar')
+                user.save()
+                return redirect(f"../account/")
             messages.error(request, _('Error updating your profile'))
             return redirect(f"../account/")
         else:
