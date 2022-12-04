@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from customers.models import CustomerUser
-from goods.models import Category, Goods
+from goods.models import Category, Goods, Image
 
 
 class ComparePageTest(TestCase):
@@ -47,3 +47,29 @@ class ComparePageTest(TestCase):
         self.assertEqual(len(response.context['compare_list']), 2)
         self.assertFalse(response.context['different_features'])
 
+
+class GoodsDetailPageTest(TestCase):
+    def setUp(self) -> None:
+        test_category = Category.objects.create(title='testcategory',
+                                                imagen=None,
+                                                activity=True,
+                                                supercat=None
+                                                )
+
+        self.test_goods = Goods.objects.create(name='testproduct',
+                                          slug='TestProduct1',
+                                          brand='TestBrand',
+                                          price=1.0,
+                                          describe='TestProductDescribe',
+                                          limit_edition=True,
+                                          category=test_category,
+                                          rating=5,
+                                          pk=0
+                                          )
+
+        self.test_image = Image.objects.create(name='TestImage', product=self.test_goods, image='None')
+
+    def test_detail_goods_page(self):
+        url = reverse('detail', kwargs={'pk': self.test_goods.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
