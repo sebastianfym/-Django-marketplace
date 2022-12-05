@@ -113,15 +113,11 @@ class Goods(models.Model):
 
     rating = models.PositiveIntegerField(verbose_name=_('rating'), default=0)
 
-    # @property
-    # def goods_discount(self) -> str:
-    #     return discount_for_good(self)
-
     def __str__(self):
         return f'{self.name}'
 
     def get_absolute_url(self):
-        return reverse('post', kwargs={'pk': self.pk})
+        return reverse('detail', kwargs={'pk': self.pk})
 
 
 class GoodsInMarket(models.Model):
