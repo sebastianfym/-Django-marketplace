@@ -121,7 +121,7 @@ class Goods(models.Model):
         return f'{self.name}'
 
     def get_absolute_url(self):
-        return reverse('post', kwargs={'pk': self.pk})
+        return reverse('detail', kwargs={'pk': self.pk})
 
 
 class GoodsInMarket(models.Model):
