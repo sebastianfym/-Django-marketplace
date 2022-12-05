@@ -125,6 +125,20 @@ class AddSomeoneCard(UpdateView):
     template_name = 'orders/paymentsomeone.html'
 
 
+class OrderDetail(DetailView):
+    model = Order
+    context_object_name = 'order'
+    template_name = 'orders/detail_order.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if not kwargs.get('pay_fail'):
+            context['pay_fail'] = False
+        else:
+            context['pay_fail'] = True
+        return context
+
+
 def add_order_for_payment(request, order_id):
     HttpResponse(request, 'orders/progress_payment.html')
     time.sleep(2)
@@ -144,4 +158,3 @@ def add_order_for_payment(request, order_id):
         return redirect(reverse('add_card', kwargs={'pk': order.id}))
     elif int(order.payment_method) == 1:
         return redirect(reverse('add_someone_card', kwargs={'pk': order.id}))
-
