@@ -5,8 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from app_shop.models import Seller
 from customers.models import CustomerUser
-# from discounts.services import discount_for_good
-# import discounts.services
 
 
 class FeatureName(models.Model):
@@ -36,9 +34,6 @@ class Feature(models.Model):
                              blank=True,
                              null=True
                              )
-    # goods = models.ForeignKey("Goods", on_delete=models.CASCADE, related_name='feature_goods',verbose_name=_('feature_goods'),
-    #                          blank=True,
-    #                          null=True)
 
     def __str__(self):
         return self.value
@@ -113,15 +108,13 @@ class Goods(models.Model):
 
     rating = models.PositiveIntegerField(verbose_name=_('rating'), default=0)
 
-    # @property
-    # def goods_discount(self) -> str:
-    #     return discount_for_good(self)
+   
 
     def __str__(self):
         return f'{self.name}'
 
     def get_absolute_url(self):
-        return reverse('post', kwargs={'pk': self.pk})
+        return reverse('detail', kwargs={'pk': self.pk})
 
 
 class GoodsInMarket(models.Model):
