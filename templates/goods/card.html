@@ -1,0 +1,25 @@
+{% load static %}
+{% load i18n %}
+
+<div class="Card">
+    <a class="Card-picture" href="{{ goods.get_absolute_url }}">
+        <img src="{{ goods.goods_image.first.image.url }}" alt="card.jpg"/>
+    </a>
+    <div class="Card-content">
+        <strong class="Card-title"><a href="{{ goods.get_absolute_url }}"> {{ goods.name }} </a>
+        </strong>
+        <div class="Card-description">
+            <div class="Card-cost"><span class="Card-price"> {{ goods.price }} {% translate "руб." %}</span>
+            </div>
+            <div class="Card-category"> {{ goods.category.title }}
+            </div>
+            <div class="Card-hover"><a class="Card-btn" href="{{ goods.get_absolute_url }}"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a><a class="Compare-btn" id="cart" product_id="{{ goods.id }}" href="{% url 'cart:add' goods.id %}"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a><a class="Card-btn" href="{% url 'compare_add' goods.id %}"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
+            </div>
+        </div>
+    </div>
+    {% if goods.goods_discount %}
+      <div class="Card-sale">
+        {{ goods.goods_discount }}
+      </div>
+    {% endif %}
+</div>

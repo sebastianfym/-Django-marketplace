@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block header %}
+    {% include 'elements/header.html' %}
+{% endblock %}
+{% load i18n %}
+{% block content %}
+    <style>
+        input[type="text"] {
+            padding: 5px 25px;
+            min-height: 56px;
+            border: 1px solid #e0e0e0;
+            background-color: #fff;
+            display: block;
+            font-size: 18px;
+            box-sizing: border-box;
+            min-width: 250px;
+            line-height: 1.3em;
+            margin: 0 auto ;
+        }
+        input[type="password"] {
+            padding: 5px 25px;
+            min-height: 56px;
+            border: 1px solid #e0e0e0;
+            background-color: #fff;
+            display: block;
+            font-size: 18px;
+            box-sizing: border-box;
+            min-width: 250px;
+            line-height: 1.3em;
+            margin: 0 auto ;
+        }
+    </style>
+    <form method="post">
+    {% csrf_token %}
+        <div class="wrap" style="margin-top: 15px; text-align: center">
+                {{ form.as_p }}
+            <div class="btn_outline" style="margin-top: 15px">
+                <button class="btn btn_success" type="submit">{% translate 'Enter' %}</button>
+            </div>
+
+            <div class="btn_outline" style="margin-top: 15px">
+                <button class="btn btn_success" type="submit">
+                    <a style="color: white" href="../register">{% translate 'Register' %}</a>
+                </button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+{% block footer %}
+     {% include 'elements/footer.html' %}
+{% endblock %}

@@ -1,0 +1,110 @@
+{% load static %}
+{% load i18n %}
+<header>
+    <div class="ControlPanel">
+        <div class="wrap">
+            <div class="row ControlPanel-row">
+                <div class="row-block">
+                    <div class="row ControlPanel-rowSplit">
+                        <div class="row-block"><a class="ControlPanel-title" href="#">{% translate 'Free delivery' %}</a>
+                        </div>
+                        <div class="row-block hide_700"><span class="ControlPanel-title">{% translate 'Subscribe to us at' %}</span>
+                            <ul class="menu menu_img menu_smallImg ControlPanel-menu">
+                                <li class="menu-item"><a class="menu-link" href="#"><img
+                                        src="{% static 'assets/img/icons/socialHeader/fb.svg' %}"
+                                        alt="fb.svg"></a>
+                                </li>
+                                <li class="menu-item"><a class="menu-link" href="#"><img
+                                        src="{% static 'assets/img/icons/socialHeader/tw.svg' %}"
+                                        alt="tw.svg"></a>
+                                </li>
+                                <li class="menu-item"><a class="menu-link" href="#"><img
+                                        src="{% static 'assets/img/icons/socialHeader/in.svg' %}"
+                                        alt="in.svg"></a>
+                                </li>
+                                <li class="menu-item"><a class="menu-link" href="#"><img
+                                        src="{% static 'assets/img/icons/socialHeader/pt.svg' %}"
+                                        alt="pt.svg"></a>
+                                </li>
+                                <li class="menu-item"><a class="menu-link" href="#"><img
+                                        src="{% static 'assets/img/icons/socialHeader/mail.svg' %}"
+                                        alt="mail.svg"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <nav class="row-block">
+                    <div class="row ControlPanel-rowSplit">
+                        <div class="row-block">
+                            {% if request.user.id %}
+                            <a class="ControlPanel-title" href="{% url 'logout' %}">{% translate 'logout' %}</a> /
+                            <a class="ControlPanel-title" href="{% url 'account' %}">{% translate 'account' %}</a>
+                            {% else %}
+                            <a class="ControlPanel-title" href="{% url 'login' %}">{% translate 'login' %}</a> /
+                            <a class="ControlPanel-title" href="{% url 'register' %}">{% translate 'Register' %}</a>
+                            {% endif %}
+                            <form class="internationalization_form" action="{%  url 'set_language'  %}" method="post">{%  csrf_token  %}
+                                <input name="next" type="hidden" value="{{ redirect_to }}">
+                                <select name="language"  class="internationalization_block">
+                                    {%  get_current_language as LANGUAGE_CODE %}
+                                    {%  get_available_languages as LANGUAGES %}
+                                    {%  get_language_info_list for LANGUAGES as languages %}
+                                    {%  for language in languages  %}
+                                        <option value="{{  language.code  }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                            {{  language.name_local  }} ({{ language.code }})
+                                        </option>
+                                    {%  endfor  %}
+                                </select>
+                                <input class="internationalization_input" type="submit" value="Go">
+                            </form>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="wrap">
+        <div class="row Header-rowMain">
+             <div class="row-block Header-logo">
+                 <a class="logo" href="{% url 'index' %}"><img class="logo-image" src="{% static 'assets/img/logo.png' %}" alt="logo.png"></a>
+            </div>
+            <nav class="row-block row-block_right Header-menu">
+                <div class="menuModal" id="navigate">
+                    <ul class="menu menu_main" style="position: static;">
+                        <li class="menu-item"><a class="menu-link" href="{% url 'catalog' %}">{% translate 'Catalog' %}</a>
+                        </li>
+                        <li class="menu-item"><a class="menu-link" href="{% url 'sale' %}">{% translate 'discount' %}</a>
+                        </li>
+                        <li class="menu-item"><a class="menu-link" href="#">{% translate 'About' %}</a>
+                        </li>
+                        <li class="menu-item"><a class="menu-link" href="{% url 'account' %}">{% translate 'Account' %}</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+            <div class="row-block">
+                <div class="CartBlock">
+                    <a class="CartBlock-block" href="{% url 'compare' %}">
+                    <img class="CartBlock-img" src="{% static 'assets/img/icons/exchange.svg' %}" alt="exchange.svg"><span
+                        class="CartBlock-amount">{{ compare }}</span>
+                    </a>
+                    <a class="CartBlock-block" href="{% url 'cart:mycart' %}">
+                        <img class="CartBlock-img" src="{% static 'assets/img/icons/cart.svg' %}"
+                        alt="cart.svg"><span
+                        class="CartBlock-amount">{{ cart_lens }}</span>
+                    </a>
+                    <div class="CartBlock-block"><span class="CartBlock-price" id="CartBlock-price">{{ total_cost_with_discount }}руб</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row-block Header-trigger"><a class="menuTrigger" href="#navigate">
+                <div class="menuTrigger-content">{% translate 'Show navigation' %}
+                </div>
+                <span></span><span></span><span></span></a>
+            </div>
+        </div>
+    </div>
+    {% include 'elements/search_bar.html' %}
+</header>

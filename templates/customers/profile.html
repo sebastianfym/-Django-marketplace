@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block header %}
+    {% include 'elements/header.html' %}
+{% endblock %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+  {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li>
+            {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+  {% endif %}
+  <div class="Middle Middle_top">
+    <div class="Middle-top">
+      <div class="wrap">
+        <div class="Middle-header">
+          <h1 class="Middle-title">{% translate 'Profile' %}
+          </h1>
+          <ul class="breadcrumbs Middle-breadcrumbs">
+            <li class="breadcrumbs-item"><a href="{% url 'index' %}">{% translate 'home' %}</a>
+            </li>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% translate 'Profile' %}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="Section Section_column Section_columnLeft">
+      <div class="wrap">
+        <div class="Section-column">
+          <div class="Section-columnSection">
+            <header class="Section-header">
+              <strong class="Section-title">{% translate 'Navigation' %}
+              </strong>
+            </header>
+            <div class="Section-columnContent">
+              <div class="NavigateProfile">
+                <ul class="menu menu_vt">
+                  <li class="menu-item">
+                    <a class="menu-link" href="{% url 'account' %}">{% translate 'Personal account' %}</a>
+                  </li>
+                  <li class="menu-item_ACTIVE menu-item">
+                    <a class="menu-link" href="{% url 'profile' %}">{% translate 'Profile' %}</a>
+                  </li>
+                  <li class="menu-item">
+                    <a class="menu-link" href="{% url 'history_orders' %}">{% translate 'Order history' %}</a>
+                  </li>
+                  <li class="menu-item">
+                    <a class="menu-link" href="historyview.html">{% translate 'Viewing history' %}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form class="form Profile-form"  action="/profile/" method="post">
+          {% csrf_token %}
+          <div class="Section-content">
+            <div class="Profile">
+                <div class="row">
+                  <div class="row-block">
+                    <div class="form-group">
+                      <label class="form-label" for="avatar">{% translate 'Avatar' %}
+                      </label>
+                      <div class="Profile-avatar Profile-avatar_noimg">
+                        <div class="Profile-img"><img src="assets/img/#.png" alt="#.png"/>
+                        </div>
+                        <label class="Profile-fileLabel" for="avatar">{% translate 'Choose an avatar' %}
+                        </label>
+                        <input class="Profile-file form-input" id="avatar" name="avatar" type="file" data-validate="onlyImgAvatar"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="full_name">{% translate 'full name' %}
+                      </label>
+                      <input class="form-input" id="full_name" name="full_name" type="text" value="{{user.full_name}}" />
+                    </div>
+                  </div>
+                  <div class="row-block">
+                    <div class="form-group">
+                      <label class="form-label" for="phone">{% translate 'phone number' %}
+                      </label>
+                      <input class="form-input" id="phone" name="phone" type="text" value="+79811234569"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="email">{% translate 'E-mail' %}
+                      </label>
+                      <input class="form-input" id="email" name="email" type="text" value="{{user.email}}"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="password">{% translate 'Password' %}
+                      </label>
+                      <input class="form-input" id="password" name="password" type="password" placeholder="{% translate 'Here you can change the password' %}"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="password1">{% translate 'Password Confirmation' %}
+                      </label>
+                      <input class="form-input" id="password1" name="password" type="password" placeholder="{% translate 'Re-enter the password' %}"/>
+                    </div>
+                    <div class="form-group">
+                      <div class="Profile-btn">
+                        <button class="btn btn_success" type="submit">{% translate 'Save' %}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+<!--  <script src="../static/assets/plg/form/jquery.maskedinput.min.js"></script>-->
+  <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
+<!--  <script src="../static/assets/plg/form/jquery.form.js"></script>-->
+  <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+<!--  <script src="../static/assets/plg/range/ion.rangeSlider.min.js"></script>-->
+  <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
+<!--  <script src="../static/assets/plg/Slider/slick.min.js"></script>-->
+  <script src="{% static 'assets/js/scripts.js' %}"></script>
+<!--  <script src="../static/assets/js/scripts.js"></script>-->
+{% endblock %}
+{% block footer %}
+     {% include 'elements/footer.html' %}
+{% endblock %}
+

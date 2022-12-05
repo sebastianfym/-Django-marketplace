@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+  {% block header %}
+    {% include 'elements/header.html' %}
+  {% endblock header %}
+
+  {% block content %}
+
+  <div class="Middle Middle_top">
+    <div class="Middle-top">
+      <div class="wrap">
+        <div class="Middle-header">
+          <h1 class="Middle-title">Megano {% translate ' Catalog' %}
+          </h1>
+          <ul class="breadcrumbs Middle-breadcrumbs">
+            <li class="breadcrumbs-item"><a href="{% url 'index' %}">{% translate 'Home' %}</a>
+            </li>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% translate 'Catalog' %}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="Section Section_column Section_columnLeft">
+      <div class="wrap">
+        <div class="Section-column">
+          <div class="Section-columnSection">
+            <header class="Section-header">
+              <strong class="Section-title">{% translate 'Filter' %}
+              </strong>
+            </header>
+            <div class="Section-columnContent">
+              <form class="form" method="get">
+                <div class="form-group">
+                  <div class="range Section-columnRange">
+                    <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="7" data-max="500000" data-from="{{ price__gte }}" data-to="{{ price__lte }}"/>
+                    <div class="range-price">{% translate 'Price' %}:&#32;
+                      <div class="rangePrice">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input class="form-input form-input_full" value="{{ name__icontains }}" id="title" name="name__icontains" type="text" placeholder="{% translate 'Title' %}"/>
+                </div>
+                <div class="form-group">
+                  <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
+                  <select class="form-select" name="goods_in_market__seller__title">
+
+                    <option value="" selected="selected">
+                    </option>
+                      {% for seller in sellers %}
+                          {% if goods_in_market__seller__title == seller.title %}
+                              <option selected> {{ seller.title }}
+                          {% else %}
+                              <option> {{ seller.title }}
+                          {% endif %}
+                        </option>
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="toggle">
+                    <input type="checkbox"/ {{ in_stock__gte }} name="in_stock__gte" value="1"><span class="toggle-box"></span><span class="toggle-text">{% translate 'Only products in stock' %}</span>
+                  </label>
+                </div>
+                <div class="form-group">
+                  <label class="toggle">
+                    <input type="checkbox"/ {{ delivery__gte }} name="delivery__gte" value="1"><span class="toggle-box"></span><span class="toggle-text">{% translate 'With free shipping' %}</span>
+                  </label>
+                </div>
+                <div class="form-group">
+                  <div class="buttons"><button name="filter" value="filter" class="btn btn_square btn_dark btn_narrow" type="submit">{% translate 'Filter' %}</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="Section-columnSection">
+            <header class="Section-header">
+              <strong class="Section-title">{% translate 'Popular tags' %}
+              </strong>
+            </header>
+            <div class="Section-columnContent">
+              <div class="buttons"><a class="btn btn_default btn_sm" href="#">Video</a><a class="btn btn_default btn_sm" href="#">Development</a><a class="btn btn_default btn_sm" href="#">Gaming</a><a class="btn btn_default btn_sm" href="#">Asus</a><a class="btn btn_default btn_sm" href="#">Development</a><a class="btn btn_default btn_sm" href="#">{% translate 'Video' %}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="Section-content">
+          <div class="Sort">
+            <div class="Sort-title">{% translate 'Sort by' %}:
+            </div>
+            <div class="Sort-variants">
+                <a class="Sort-sortBy Sort-sortBy_dec" href="{% url 'catalog' %}?sort=quantity">{% translate 'Popularity' %}</a>
+                <a class="Sort-sortBy" href="{% url 'catalog' %}?sort=price">{% translate 'Price' %}</a>
+                <a class="Sort-sortBy" href="{% url 'catalog' %}?sort=rating">{% translate 'Reviews' %}</a>
+                <a class="Sort-sortBy " href="{% url 'catalog' %}?sort=release_date">{% translate 'Novelty' %}</a>
+                <a class="Sort-sortBy " href="{% url 'catalog' %}?trend=asc">
+                    <img class="Sort-arrow" src="{% static 'assets/img/icons/upArrow.svg' %}" alt="">
+                </a>
+                <a class="Sort-sortBy " href="{% url 'catalog' %}?trend=-">
+                    <img class="Sort-arrow ArrowRotate" src="{% static 'assets/img/icons/upArrow.svg' %}" alt="">
+                </a>
+
+            </div>
+          </div>
+
+          <div class="Cards">
+          {% for goods in catalog %}
+            {% include 'goods/card.html' %}
+          {% endfor %}
+
+          <div class="Pagination">
+            <div class="Pagination-ins">
+                <a class="Pagination-element Pagination-element_prev" href="#"><img src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg"/></a>
+
+                {% for page in paginator.page_range %}
+                    {% if page_obj.number == page %}
+                        <a class="Pagination-element Pagination-element_current" href="#"><span class="Pagination-text"> {{ page }} </span></a>
+                    {% else %}
+                        <a class="Pagination-element " href="{% url 'catalog' %}?page={{ page }}"><span class="Pagination-text"> {{ page }} </span></a>
+                    {% endif %}
+                    {% endfor %}
+                <a class="Pagination-element Pagination-element_prev" href="{% url 'catalog' %}?page={{ page }}"><img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block footer %}
+{% include 'elements/footer.html' %}
+{% endblock footer %}
+<!--+Middle-->
+<!--    +div.-top-->
+<!--        +breadcrumbs('Главная','Портфолио')-->
+<!--    +Article('portfolio')-->
+<!---->
+
+
+
