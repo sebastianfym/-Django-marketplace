@@ -128,8 +128,11 @@
                     </strong>
                   </div>
                   {% if order.status < 1 %}
-                  <div class="Cart-block"><a class="btn btn_primary btn_lg" href="#">Оплатить</a>
-                  </div>
+                  {% if order.payment_method == 0 %}
+                  <div class="Cart-block"><a class="btn btn_primary btn_lg" href="{% url 'add_card' order.id %}">Оплатить</a></div>
+                  {% else %}
+                  <div class="Cart-block"><a class="btn btn_primary btn_lg" href="{% url 'add_someone_card' order.id %}">Оплатить</a></div>
+                  {% endif %}
                   {% endif %}
                 </div>
               </div>
