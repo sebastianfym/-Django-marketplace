@@ -10,17 +10,22 @@ from .tasks import load_data
 from django.contrib.auth import get_user_model
 from goods.models import Goods
 from discounts.models import Discount
+from .permissions import SellerPermissoinMixin
 user = get_user_model()
 
 
-class DataImportView(FormView):
+class DataImportView(SellerPermissoinMixin, FormView):
     template_name = 'data_import/data_import.html'
     form_class = DataImportForm
 
     def form_valid(self, form):
-        users = CustomerUser.objects.all()
-        for item in users:
-            print(item.email)
+        #seller = self.request.user.seller
+        #print(seller)
+        #users = CustomerUser.objects.all()
+        #for user in users:
+        #    print(user.email)
+        #    user.set_password('123456')
+        #    user.save()
         data = self.request.FILES['data_file']
         file_obj = data.file
         file_name = data.name

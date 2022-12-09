@@ -2,6 +2,13 @@ import csv
 from decimal import Decimal
 from typing import List
 from goods.models import Goods, GoodsInMarket
+from django.db.models import Avg
+
+
+def calculate_goods_averange_price(goods: Goods):
+    average_price = goods.aggregate(avg_price=Avg('goods_in_market__price'))
+    goods.price = average_price['avg_price']
+    goods.save(update_fields=price)
 
 
 def save_data_to_csv(file_name: str, field_names: list, list_data: List[dict]) -> None:
@@ -39,6 +46,7 @@ def goods_import(seller_id, file_path) -> None:
                     product[0].quantity += int(row['quantity'])
                     product[0].save(update_fields=['quantity'])
                     list_success_added_goods.append(row)
+                    calculate_goods_averange_price(goods)
                     print('товар успешно добавлен')
                 else:
                     list_missing_goods.append(row)
