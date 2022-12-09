@@ -12,7 +12,7 @@ class Seller(models.Model):
     address = models.TextField(max_length=100, null=True, blank=True, default="", verbose_name=_('address'))
     email = models.EmailField(null=True, blank=True, default="", verbose_name='email')
     phone = models.CharField(max_length=16, null=True, blank=True, default="", verbose_name=_('phone'))
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='seller', verbose_name=_('owner'))
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='seller', verbose_name=_('owner'))
 
     def __str__(self) -> str:
         return self.title

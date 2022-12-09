@@ -131,7 +131,7 @@ class GoodsInMarket(models.Model):
                                 max_digits=10,
                                 validators=[MinValueValidator(0.0, message=_("Price can't be less than 0.0"))]
                                 )
-    quantity = models.PositiveIntegerField(verbose_name=_('quantity'))
+    quantity = models.PositiveIntegerField(verbose_name=_('quantity'), default=0)
     free_delivery = models.BooleanField(verbose_name=_('free_delivery'), default=False)
     goods = models.ForeignKey(Goods,
                               verbose_name=_('goods'),
