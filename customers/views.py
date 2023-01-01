@@ -1,6 +1,3 @@
-
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import user_passes_test
 from django.core.cache import cache
 from django.http import HttpResponseRedirect
 from django.core.handlers.wsgi import WSGIRequest
@@ -8,16 +5,14 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.decorators.cache import cache_page
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView
 from django.urls import reverse_lazy
 
-from customers.forms import RegistrationForm, AccountAuthenticationForm, ChangeUserData
+from customers.forms import RegistrationForm, ChangeUserData
 from customers.models import CustomerUser
 from django.contrib import messages
 from django.utils.translation import gettext as _
 
-from customers.utils import clear_cache
 from goods.models import ViewHistory, Image, Goods
 from orders.models import Order
 
@@ -89,7 +84,6 @@ class UserAccount(View):
 
     def get(self, request: WSGIRequest):
         user = request.user
-
         if user.is_authenticated:
             view_goods = Goods.objects.filter(
                 id__in=ViewHistory.objects.filter(customer=self.request.user)[:3].values_list('goods'))

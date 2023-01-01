@@ -73,14 +73,10 @@ class ShowDetailProduct(DetailView):
         context['review'] = DetailProductComment.objects.filter(goods__id=product_id)
         context['len_review'] = str(len(context['review']))
         context['images'] = Image.objects.filter(product_id=product_id)
-        context['image_pict_right'] = context['images'][0]
+        context['image_pict_right'] = context['images'].first()
         context['form'] = DetailProductReviewForm()
         context['feature'] = Goods.objects.get(id=product_id).feature.all()
 
-        cache.set('feature', context['feature'], timeout=None)
-        cache.set('image_pict_right', context['image_pict_right'], timeout=None)
-        cache.set('images', context['images'], timeout=None)
-        cache.set('seller', context['seller'], timeout=None)
 
         if self.request.user.is_authenticated:
             context['in_cart_or_not'] = CartItems.objects.filter(user=self.request.user,
@@ -282,7 +278,6 @@ def cart_cost(cart: dict) -> dict:
 
 
 class GoodsClearCacheAdminView(View):
-    # @user_passes_test(lambda u: u.is_superuser)
     def get(self, request):
         try:
             cache.delete('feature')
